@@ -8,6 +8,7 @@ const CreateUser = () => {
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [image, setimage] = useState("");
   const noteFormRef = useRef();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -15,13 +16,20 @@ const CreateUser = () => {
   const handleCreateUser = (event) => {
     //noteFormRef.current.togglevisibility();
     event.preventDefault();
-    const newUserObject = {
-      username,
-      name,
-      password,
-    };
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("username", username);
+    formData.append("name", name);
+    formData.append("password", password);
 
-    dispatch(createUser(newUserObject));
+    // const newUserObject = {
+    //   username,
+    //   name,
+    //   password,
+    //   image,
+    // };
+
+    dispatch(createUser(formData));
     setUsername("");
     setName("");
     setPassword("");
@@ -37,6 +45,11 @@ const CreateUser = () => {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
+  };
+
+  const fileSelected = (event) => {
+    const file = event.target.files[0];
+    setimage(file);
   };
 
   return (
@@ -59,6 +72,14 @@ const CreateUser = () => {
           onChange={handlePasswordChange}
         />
       </Form.Group>
+
+      <Form.Group controlId="formProfileImageId">
+        <Form.File
+          onChange={fileSelected}
+          accept="image/*"
+          label="Profile Image"
+        />
+      </Form.Group>
       <Button type="submit" block>
         create
       </Button>
@@ -67,13 +88,9 @@ const CreateUser = () => {
 };
 export default CreateUser;
 {
-  /* <Form.Group controlId="formTitleId">
-<Form.Label>Title</Form.Label>
-<Form.Control type="text" value={title} onChange={handleTitleChange} />
-</Form.Group> */
-}
-{
-  /* <Form.Text className="text-muted">
-      We'll never share your email with anyone else.
-    </Form.Text> */
+  /* <Form>
+  <Form.Group>
+    <Form.File id="exampleFormControlFile1" label="Example file input" />
+  </Form.Group>
+</Form> */
 }

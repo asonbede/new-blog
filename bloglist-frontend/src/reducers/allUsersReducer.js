@@ -1,5 +1,5 @@
 import usersService from "../services/users";
-
+import { renderMessage } from "./messageReducer";
 const allUsersReducer = (state = [], action) => {
   switch (action.type) {
     case "GET_ALL_USER":
@@ -40,11 +40,26 @@ export const getAllUsers = (content) => {
 
 export const createUser = (content) => {
   return async (dispatch) => {
-    const newUser = await usersService.create(content);
-    dispatch({
-      type: "NEW_USER",
-      data: newUser,
-    });
+    try {
+      const newUser = await usersService.create(content);
+      dispatch({
+        type: "NEW_USER",
+        data: newUser,
+      });
+      dispatch(
+        renderMessage({
+          type: "success",
+          message: "User creation was successful",
+        })
+      );
+    } catch (error) {
+      dispatch(
+        renderMessage({
+          type: "error",
+          message: "User creation was not successful ",
+        })
+      );
+    }
   };
 };
 

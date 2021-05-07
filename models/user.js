@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
       ref: "Bloglist",
     },
   ],
+  profileimageid: String,
 });
 
 userSchema.set("toJSON", {

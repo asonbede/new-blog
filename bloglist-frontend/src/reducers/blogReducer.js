@@ -1,5 +1,6 @@
 import blogService from "../services/blogs";
 import { trigerRender } from "./trigarRender";
+import { renderMessage } from "./messageReducer";
 
 // const initialState = [
 //   {
@@ -104,13 +105,27 @@ export const removeBlogHandler = (id) => {
 
 export const createBlog = (content) => {
   return async (dispatch) => {
-    const newBlog = await blogService.create(content);
+    try {
+      const newBlog = await blogService.create(content);
+      dispatch({
+        type: "NEW_NOTE",
+        data: newBlog,
+      });
+      dispatch(
+        renderMessage({
+          type: "success",
+          message: "Blog creation was successful",
+        })
+      );
+    } catch (error) {
+      dispatch(
+        renderMessage({
+          type: "error",
+          message: "Blog creation was not successful",
+        })
+      );
+    }
     //noteFormRef.current.togglevisibility();
-
-    dispatch({
-      type: "NEW_NOTE",
-      data: newBlog,
-    });
   };
 };
 // export const controlUseEffectRerender = () => {

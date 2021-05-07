@@ -3,7 +3,15 @@ const Bloglist = require("../models/blogs");
 
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
-
+const sizeOf = require("image-size");
+const fs = require("fs");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
+const {
+  uploadFile,
+  getFileStream,
+  uploadFunc,
+} = require("../utils/s3-services");
 // blogsRouter.get("/", (request, response) => {
 //   Bloglist.find({}).then((blogs) => {
 //     response.json(blogs);
@@ -79,15 +87,24 @@ blogsRouter.get("/:id", (request, response, next) => {
 //   return null;
 // };
 
-blogsRouter.post("/", async (request, response, next) => {
-  const body = request.body;
+//get user image from s3
+blogsRouter.get("/images/:key", (req, res) => {
+  console.log("inside get");
+  const key = req.params.key;
+  const readStream = getFileStream(key);
+  readStream.pipe(res);
+});
+
+//handle create blog
+async function handleCreateBlog(req, res, imageid) {
+  const body = req.body;
   console.log({ body }, "in jest");
   // const token = getTokenFrom(request);
-  const token = request.token;
+  const token = req.token;
   console.log({ token });
   const decodedToken = jwt.verify(token, process.env.SECRET);
   if (!token || !decodedToken.id) {
-    return response.status(401).json({ error: "token missing or invalid" });
+    return res.status(401).json({ error: "token missing or invalid" });
   }
   console.log("working in blog");
   const user = await User.findById(decodedToken.id);
@@ -99,13 +116,47 @@ blogsRouter.post("/", async (request, response, next) => {
     likes: body.likes || 0,
     user: user._id,
     comments: [],
+    imageid,
   });
   console.log("working33333");
   const savedBlog = await blog.save();
   user.blogs = user.blogs.concat(savedBlog._id);
   await user.save();
 
-  response.json(savedBlog);
+  res.json(savedBlog);
+}
+
+blogsRouter.post("/", async (req, res, next) => {
+  const upload = uploadFunc(9000000);
+  console.log("started....");
+
+  upload(req, res, async (err) => {
+    // const description = req.body.description;
+    // console.log({ description }, "from image");
+    if (err) {
+      res.json({ msg: err });
+    } else {
+      if (req.file == undefined) {
+        res.json({ msg: "Error-no file selected" });
+      } else {
+        const file = req.file;
+
+        const dimensions = sizeOf(`upload/${file.filename}`); // replace with your image
+        console.log(dimensions.width, dimensions.height, "demensions");
+
+        console.log({ file });
+        const result = await uploadFile(file);
+        console.log({ result });
+        await unlinkFile(file.path);
+        // const description = req.body.description;
+        // console.log(description);
+        const imageid = `/api/blogs/images/${result.key}`;
+        // handleRegister(req.body, imageid, res);
+        handleCreateBlog(req, res, imageid);
+        //res.json({ imagePath: `/api/users/images/${result.key}` });
+      }
+    }
+  });
 });
 
 // blogsRouter.post("/", async (request, response) => {

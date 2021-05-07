@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeUserHandler } from "../reducers/allUsersReducer";
 
 import { useRouteMatch, Link } from "react-router-dom";
+import { Card, ListGroup, ListGroupItem, Image } from "react-bootstrap";
 
 console.log("one blog running");
 
@@ -16,30 +17,59 @@ const OneUser = () => {
   const singleUser = allUsers
     ? allUsers.find((user) => user.id.toString() === match.params.id)
     : null;
-  console.log({ singleUser });
 
   //const dispatch= useDispatch()
   console.log({ singleUser });
   if (singleUser) {
+    console.log(singleUser.profileimageid, "imgeprofile");
+
     return (
-      <>
-        <Link to="/users">Close View </Link>
-        <p>Name of User: {singleUser.name}</p>
-        <p>Total Number of blog: {singleUser.blogs.length}</p>
-        <p> added Blogs</p>
-        <ul>
+      <Card
+        style={{ width: "50%", marginTop: "5%" }}
+        border="primary"
+        bg=""
+        text=""
+      >
+        <Image
+          variant="top"
+          src={`http://localhost:8082${singleUser.profileimageid}`}
+          thumbnail
+          fluid
+          alt="profile image"
+        />
+        <Card.Header as="h2">{singleUser.name} Profile </Card.Header>
+        <Card.Body>
+          {/* <Card.Title>{singleUser.name} Profile</Card.Title> */}
+          <Card.Text>
+            Total Number of Blogs: {singleUser.blogs.length}
+          </Card.Text>
+          <ListGroup className="list-group-flush">
+            <Card.Text> Added Blogs</Card.Text>
+            {singleUser.blogs.map((blog) => (
+              <ListGroupItem key={blog.id}>{blog.title}</ListGroupItem>
+            ))}
+          </ListGroup>
+
+          {/* <ListGroup className="list-group-flush">
+          <Card.Text> Added Blogs</Card.Text>
           {singleUser.blogs.map((blog) => (
-            <li key={blog.id}>{blog.title}</li>
+            <ListGroupItem key={blog.id}>{blog.title}</ListGroupItem>
           ))}
-        </ul>
-        {user.username === singleUser.username ? (
-          <p>
-            <button onClick={() => dispatch(removeUserHandler(singleUser.id))}>
+        </ListGroup> */}
+
+          {user.username === singleUser.username ? (
+            <Card.Link
+              href="#"
+              onClick={() => dispatch(removeUserHandler(singleUser.id))}
+              style={{ marginRight: 15 }}
+            >
               Delete User
-            </button>
-          </p>
-        ) : null}
-      </>
+            </Card.Link>
+          ) : null}
+
+          <Link to="/users">Go To Users List</Link>
+        </Card.Body>
+      </Card>
     );
   }
 

@@ -4,6 +4,8 @@ import { removeBlogHandler, likeHandler } from "../reducers/blogReducer";
 
 import CommentForm from "./CommentForm";
 import Comments from "./Comments";
+import BlogTitle from "./BlogTitle";
+import BlogBody from "./BlogBody";
 import { useRouteMatch, Link } from "react-router-dom";
 
 const OneBlog = () => {
@@ -24,58 +26,21 @@ const OneBlog = () => {
     marginBottom: 5,
   };
   // dispatch(createComment(blog.id,{...blog,comments:[...blog.comments,event.target.comment.value]}))
-  let imagePath;
   if (blog) {
-    try {
-      imagePath = require(`../images/photo-${blog.title}.jpeg`);
-    } catch (error) {
-      imagePath = require(`../images/default-photo.jpeg`);
-    }
+   
 
     return (
-      <div style={blogStyle}>
-        <div>
-          <p>
-            {" "}
-            <Link to="/"> Close View </Link>
-          </p>
-
-          <p>
-            {" "}
-            {blog.title} {blog.author}
-          </p>
-          <img src={`${imagePath}`} alt="image of Blog" />
-
-          <p>Url:{blog.url}</p>
-          <p>
-            Likes:{blog.likes}{" "}
-            <button
-              onClick={() =>
-                dispatch(
-                  likeHandler(blog.id, { ...blog, likes: blog.likes + 1 })
-                )
-              }
-            >
-              click to like
-            </button>
-          </p>
-          <p>Author:{blog.author}</p>
-          {user.username === blog.user.username ? (
-            <p>
-              <button onClick={() => dispatch(removeBlogHandler(blog.id))}>
-                Delete
-              </button>
-            </p>
-          ) : null}
+      <div >
+       <BlogTitle blog={blog} />
+          <BlogBody blog={blog} user={user}  />
+         <hr/> 
+         <Comments blog={blog}/>
+         <hr/>
+         <CommentForm blog={blog}/>
         </div>
-        <hr />
-        <CommentForm blog={blog} />
-        <hr />
-        <Comments blog={blog} />
-      </div>
-    );
-  }
-
+   )
+    }     
+         
   return null;
 };
 

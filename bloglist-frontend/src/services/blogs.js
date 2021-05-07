@@ -22,15 +22,18 @@ const create = async (newObject) => {
   };
 
   const response = await axios.post(baseUrl, newObject, {
-    headers: { Authorization: token },
+    headers: { Authorization: token, "Content-Type": "multipart/form-data" },
   });
   console.log({ config });
   return response.data;
 };
 
+// {
+//   header: { "Content-Type": "multipart/form" },
+// }
 const update = (id, notObject) => {
-  console.log("clientid",id)
-  console.log("clientid",notObject)
+  console.log("clientid", id);
+  console.log("clientid", notObject);
   const request = axios.put(`${baseUrl}/${id}`, notObject);
   return request.then((response) => response.data);
 };
@@ -47,4 +50,12 @@ const getOneBlog = (id) => {
   return request.then((response) => response.data); //note-app-with-react-node
 };
 
-export default { getAll, create, setToken, update, token, deleteBlog,getOneBlog };
+export default {
+  getAll,
+  create,
+  setToken,
+  update,
+  token,
+  deleteBlog,
+  getOneBlog,
+};

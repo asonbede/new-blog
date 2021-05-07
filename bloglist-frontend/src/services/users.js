@@ -7,7 +7,7 @@ const getAll = () => {
 };
 
 const getOne = (id) => {
-  console.log("ingetOneServices")
+  console.log("ingetOneServices");
   const request = axios.get(`${baseUrl}/${id}`);
   return request.then((response) => response.data);
 };
@@ -18,16 +18,15 @@ const setToken = (newToken) => {
   token = `bearer ${newToken}`;
 };
 
-
 const create = async (newObject) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-
+  // const config = {
+  //   headers: { Authorization: token },
+  // };
+  console.log({ newObject });
   const response = await axios.post(baseUrl, newObject, {
-    headers: { Authorization: token },
+    header: { "Content-Type": "multipart/form" },
   });
-  console.log({ config });
+
   return response.data;
 };
 
@@ -38,5 +37,4 @@ const deletePerson = (id) => {
   return request.then((response) => response.data); //note-app-with-react-node
 };
 
-
-export default { getAll ,getOne,deletePerson,setToken,create};
+export default { getAll, getOne, deletePerson, setToken, create };

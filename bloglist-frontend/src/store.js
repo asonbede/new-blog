@@ -7,7 +7,7 @@ import blogReducer from "./reducers/blogReducer";
 import usersReducer from "./reducers/usersReducer";
 import allUsersReducer from "./reducers/allUsersReducer";
 import reRenderReducer from "./reducers/trigarRender";
-
+import messageReducer from "./reducers/messageReducer";
 // import singleUserReducer from "./reducers/singleUserReducer";
 //import filterReducer from "./reducers/filterReducer";
 
@@ -17,6 +17,7 @@ const reducer = combineReducers({
   logInUser: usersReducer,
   allUsers: allUsersReducer,
   trigarRender: reRenderReducer,
+  message: messageReducer,
   //  singleUser: singleUserReducer
 
   //filter: filterReducer,

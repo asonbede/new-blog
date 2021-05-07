@@ -7,6 +7,7 @@ const CreateBlog = (props) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+  const [image, setimage] = useState("");
 
   const dispatch = useDispatch();
 
@@ -14,15 +15,22 @@ const CreateBlog = (props) => {
     //noteFormRef.current.togglevisibility();
     //console.log({ noteFormRef });
     event.preventDefault();
-    const newBlogObject = {
-      title: title,
-      url: url,
-      author: author,
-    };
+
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("title", title);
+    formData.append("url", url);
+    formData.append("author", author);
+
+    // const newBlogObject = {
+    //   title: title,
+    //   url: url,
+    //   author: author,
+    // };
 
     props.noteFormRef.current.togglevisibility();
 
-    dispatch(createBlog(newBlogObject));
+    dispatch(createBlog(formData));
     setTitle("");
     setAuthor("");
     setUrl("");
@@ -38,6 +46,10 @@ const CreateBlog = (props) => {
 
   const handleUrlChange = (event) => {
     setUrl(event.target.value);
+  };
+  const fileSelected = (event) => {
+    const file = event.target.files[0];
+    setimage(file);
   };
 
   return (
@@ -67,6 +79,14 @@ const CreateBlog = (props) => {
           onChange={handleUrlChange}
         />
       </Form.Group>
+      <Form.Group controlId="formProfileImageId">
+        <Form.File
+          onChange={fileSelected}
+          accept="image/*"
+          label="Profile Image"
+        />
+      </Form.Group>
+
       <Button type="submit" style={{ margin: 5 }} block>
         create
       </Button>
@@ -74,19 +94,3 @@ const CreateBlog = (props) => {
   );
 };
 export default CreateBlog;
-{
-  /* <div>
-      <h2>login</h2>
-      <Form onSubmit={onSubmit}>
-        <Form.Group>
-          <Form.Label>username:</Form.Label>
-          <Form.Control type="text" name="username" />
-          <Form.Label>password:</Form.Label>
-          <Form.Control type="password" />
-          <Button variant="primary" type="submit">
-            login
-          </Button>
-        </Form.Group>
-      </Form>
-    </div> */
-}

@@ -243,7 +243,7 @@ const App = (props) => {
                   </Nav.Link>
                   <Nav.Link href="#" as="span">
                     <Link style={padding} to="/register">
-                      registerr
+                      register
                     </Link>
                   </Nav.Link>
                 </>
@@ -270,7 +270,7 @@ const App = (props) => {
 
           <Route path="/blogs/:id">
             {" "}
-            <OneBlog /> <Blogs />{" "}
+            <OneBlog />
           </Route>
 
           <Route path="/login">
