@@ -134,10 +134,12 @@ blogsRouter.post("/", async (req, res, next) => {
     // const description = req.body.description;
     // console.log({ description }, "from image");
     if (err) {
-      res.json({ msg: err });
+      //res.json({ msg: err });
+      return res.status(401).json({ error: err });
     } else {
       if (req.file == undefined) {
-        res.json({ msg: "Error-no file selected" });
+        // res.json({ msg: "Error-no file selected" });
+        return res.status(401).json({ error: "Error-no file selected" });
       } else {
         const file = req.file;
 

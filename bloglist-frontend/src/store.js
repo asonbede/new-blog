@@ -8,6 +8,8 @@ import usersReducer from "./reducers/usersReducer";
 import allUsersReducer from "./reducers/allUsersReducer";
 import reRenderReducer from "./reducers/trigarRender";
 import messageReducer from "./reducers/messageReducer";
+import commentUpdateReducer from "./reducers/commentUpdateReducer";
+
 // import singleUserReducer from "./reducers/singleUserReducer";
 //import filterReducer from "./reducers/filterReducer";
 
@@ -18,6 +20,7 @@ const reducer = combineReducers({
   allUsers: allUsersReducer,
   trigarRender: reRenderReducer,
   message: messageReducer,
+  updateHandle: commentUpdateReducer,
   //  singleUser: singleUserReducer
 
   //filter: filterReducer,

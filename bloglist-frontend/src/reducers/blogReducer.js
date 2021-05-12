@@ -131,18 +131,71 @@ export const createBlog = (content) => {
 // export const controlUseEffectRerender = () => {
 //   return !true;
 // };
+const scrollToElement = () => {
+  document.getElementById("noteti").scrollIntoView();
+};
 
-export const createComment = (id, content) => {
+export const handleComment = (id, content, operationType) => {
+  let successMessage;
+  let failureMessage;
+
+  if (operationType === "delete") {
+    successMessage = "Comment deletion was successful";
+    failureMessage = "Comment deletion was not successful";
+  } else if (operationType === "create") {
+    successMessage = "Comment creation was successful";
+    failureMessage = "Comment creation was not successful";
+  } else if (operationType === "update") {
+    successMessage = "Comment update was successful";
+    failureMessage = "Comment update was not successful";
+  } else if (operationType === "like") {
+    successMessage = "Comment like operation was successful";
+    failureMessage = "Comment like operation was not successful";
+  } else if (operationType === "reply-create") {
+    successMessage = "Comment-create-reply operation was successful";
+    failureMessage = "Comment-create-reply operation was not successful";
+  } else if (operationType === "update-reply") {
+    successMessage = "Comment-reply-update operation was successful";
+    failureMessage = "Comment-reply-update operation was not successful";
+  } else if (operationType === "like-reply") {
+    successMessage = "Like-reply operation was successful";
+    failureMessage = "Like-reply operation was not successful";
+  } else if (operationType === "dis-like-reply") {
+    successMessage = "Dis-Like-reply operation was successful";
+    failureMessage = "Dis-Like-reply operation was not successful";
+  } else if (operationType === "delete-comment-reply") {
+    successMessage = "Delete-comment-reply operation was successful";
+    failureMessage = "Delete-comment-reply operation was not successful";
+  }
+
   return async (dispatch) => {
     console.log("inside actioncreator reducer");
-    const response = await blogService.update(id, content);
+    try {
+      const response = await blogService.update(id, content);
+
+      console.log({ response });
+      dispatch({
+        type: "CREATE_COMMENT",
+        data: response,
+      });
+
+      dispatch(
+        renderMessage({
+          type: "success",
+          message: successMessage,
+        })
+      );
+      // scrollToElement();
+      dispatch(trigerRender());
+    } catch (error) {
+      dispatch(
+        renderMessage({
+          type: "error",
+          message: failureMessage,
+        })
+      );
+    }
     //controlUseEffectRerender();
-    dispatch(trigerRender());
-    console.log({ response });
-    dispatch({
-      type: "CREATE_COMMENT",
-      data: response,
-    });
   };
 };
 

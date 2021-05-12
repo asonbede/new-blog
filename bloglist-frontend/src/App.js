@@ -18,6 +18,7 @@ import loginService from "./services/login";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { setLoginUser } from "./reducers/usersReducer";
 import { getAllUsers } from "./reducers/allUsersReducer";
+import { renderMessage } from "./reducers/messageReducer";
 import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
@@ -32,7 +33,7 @@ import { Table, Form, Button, Alert, Navbar, Nav } from "react-bootstrap";
 
 const App = (props) => {
   //const [blogs, setBlogs] = useState([]);
-  const [message, setMessage] = useState(null);
+  //const [message, setMessage] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [controlRerender, setcontrolRerender] = useState(false);
@@ -116,89 +117,37 @@ const App = (props) => {
       dispatch(setLoginUser(user));
       setUsername("");
       setPassword("");
-      setMessage({ type: "success", message: `${user.name} logged in` });
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
+
+      dispatch(
+        renderMessage({
+          type: "success",
+          message: `${user.name} logged in`,
+        })
+      );
     } catch (exception) {
-      setMessage({
-        type: "error",
-        message: "Login failed. Wrong credentials: wrong username or password",
-      });
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
+      dispatch(
+        renderMessage({
+          type: "error",
+          message: `logged in was not successful`,
+        })
+      );
     }
   };
   const handleLogout = () => {
     window.localStorage.removeItem("loggedNoteappUser");
-    // setMessage({ type: "success", message: `${userName} logged out` });
-    // setTimeout(() => {
-    //   setMessage(null);
-    // }, 5000);
-    // setUser(null);
-    dispatch(setLoginUser(null));
+    const loggedUserJSON = window.localStorage.getItem("loggedNoteappUser");
+    if (!loggedUserJSON) {
+      dispatch(setLoginUser(null));
+
+      dispatch(
+        renderMessage({
+          type: "success",
+          message: `${user.name} logged out`,
+        })
+      );
+    }
   };
 
-  // //implementing updating likes
-  // const updateLikes = (id) => {
-  //   console.log(`Likes of ${id} about to be changed`);
-  //   //const url = `http://localhost:3001/notes/${id}`;
-  //   // const note = notes.find((n) => n.id === id);
-  //   const changeBlog = {
-  //     user: "5a43e6b6c37f3d065eaaa581",
-  //     likes: 45,
-  //     author: "Joel Spolsky",
-  //     title: "The Joel Test: 12 Steps to Better Code",
-  //     url:
-  //       "https://www.joelonsoftware.com/2000/08/09/the-joel-test-12-steps-to-better-code/",
-  //   };
-  //   blogServices
-  //     .update(id, changeBlog)
-  //     .then((returnedBlog) => {
-  //       console.log({ returnedBlog });
-  //      // setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)));
-  //       //setNotes(returnedNote);
-  //       setMessage({
-  //         type: "success",
-  //         message: `The Likes of Blog with id:${id} was successfully updated`,
-  //       });
-  //       setTimeout(() => {
-  //         setMessage(null);
-  //       }, 5000);
-  //     })
-  //     .catch(() => {
-  //       setMessage(`Blogs likes update failed`);
-  //       setTimeout(() => {
-  //         setMessage(null);
-  //       }, 5000);
-  //       //setNotes(notes.filter((n) => n.id !== id));
-  //     });
-  //   // .catch((error) => {
-  //   //   alert(`the note ${note.content} was already deleted`);
-  //   // });
-  // };
-
-  // const match = useRouteMatch('/blogs/:id')
-  // const blog = match ? blogs.find(blog => blog.id === Number(match.params.id)): null
-
-  // if (user === null) {
-  //   return (
-  //     <div>
-  //       <Notification message={message} />
-  //       <h2>Log in to application</h2>
-  //       <Togglable buttonLabel="login">
-  //         <LoginForm
-  //           handlePasswordChange={handlePasswordChange}
-  //           handleUsernameChange={handleUsernameChange}
-  //           handleLogin={handleLogin}
-  //           password={password}
-  //           username={username}
-  //         />
-  //       </Togglable>
-  //     </div>
-  //   );
-  // }
   const padding = {
     padding: 5,
   };
@@ -252,7 +201,7 @@ const App = (props) => {
           </Navbar.Collapse>
         </Navbar>
 
-        <Notification message={message} />
+        <Notification />
 
         <Switch>
           <Route path="/users/:id">
@@ -270,7 +219,7 @@ const App = (props) => {
 
           <Route path="/blogs/:id">
             {" "}
-            <OneBlog />
+            <OneBlog noteFormRef={noteFormRef} />
           </Route>
 
           <Route path="/login">
@@ -317,36 +266,3 @@ const App = (props) => {
 };
 
 export default App;
-{
-  /* <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-<Navbar.Toggle aria-controls="responsive-navbar-nav" />
-<Navbar.Collapse id="responsive-navbar-nav">
-  <Nav className="mr-auto">
-    <Nav.Link href="#" as="span">
-      <Link style={padding} to="/">
-        home
-      </Link>
-    </Nav.Link>
-    <Nav.Link href="#" as="span">
-      <Link style={padding} to="/notes">
-        notes
-      </Link>
-    </Nav.Link>
-    <Nav.Link href="#" as="span">
-      <Link style={padding} to="/users">
-        users
-      </Link>
-    </Nav.Link>
-    <Nav.Link href="#" as="span">
-      {user ? (
-        <em style={padding}>{user} logged in</em>
-      ) : (
-        <Link style={padding} to="/login">
-          login
-        </Link>
-      )}
-    </Nav.Link>
-  </Nav>
-</Navbar.Collapse>
-</Navbar> */
-}
