@@ -1,5 +1,5 @@
 import React from "react";
-import { handleComment } from "../reducers/blogReducer";
+import { handleCreateMainComment } from "../reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Button } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
@@ -28,7 +28,9 @@ const CommentForm = ({ blog }) => {
         reply: [],
       },
     ];
-    dispatch(handleComment(blog.id, { ...blog, comments: comment }, "create"));
+    dispatch(
+      handleCreateMainComment(blog.id, { ...blog, comments: comment }, "create")
+    );
 
     //[...blog.comments,event.target.comment.value]
   };

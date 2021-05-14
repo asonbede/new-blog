@@ -14,21 +14,47 @@ import { renderMessage } from "./messageReducer";
 const blogReducer = (state = [], action) => {
   switch (action.type) {
     case "NEW_NOTE":
-      //return state.concat(action.data);
       return [...state, action.data];
     case "INIT_BLOGS":
       return action.data;
     case "DELETE_BLOG":
-      // return   state.filter((blog)=>blog.id!==action.id)
       return action.data;
 
-    case "NEW_NOTE":
-      return state.concat(action.data);
+    case "UPDATE_MAIN_BLOG":
+      return state.map((blog) =>
+        blog.id === action.data.id ? action.data : blog
+      );
 
+    case "CREAT_MAIN_COMMENT":
+      return state.map((blog) =>
+        blog.id === action.data.id ? action.data : blog
+      );
+
+    case "CREAT_MAIN_BLOG_LIKE":
+      // window.location.reload()
+
+      return state.map((blog) =>
+        blog.id === action.data.id ? action.data : blog
+      );
+    //----------comments operations-----------
     case "CREATE_COMMENT":
       // window.location.reload()
 
       return state.filter((blog) =>
+        blog.id === action.data.id ? action.data : blog
+      );
+
+    case "LIKE_COMMENT":
+      // window.location.reload()
+
+      return state.map((blog) =>
+        blog.id === action.data.id ? action.data : blog
+      );
+
+    case "DIS_LIKE_COMMENT":
+      // window.location.reload()
+
+      return state.map((blog) =>
         blog.id === action.data.id ? action.data : blog
       );
 
@@ -47,21 +73,7 @@ const blogReducer = (state = [], action) => {
   }
 };
 
-//const generateId = () => Number((Math.random() * 1000000).toFixed(0));
-
-export const toggleImportanceOf = (id) => {
-  return {
-    type: "TOGGLE_IMPORTANCE",
-    data: { id },
-  };
-};
-
-// export const initializeNotes = (notes) => {
-//   return {
-//     type: "INIT_NOTES",
-//     data: notes,
-//   };
-// };
+//----------------mainn blogs, comments and their replies,likes,dislikes,create,update
 
 export const initializeBlogs = () => {
   let blogs;
@@ -81,6 +93,9 @@ export const initializeBlogs = () => {
 };
 
 export const removeBlogHandler = (id) => {
+  const successMessage = "Blog-deletion operation was successful";
+  const failureMessage = "Blog-deletion operation was not successful";
+
   return async (dispatch) => {
     const blogs = await blogService.getAll();
     const blogObject = blogs.find((blog) => blog.id === id);
@@ -90,16 +105,32 @@ export const removeBlogHandler = (id) => {
     if (!confirmResult) {
       return;
     }
-    blogService
-      .deleteBlog(id)
-      .then((returnedNote) => {
-        const newBlogs = blogs.filter((blog) => blog.id !== id);
-        dispatch({
-          type: "DELETE_BLOG",
-          data: newBlogs,
-        });
-      })
-      .catch((error) => console.log("blog not deleted"));
+    try {
+      const result = await blogService.deleteBlog(id);
+
+      const newBlogs = blogs.filter((blog) => blog.id !== id);
+      dispatch({
+        type: "DELETE_BLOG",
+        data: newBlogs,
+      });
+
+      dispatch(
+        renderMessage({
+          type: "success",
+          message: successMessage,
+        })
+      );
+      // scrollToElement();
+      dispatch(trigerRender());
+    } catch (error) {
+      dispatch(
+        renderMessage({
+          type: "error",
+          message: failureMessage,
+        })
+      );
+      dispatch(trigerRender());
+    }
   };
 };
 
@@ -117,6 +148,7 @@ export const createBlog = (content) => {
           message: "Blog creation was successful",
         })
       );
+      dispatch(trigerRender());
     } catch (error) {
       dispatch(
         renderMessage({
@@ -124,13 +156,120 @@ export const createBlog = (content) => {
           message: "Blog creation was not successful",
         })
       );
+      dispatch(trigerRender());
     }
-    //noteFormRef.current.togglevisibility();
   };
 };
-// export const controlUseEffectRerender = () => {
-//   return !true;
-// };
+
+export const handleUpdateMainBlog = (id, content) => {
+  const successMessage = "main-blog-update operation was successful";
+  const failureMessage = "main-blog-update operation was not successful";
+
+  return async (dispatch) => {
+    console.log("inside actioncreator reducer");
+    try {
+      const response = await blogService.update(id, content);
+
+      console.log({ response });
+      dispatch({
+        type: "UPDATE_MAIN_BLOG",
+        data: response,
+      });
+
+      dispatch(
+        renderMessage({
+          type: "success",
+          message: successMessage,
+        })
+      );
+      // scrollToElement();
+      dispatch(trigerRender());
+    } catch (error) {
+      dispatch(
+        renderMessage({
+          type: "error",
+          message: failureMessage,
+        })
+      );
+      dispatch(trigerRender());
+    }
+    //controlUseEffectRerender();
+  };
+};
+
+export const handleCreateMainComment = (id, content, operationType) => {
+  const successMessage = "Main-Comment-creation was successful";
+  const failureMessage = "Main-Comment-creation was not successful";
+
+  return async (dispatch) => {
+    console.log("inside actioncreator reducer");
+    try {
+      const response = await blogService.update(id, content);
+
+      console.log({ response });
+      dispatch({
+        type: "CREAT_MAIN_COMMENT",
+        data: response,
+      });
+
+      dispatch(
+        renderMessage({
+          type: "success",
+          message: successMessage,
+        })
+      );
+      // scrollToElement();
+      dispatch(trigerRender());
+    } catch (error) {
+      dispatch(
+        renderMessage({
+          type: "error",
+          message: failureMessage,
+        })
+      );
+      dispatch(trigerRender());
+    }
+    //controlUseEffectRerender();
+  };
+};
+
+export const handleCreateMainBlogLike = (id, content) => {
+  const successMessage = "Main-blog-like operation was successful";
+  const failureMessage = "Main-blog-like operation was not successful";
+
+  return async (dispatch) => {
+    console.log("inside actioncreator reducer");
+    try {
+      const response = await blogService.update(id, content);
+
+      console.log({ response });
+      dispatch({
+        type: "CREAT_MAIN_BLOG_LIKE",
+        data: response,
+      });
+
+      dispatch(
+        renderMessage({
+          type: "success",
+          message: successMessage,
+        })
+      );
+      // scrollToElement();
+      dispatch(trigerRender());
+    } catch (error) {
+      dispatch(
+        renderMessage({
+          type: "error",
+          message: failureMessage,
+        })
+      );
+      dispatch(trigerRender());
+    }
+    //controlUseEffectRerender();
+  };
+};
+
+//----------------sub comments and their replies,likes,dislikes,create,update
 const scrollToElement = () => {
   document.getElementById("noteti").scrollIntoView();
 };
@@ -142,15 +281,9 @@ export const handleComment = (id, content, operationType) => {
   if (operationType === "delete") {
     successMessage = "Comment deletion was successful";
     failureMessage = "Comment deletion was not successful";
-  } else if (operationType === "create") {
-    successMessage = "Comment creation was successful";
-    failureMessage = "Comment creation was not successful";
   } else if (operationType === "update") {
     successMessage = "Comment update was successful";
     failureMessage = "Comment update was not successful";
-  } else if (operationType === "like") {
-    successMessage = "Comment like operation was successful";
-    failureMessage = "Comment like operation was not successful";
   } else if (operationType === "reply-create") {
     successMessage = "Comment-create-reply operation was successful";
     failureMessage = "Comment-create-reply operation was not successful";
@@ -199,26 +332,74 @@ export const handleComment = (id, content, operationType) => {
   };
 };
 
-export const likeHandler = (id, content) => {
+export const sendCommentLike = (id, content) => {
+  const successMessage = "Comment-Like operation was successful";
+  const failureMessage = "Comment-Like operation was not successful";
+
   return async (dispatch) => {
     console.log("inside actioncreator reducer");
-    const response = await blogService.update(id, content);
+    try {
+      const response = await blogService.update(id, content);
 
-    dispatch(trigerRender());
-    console.log({ response });
-    dispatch({
-      type: "CREATE_LIKE",
-      data: response,
-    });
+      console.log({ response });
+      dispatch({
+        type: "LIKE_COMMENT",
+        data: response,
+      });
+
+      dispatch(
+        renderMessage({
+          type: "success",
+          message: successMessage,
+        })
+      );
+      // scrollToElement();
+      dispatch(trigerRender());
+    } catch (error) {
+      dispatch(
+        renderMessage({
+          type: "error",
+          message: failureMessage,
+        })
+      );
+      dispatch(trigerRender());
+    }
   };
 };
 
-// export const handleBlogdetailsClose = () => {
-//   console.log("ondetailclose");
-//   return {
-//     type: "CLOSE_DETAILS",
-//     data: null,
-//   };
-// };
+export const sendCommentDisLike = (id, content) => {
+  const successMessage = "Comment-DisLike operation was successful";
+  const failureMessage = "Comment-DisLike operation was not successful";
+
+  return async (dispatch) => {
+    console.log("inside actioncreator reducer");
+    try {
+      const response = await blogService.update(id, content);
+
+      console.log({ response });
+      dispatch({
+        type: "DIS_LIKE_COMMENT",
+        data: response,
+      });
+
+      dispatch(
+        renderMessage({
+          type: "success",
+          message: successMessage,
+        })
+      );
+      // scrollToElement();
+      dispatch(trigerRender());
+    } catch (error) {
+      dispatch(
+        renderMessage({
+          type: "error",
+          message: failureMessage,
+        })
+      );
+      dispatch(trigerRender());
+    }
+  };
+};
 
 export default blogReducer;

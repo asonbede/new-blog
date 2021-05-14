@@ -14,7 +14,7 @@ import blogServices from "./services/blogs";
 
 import usersService from "./services/users";
 import loginService from "./services/login";
-
+import "./App.css";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { setLoginUser } from "./reducers/usersReducer";
 import { getAllUsers } from "./reducers/allUsersReducer";

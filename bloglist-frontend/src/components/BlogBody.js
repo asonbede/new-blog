@@ -1,26 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 // import { useDispatch, useSelector } from "react-redux";
-import { removeBlogHandler, likeHandler } from "../reducers/blogReducer";
+import {
+  removeBlogHandler,
+  handleCreateMainBlogLike,
+} from "../reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
 // import CommentForm from "./CommentForm";
 // import Comments from "./Comments";
 // import { useRouteMatch, Link } from "react-router-dom";
 import { Card, Accordion, Image, Badge } from "react-bootstrap";
 import { useRouteMatch, Link } from "react-router-dom";
-
-const BlogBody = ({ blog, user }) => {
+import MainBlogUpdateForm from "./MainBlogUpdateForm";
+import Togglable from "./Togglable";
+const BlogBody = ({ blog, user, noteFormRef }) => {
+  const [blogTitleSuffix, setblogTitleSuffix] = useState(true);
+  const classVarr = blogTitleSuffix ? "add-on-present" : "add-on-addsent";
   const dispatch = useDispatch();
   // dispatch(createComment(blog.id,{...blog,comments:[...blog.comments,event.target.comment.value]}))
   if (blog) {
     const imagePath = blog.imageid
       ? `http://localhost:8082${blog.imageid}`
       : require(`../images/default-photo.jpeg`);
-
-    // try {
-    //   imagePath = require(`../images/photo-${blog.title}.jpeg`);
-    // } catch (error) {
-    //   imagePath = require(`../images/default-photo.jpeg`);
-    // }
 
     return (
       <Accordion style={{ width: "80%" }}>
@@ -34,7 +34,14 @@ const BlogBody = ({ blog, user }) => {
           />
 
           <Accordion.Toggle as={Card.Header} eventKey="0">
-            {blog.url.slice(0, 200)}... See More
+            <Card.Text
+              onClick={() => setblogTitleSuffix(!blogTitleSuffix)}
+              className={classVarr}
+            >
+              {" "}
+              {blog.url.slice(0, 200)}
+            </Card.Text>
+
             <Card.Text>By {blog.author}</Card.Text>
             <Card.Text>
               <Card.Link
@@ -42,7 +49,10 @@ const BlogBody = ({ blog, user }) => {
                 style={{ marginRight: 10 }}
                 onClick={() =>
                   dispatch(
-                    likeHandler(blog.id, { ...blog, likes: blog.likes + 1 })
+                    handleCreateMainBlogLike(blog.id, {
+                      ...blog,
+                      likes: blog.likes + 1,
+                    })
                   )
                 }
               >
@@ -71,6 +81,13 @@ const BlogBody = ({ blog, user }) => {
                   Delete
                 </Card.Link>
               ) : null}
+
+              {user.username === blog.user.username ? (
+                <Togglable buttonLabel="update" ref={noteFormRef}>
+                  <MainBlogUpdateForm blog={blog} noteFormRef={noteFormRef} />
+                </Togglable>
+              ) : null}
+
               <Link to="/" style={{ marginRight: 10, textDecoration: "none" }}>
                 {" "}
                 Blog List{" "}

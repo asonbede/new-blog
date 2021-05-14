@@ -30,7 +30,7 @@ const OneBlog = (props) => {
     return (
       <div>
         <BlogTitle blog={blog} />
-        <BlogBody blog={blog} user={user} />
+        <BlogBody blog={blog} user={user} noteFormRef={props.noteFormRef} />
         <hr />
         <Comments blog={blog} noteFormRef={props.noteFormRef} />
         <hr />

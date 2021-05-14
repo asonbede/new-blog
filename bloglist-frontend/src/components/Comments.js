@@ -2,7 +2,11 @@ import React, { useState } from "react";
 //import { useSelector } from "react-redux";
 import { Media, Image, Card, Button, Badge } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { handleComment } from "../reducers/blogReducer";
+import {
+  handleComment,
+  sendCommentLike,
+  sendCommentDisLike,
+} from "../reducers/blogReducer";
 import { updateMessage } from "../reducers/commentUpdateReducer";
 import UpdateForm from "./UpdateForm";
 import Togglable from "./Togglable";
@@ -92,7 +96,7 @@ const Comments = ({ blog, noteFormRef }) => {
       comments: newArray,
     };
 
-    dispatch(handleComment(blogId, blogObj, "like"));
+    dispatch(sendCommentLike(blogId, blogObj));
   };
 
   const handleDisLikeComment = (blog, comment) => {
@@ -114,7 +118,7 @@ const Comments = ({ blog, noteFormRef }) => {
       comments: newArray,
     };
 
-    dispatch(handleComment(blogId, blogObj, "dislike"));
+    dispatch(sendCommentDisLike(blogId, blogObj));
   };
 
   console.log({ blog });
@@ -178,14 +182,6 @@ const Comments = ({ blog, noteFormRef }) => {
               ) : null}
 
               {user.username === comment.commenter ? (
-                // c
-                //   href="#"
-                //   style={{ marginRight: 10 }}
-                //   onClick={() => handleUpdateComment(comment)}
-                // >
-                //   Update Comment
-                // </Card.Link>
-
                 <Togglable buttonLabel="update" ref={noteFormRef}>
                   <UpdateForm
                     blog={blog}
