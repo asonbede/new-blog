@@ -37,7 +37,9 @@ const DisplayQuestion = ({ noteFormRef }) => {
   const [submitButtonState, setsubmitButtonState] = useState(true);
   const [showAlert, setshowAlert] = useState(false);
   const [alertContent, setalertContent] = useState({});
-
+  const [deleteHandlerOutput, setdeleteHandlerOutput] = useState({});
+  // const [continueValue, setContinue] = useState(false);
+  // const [cancel, setCancel] = useState(false);
   let user = useSelector((state) => state.logInUser);
   if (!user) {
     user = JSON.parse(localStorage.getItem("loggedNoteappUser"));
@@ -52,7 +54,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
   //blogQuestionArray: null, nameValueObj
   let now;
   const optionLetters = ["A", "B", "C", "D", "E"];
-
+  //let deleteHandlerOutput = {};
   let blogQuestionObjArray = [];
   let match = useRouteMatch("/questions/:id");
   const paraValue = match.params.id;
@@ -68,7 +70,13 @@ const DisplayQuestion = ({ noteFormRef }) => {
     ? blogs.find((blog) => blog.id.toString() === match.params.id)
     : null;
   console.log({ blog });
-
+  // useEffect(
+  //   (blog) => {
+  //     setContinue(false);
+  //     setCancel(false);
+  //   },
+  //   [blog]
+  // );
   if (blog && blog.questions.length) {
     blogQuestionObjArray = transformQuestionArray(blog.questions);
     //dispatch(sendBlogQuestionArray(blogQuestionObjArray));
@@ -121,26 +129,34 @@ const DisplayQuestion = ({ noteFormRef }) => {
     };
 
     //const blogObject = blogs.find((blog) => blog.id === id);
-    const confirmResult = window.confirm(
-      `Do you really want to delete this comment ${questionObj.question} from database/server`
-    );
-    if (!confirmResult) {
-      return;
-    }
+    // const confirmResult = window.confirm(
+    //   `Do you really want to delete this comment ${questionObj.question} from database/server`
+    // );
+    // if (!confirmResult) {
+    //   return;
+    // }
+    setalertContent({
+      headers: "Question Delete Alert",
+      body: `Do you really want to delete this question ${questionObj.question} from database`,
+    });
+    setshowAlert(true);
 
-    dispatch(sendQuestionDelete(blogId, blogObj));
+    //deleteHandlerOutput = { blogId, blogObj };
+    setdeleteHandlerOutput({ blogId, blogObj });
+    //dispatch(sendQuestionDelete(blogId, blogObj));
   };
 
   const continueHandler = () => {
-    console.log("okay44444");
-    setskippedArr([]);
-    setIsOpen(false);
+    const { blogId, blogObj } = deleteHandlerOutput;
+    console.log({ blogId });
+    console.log({ deleteHandlerOutput });
+    dispatch(sendQuestionDelete(blogId, blogObj));
+    setshowAlert(false);
+    setdeleteHandlerOutput({});
   };
   const cancelHandler = () => {
-    console.log("okay");
-    dispatch(sendResultHandler());
-    dispatch(sendResulReviewtHandler());
-    setIsOpen(false);
+    setshowAlert(false);
+    setdeleteHandlerOutput({});
   };
 
   console.log({ blog });
@@ -148,6 +164,12 @@ const DisplayQuestion = ({ noteFormRef }) => {
     console.log(blog.questions, "questionnnnnqrray");
     return (
       <div>
+        <AlertComponent
+          showAlert={showAlert}
+          continueHandler={continueHandler}
+          cancelHandler={cancelHandler}
+          alertContent={alertContent}
+        />
         <Card
           style={{
             width: "70%",

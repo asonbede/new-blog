@@ -56,6 +56,14 @@ const CreateQuestionsForm = ({ noteFormRef, blog }) => {
     // setAuthor("");
     // setUrl("");
     //noteFormRef.current.togglevisibility();
+    setquestion("");
+    setoptionA("");
+    setoptionB("");
+    setoptionC("");
+    setoptionD("");
+    setoptionE("");
+    setcorrectOption("");
+    setexplanation("");
   };
 
   const handleQuestionChange = (event) => {
