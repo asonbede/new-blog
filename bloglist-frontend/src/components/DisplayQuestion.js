@@ -70,13 +70,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
     ? blogs.find((blog) => blog.id.toString() === match.params.id)
     : null;
   console.log({ blog });
-  // useEffect(
-  //   (blog) => {
-  //     setContinue(false);
-  //     setCancel(false);
-  //   },
-  //   [blog]
-  // );
+
   if (blog && blog.questions.length) {
     blogQuestionObjArray = transformQuestionArray(blog.questions);
     //dispatch(sendBlogQuestionArray(blogQuestionObjArray));
@@ -86,6 +80,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
       (Object.keys(radioNameValue.nameValueObj).length /
         radioNameValue.blogQuestionArray.length) *
       100;
+    now = Math.round(now);
   }
   console.log({ now });
 
