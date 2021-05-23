@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { handleComment } from "../reducers/blogReducer";
+import { sendReplyCreateComment } from "../reducers/blogReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Button } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
@@ -32,7 +32,7 @@ const CommentReply = ({ blog, commentObj, noteFormRef }) => {
       likes: 0,
       dislikes: 0,
     };
-
+    console.log({ blog });
     // const newItemObject = { ...commentItem, comment: comment };
     console.log({ newItemObject });
     const newCommentArray = blog.comments.map((item) => {
@@ -45,11 +45,7 @@ const CommentReply = ({ blog, commentObj, noteFormRef }) => {
     console.log({ newCommentArray });
 
     dispatch(
-      handleComment(
-        blog.id,
-        { ...blog, comments: newCommentArray },
-        "reply-create"
-      )
+      sendReplyCreateComment(blog.id, { ...blog, comments: newCommentArray })
     );
     noteFormRef.current.togglevisibility();
 

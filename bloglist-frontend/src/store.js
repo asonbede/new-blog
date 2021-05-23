@@ -8,7 +8,10 @@ import usersReducer from "./reducers/usersReducer";
 import allUsersReducer from "./reducers/allUsersReducer";
 import reRenderReducer from "./reducers/trigarRender";
 import messageReducer from "./reducers/messageReducer";
-import commentUpdateReducer from "./reducers/commentUpdateReducer";
+//import commentUpdateReducer from "./reducers/commentUpdateReducer";
+import commentUpdateReducer from "./reducers/commentUpdate";
+import radioButtonNameValueReducer from "./reducers/radioButtonNameValueReducer";
+import resultReducer from "./reducers/resultReducer";
 
 // import singleUserReducer from "./reducers/singleUserReducer";
 //import filterReducer from "./reducers/filterReducer";
@@ -20,7 +23,10 @@ const reducer = combineReducers({
   allUsers: allUsersReducer,
   trigarRender: reRenderReducer,
   message: messageReducer,
-  updateHandle: commentUpdateReducer,
+  updateState: commentUpdateReducer,
+  radioNameValue: radioButtonNameValueReducer,
+  resultState: resultReducer,
+  // updateHandle: commentUpdateReducer,
   //  singleUser: singleUserReducer
 
   //filter: filterReducer,

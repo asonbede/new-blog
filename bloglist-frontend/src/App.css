@@ -5,3 +5,37 @@
 .add-on-addsent::after {
   content: "...see less";
 }
+.grey-color {
+  color: gray;
+  pointer-events: none;
+}
+
+.close-reply::after {
+  content: "...close view";
+}
+
+.open-reply::after {
+  content: "...open view";
+}
+.first-card-margin {
+  margin-top: 15%;
+}
+.other-card-margin {
+  margin-top: 2.5%;
+}
+@media screen and (max-width: 810px) {
+  .first-card-margin {
+    margin-top: 25%;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .first-card-margin {
+    margin-top: 30%;
+  }
+}
+@media screen and (max-width: 440px) {
+  .first-card-margin {
+    margin-top: 80%;
+  }
+}

@@ -5,17 +5,10 @@ import { Table } from "react-bootstrap";
 
 const Blogs = () => {
   const dispatch = useDispatch();
-  const blogs = useSelector(({ blogs }) => {
+  let blogs = useSelector(({ blogs }) => {
     return blogs;
   });
   //console.log("kkkkjj", notes);
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5,
-  };
 
   if (blogs) {
     return (

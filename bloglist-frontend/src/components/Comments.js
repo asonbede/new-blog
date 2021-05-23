@@ -6,18 +6,58 @@ import {
   handleComment,
   sendCommentLike,
   sendCommentDisLike,
+  sendCommentDelete,
 } from "../reducers/blogReducer";
+import {
+  sendCommentUpdate,
+  sendReplViewWrite,
+} from "../reducers/commentUpdate";
 import { updateMessage } from "../reducers/commentUpdateReducer";
 import UpdateForm from "./UpdateForm";
 import Togglable from "./Togglable";
 import CommentReply from "./CommentReply";
-import ReplyFormAccordion from "./DisplayReply";
-
+import DisplayReply from "./DisplayReply";
+import CommentForm from "./CommentForm";
+//import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, Link } from "react-router-dom";
 //window.location.reload()
-const Comments = ({ blog, noteFormRef }) => {
+const Comments = ({ noteFormRef }) => {
   // const [starter, setstarter] = useState(null);
   // const [comment, setcomment] = useState({});
-  const user = useSelector((state) => state.logInUser);
+  let user = useSelector((state) => state.logInUser);
+  if (!user) {
+    user = JSON.parse(localStorage.getItem("loggedNoteappUser"));
+  }
+
+  const replyViewWrite = useSelector(
+    (state) => state.updateState.replyViewWrite
+  );
+
+  const replyViewWriteCommentId = useSelector(
+    (state) => state.updateState.replyViewWriteCommentId
+  );
+  console.log("comennnnnnn");
+  console.log({ replyViewWrite }, "5comment");
+  //let match = useRouteMatch("/blogs/:id");
+
+  let match = useRouteMatch("/comments/:id");
+  const paraValue = match.params.id;
+  console.log({ paraValue });
+  let blogs = useSelector((state) => state.blogs);
+  if (!blogs.length) {
+    blogs = JSON.parse(localStorage.getItem("allBlogs"));
+  }
+
+  console.log({ blogs });
+  const blog = blogs
+    ? blogs.find((blog) => blog.id.toString() === match.params.id)
+    : null;
+  console.log({ blog });
+  // const blog = blogs
+  //   ? blogs.find((blog) => blog.id.toString() === match.params.id)
+  //   : null;
+  // console.log({ blog });
+
   const dispatch = useDispatch();
 
   // const scrollToElement = () => {
@@ -68,13 +108,13 @@ const Comments = ({ blog, noteFormRef }) => {
 
     //const blogObject = blogs.find((blog) => blog.id === id);
     const confirmResult = window.confirm(
-      `Do you really want to delete this comment from database/server`
+      `Do you really want to delete this comment ${comment.comment} from database/server`
     );
     if (!confirmResult) {
       return;
     }
 
-    dispatch(handleComment(blogId, blogObj, "delete"));
+    dispatch(sendCommentDelete(blogId, blogObj, comment));
   };
 
   const handleLikeComment = (blog, comment) => {
@@ -126,86 +166,132 @@ const Comments = ({ blog, noteFormRef }) => {
   return (
     <div>
       {blog.comments.length ? (
-        blog.comments.map((comment, i) => (
-          <Media key={`${i}-comment`} style={{ marginBottom: 20 }}>
+        <p>
+          <Link
+            to={`/blogs/${paraValue}`}
+            style={{ marginRight: 10, textDecoration: "none" }}
+          >
             {" "}
-            <Image
-              roundedCircle
-              width={64}
-              height={64}
-              className="mr-3"
-              src={
-                comment.profileimageid
-                  ? `http://localhost:8082${comment.profileimageid}`
-                  : require("../images/profile.jpg")
-              }
-              alt="Generic placeholder"
-            />
-            <Media.Body>
-              <h5>{comment.commenter}</h5>
-              <p style={{ width: "40%" }}>{comment.comment}</p>
-              <span style={{ marginRight: 10 }}>
-                {comment.postedTime
-                  ? getTimeDiff(comment.postedTime)
-                  : "notime"}
-              </span>
+            Back{" "}
+          </Link>
+        </p>
+      ) : null}
+      {blog.comments.length ? (
+        blog.comments.map((comment, i) => (
+          <>
+            <Media key={`${i}-comment`} style={{ marginBottom: 20 }}>
+              <Image
+                roundedCircle
+                width={64}
+                height={64}
+                className="mr-3"
+                src={
+                  comment.profileimageid
+                    ? `http://localhost:8082${comment.profileimageid}`
+                    : require("../images/profile.jpg")
+                }
+                alt="Generic placeholder"
+              />
+              <Media.Body>
+                <h5>{comment.commenter}</h5>
+                <p style={{ width: "40%" }}>{comment.comment}</p>
+                <span style={{ marginRight: 10 }}>
+                  {comment.postedTime
+                    ? getTimeDiff(comment.postedTime)
+                    : "notime"}
+                </span>
 
-              <Button
-                style={{ marginRight: 10 }}
-                onClick={() => handleLikeComment(blog, comment)}
-                size="sm"
-              >
-                <Badge pill variant="success">
-                  {comment.likes}
-                </Badge>{" "}
-                Like
-              </Button>
-              <Button
-                style={{ marginRight: 10 }}
-                onClick={() => handleDisLikeComment(blog, comment)}
-                size="sm"
-              >
-                <Badge pill variant="success">
-                  {comment.dislikes}
-                </Badge>{" "}
-                Dislike
-              </Button>
-
-              {user.username === comment.commenter ? (
-                <Button
+                <Link
                   style={{ marginRight: 10 }}
-                  onClick={() => handleDeleteComment(blog, comment)}
+                  onClick={() => handleLikeComment(blog, comment)}
                   size="sm"
                 >
-                  Delete
-                </Button>
-              ) : null}
+                  <Badge pill variant="success">
+                    {comment.likes}
+                  </Badge>{" "}
+                  Like
+                </Link>
+                <Link
+                  style={{ marginRight: 10 }}
+                  onClick={() => handleDisLikeComment(blog, comment)}
+                  size="sm"
+                >
+                  <Badge pill variant="success">
+                    {comment.dislikes}
+                  </Badge>{" "}
+                  Dislike
+                </Link>
 
-              {user.username === comment.commenter ? (
-                <Togglable buttonLabel="update" ref={noteFormRef}>
-                  <UpdateForm
-                    blog={blog}
-                    noteFormRef={noteFormRef}
-                    commentObj={comment}
-                  />
-                </Togglable>
-              ) : null}
-              <ReplyFormAccordion
-                commentObj={comment}
-                blog={blog}
-                user={user}
-                getTimeDiff={getTimeDiff}
-                noteFormRef={noteFormRef}
-                blog={blog}
-              />
-            </Media.Body>
-          </Media>
+                {user.username === comment.commenter ? (
+                  <Link
+                    style={{ marginRight: 10 }}
+                    onClick={() => handleDeleteComment(blog, comment)}
+                    size="sm"
+                  >
+                    Delete
+                  </Link>
+                ) : null}
+
+                {user.username === comment.commenter ? (
+                  <Link
+                    onClick={() =>
+                      dispatch(sendCommentUpdate(comment.commentId))
+                    }
+                    to="#"
+                    style={{ marginRight: 10, textDecoration: "none" }}
+                  >
+                    update
+                  </Link>
+                ) : null}
+                <UpdateForm
+                  blog={blog}
+                  commentObj={comment}
+                  noteFormRef={noteFormRef}
+                  commentIdValue={comment.commentId}
+                />
+                <Link
+                  onClick={() => dispatch(sendReplViewWrite(comment.commentId))}
+                  to="#"
+                  style={{ marginRight: 10, textDecoration: "none" }}
+                >
+                  <span
+                    className={
+                      replyViewWrite &&
+                      replyViewWriteCommentId === comment.commentId
+                        ? "close-reply"
+                        : "open-reply"
+                    }
+                  >
+                    {" "}
+                    {comment.reply && comment.reply.length > 1
+                      ? `${comment.reply.length} Replies`
+                      : comment.reply && comment.reply.length === 1
+                      ? "1 Reply"
+                      : " NO Reply"}{" "}
+                  </span>
+                </Link>
+
+                <DisplayReply
+                  commentObj={comment}
+                  blog={blog}
+                  user={user}
+                  getTimeDiff={getTimeDiff}
+                  noteFormRef={noteFormRef}
+                  blog={blog}
+                />
+              </Media.Body>
+            </Media>
+          </>
         ))
       ) : (
         <ul>
           <li>No Comment Yet, Leave One</li>
         </ul>
       )}
+      <hr />
+      <Togglable buttonLabel="Write Comment" ref={noteFormRef}>
+        <CommentForm blog={blog} noteFormRef={noteFormRef} />
+      </Togglable>
     </div>
   );
 };

@@ -21,7 +21,10 @@ const Notification = () => {
 
     if (show) {
       return (
-        <div id="noteti">
+        <div
+          id="noteti"
+          style={{ position: "fixed", top: "10%", zIndex: 5, width: "70%" }}
+        >
           <Alert
             variant={type === "error" ? "danger" : "success"}
             onClose={() => setShow(false)}

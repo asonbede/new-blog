@@ -9,7 +9,11 @@ import AllUsers from "./components/AllUsers";
 import OneUser from "./components/OneUser";
 import OneBlog from "./components/Oneblog";
 import CreateUser from "./components/CreateUserForm";
-
+import MainBlogUpdateForm from "./components/MainBlogUpdateForm";
+import Comments from "./components/Comments";
+import DisplayQuestion from "./components/DisplayQuestion";
+import ReviewAnswer from "./components/ReviewAnswers";
+//import UpdateForm from "./components/UpdateForm";
 import blogServices from "./services/blogs";
 
 import usersService from "./services/users";
@@ -155,7 +159,14 @@ const App = (props) => {
   return (
     <div className="container">
       <Router>
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar
+          collapseOnSelect
+          expand="lg"
+          bg="dark"
+          variant="dark"
+          // fixed="top"
+          sticky="top"
+        >
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
@@ -248,6 +259,25 @@ const App = (props) => {
               <CreateUser />
             </Togglable>
           </Route>
+
+          <Route path="/updatemainblog">
+            <MainBlogUpdateForm noteFormRef={noteFormRef} />
+          </Route>
+
+          <Route path="/comments/:id">
+            <Comments noteFormRef={noteFormRef} blogs={blogs} />
+          </Route>
+          <Route path="/questions/:id">
+            <DisplayQuestion noteFormRef={noteFormRef} blogs={blogs} />
+          </Route>
+
+          <Route path="/aswerrview">
+            <ReviewAnswer />
+          </Route>
+
+          {/* <Route path="/commentupdate/:id">
+            <UpdateForm noteFormRef={noteFormRef} />
+          </Route> */}
 
           <Route path="/">
             {console.log("in blogs")}

@@ -12,7 +12,8 @@ const logger = require("./utils/logger");
 const mongoose = require("mongoose");
 
 logger.info("connecting to", config.MONGODB_URI);
-
+//config.localDatabaseUrl
+//config.MONGODB_URI //remote database url
 mongoose
   .connect(config.MONGODB_URI, {
     useNewUrlParser: true,

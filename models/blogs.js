@@ -10,12 +10,13 @@ const blogSchema = new mongoose.Schema({
     required: true,
   },
   url: String,
-  likes: Number,
+  likes: { type: Object },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
   comments: { type: Array },
+  questions: { type: Array },
   imageid: { type: String },
 });
 

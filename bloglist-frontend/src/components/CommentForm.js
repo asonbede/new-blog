@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Form, Button } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
-const CommentForm = ({ blog }) => {
+const CommentForm = ({ blog, noteFormRef }) => {
   const dispatch = useDispatch();
   console.log({ dispatch });
   const user = useSelector((state) => state.logInUser);
@@ -28,10 +28,8 @@ const CommentForm = ({ blog }) => {
         reply: [],
       },
     ];
-    dispatch(
-      handleCreateMainComment(blog.id, { ...blog, comments: comment }, "create")
-    );
-
+    dispatch(handleCreateMainComment(blog.id, { ...blog, comments: comment }));
+    noteFormRef.current.togglevisibility();
     //[...blog.comments,event.target.comment.value]
   };
   return (

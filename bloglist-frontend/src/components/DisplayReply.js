@@ -1,6 +1,11 @@
 import React from "react";
 import CommentReply from "./CommentReply";
-import { handleComment } from "../reducers/blogReducer";
+import {
+  sendDeleteCommentReply,
+  sendLikeCommentReply,
+  sendDisLikeCommentReply,
+} from "../reducers/blogReducer";
+import { sendCommentReplyUpdate } from "../reducers/commentUpdate";
 import Togglable from "./Togglable";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -15,15 +20,24 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 import UpdateReplyForm from "./UpdateReplyForm";
 
 const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
   const dispatch = useDispatch();
+  const replyViewWrite = useSelector(
+    (state) => state.updateState.replyViewWrite
+  );
+  console.log({ replyViewWrite });
+  const replyViewWriteCommentId = useSelector(
+    (state) => state.updateState.replyViewWriteCommentId
+  );
 
   const handleDeleteCommentReply = (replyId) => {
     const blogId = blog.id;
-
+    const replyObj = commentObj.reply.find((item) => item.id === replyId);
+    const replyText = replyObj.comment;
     const newCommentArray = blog.comments.map((item) => {
       if (item.commentId === commentObj.commentId) {
         return {
@@ -41,13 +55,13 @@ const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
 
     //const blogObject = blogs.find((blog) => blog.id === id);
     const confirmResult = window.confirm(
-      `Do you really want to delete this comment from database/server`
+      `Do you really want to delete this comment: ${replyText} from database/server?`
     );
     if (!confirmResult) {
       return;
     }
 
-    dispatch(handleComment(blogId, blogObj, "delete-comment-reply"));
+    dispatch(sendDeleteCommentReply(blogId, blogObj));
   };
 
   const handleLikeCommentReply = (replyId) => {
@@ -75,7 +89,7 @@ const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
       comments: newCommentArray,
     };
 
-    dispatch(handleComment(blogId, blogObj, "like-reply"));
+    dispatch(sendLikeCommentReply(blogId, blogObj));
   };
 
   const handleDisLikeCommentReply = (replyId) => {
@@ -106,12 +120,16 @@ const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
       comments: newCommentArray,
     };
 
-    dispatch(handleComment(blogId, blogObj, "dis-like-reply"));
+    dispatch(sendDisLikeCommentReply(blogId, blogObj));
   };
 
   //import CommentReply from "./CommentReply";
   console.log(commentObj, "testingggg-blog");
-  if (commentObj.reply) {
+  if (
+    commentObj.reply &&
+    replyViewWrite &&
+    replyViewWriteCommentId === commentObj.commentId
+  ) {
     return (
       <>
         {commentObj.reply.map((comment, i) => (
@@ -139,7 +157,7 @@ const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
                   : "notime"}
               </span>
 
-              <Button
+              <Link
                 style={{ marginRight: 10 }}
                 onClick={() => handleLikeCommentReply(comment.commentId)}
                 size="sm"
@@ -148,9 +166,9 @@ const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
                   {comment.likes}
                 </Badge>{" "}
                 Like
-              </Button>
+              </Link>
 
-              <Button
+              <Link
                 style={{ marginRight: 10 }}
                 onClick={() => handleDisLikeCommentReply(comment.commentId)}
                 size="sm"
@@ -159,85 +177,105 @@ const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
                   {comment.dislikes}
                 </Badge>{" "}
                 Dislike
-              </Button>
+              </Link>
 
               {user.username === comment.commenter ? (
-                <Button
+                <Link
                   style={{ marginRight: 10 }}
                   onClick={() => handleDeleteCommentReply(comment.commentId)}
                   size="sm"
                 >
                   Delete
-                </Button>
+                </Link>
               ) : null}
 
               {user.username === comment.commenter ? (
-                <Togglable buttonLabel="update Reply" ref={noteFormRef}>
+                <>
+                  <Link
+                    onClick={() =>
+                      dispatch(sendCommentReplyUpdate(comment.commentId))
+                    }
+                    to="#"
+                    style={{ marginRight: 10, textDecoration: "none" }}
+                  >
+                    update
+                  </Link>
+
                   <UpdateReplyForm
                     blog={blog}
                     noteFormRef={noteFormRef}
                     commentObj={commentObj}
                     replyId={comment.commentId}
                   />
-                </Togglable>
+                </>
               ) : null}
             </Media.Body>
           </Media>
         ))}
+        <hr />
+        <Togglable buttonLabel="write reply" ref={noteFormRef}>
+          <CommentReply
+            commentObj={commentObj}
+            blog={blog}
+            noteFormRef={noteFormRef}
+          />
+        </Togglable>
       </>
     );
   }
   return null;
 };
 
-const ReplyFormAccordion = ({
-  blog,
-  user,
-  commentObj,
-  getTimeDiff,
+// const ReplyFormAccordion = ({
+//   blog,
+//   user,
+//   commentObj,
+//   getTimeDiff,
 
-  noteFormRef,
-}) => {
-  return (
-    <Accordion>
-      <Card>
-        <Card.Header style={{ backgroundColor: "white" }}>
-          <Accordion.Toggle as={Button} variant="link" eventKey="0">
-            <span>
-              {" "}
-              {commentObj.reply && commentObj.reply.length > 1
-                ? `${commentObj.reply.length} Replies`
-                : commentObj.reply && commentObj.reply.length === 1
-                ? "1 Reply"
-                : " NO Reply"}{" "}
-            </span>
-          </Accordion.Toggle>
-        </Card.Header>
-        <Accordion.Collapse eventKey="0">
-          <Card.Body>
-            <DisplayReply
-              commentObj={commentObj}
-              user={user}
-              getTimeDiff={getTimeDiff}
-              noteFormRef={noteFormRef}
-              blog={blog}
-            />
-            <Media>
-              <Media.Body>
-                <Togglable buttonLabel="write reply" ref={noteFormRef}>
-                  <CommentReply
-                    commentObj={commentObj}
-                    blog={blog}
-                    noteFormRef={noteFormRef}
-                  />
-                </Togglable>
-              </Media.Body>
-            </Media>
-          </Card.Body>
-        </Accordion.Collapse>
-      </Card>
-    </Accordion>
-  );
-};
+//   noteFormRef,
+// }) => {
+//   const replyViewWrite = useSelector(
+//     (state) => state.updateState.replyViewWrite
+//   );
+//   console.log({ replyViewWrite });
+//   if (replyViewWrite) {
+//     return (
+//       <Accordion defaultActiveKey="0">
+//         <Card>
+//           <Card.Header style={{ backgroundColor: "white" }}>
+//             <Accordion.Toggle
+//               as={Button}
+//               variant="link"
+//               eventKey="0"
+//             ></Accordion.Toggle>
+//           </Card.Header>
+//           <Accordion.Collapse eventKey="0">
+//             <Card.Body>
+//               <DisplayReply
+//                 commentObj={commentObj}
+//                 user={user}
+//                 getTimeDiff={getTimeDiff}
+//                 noteFormRef={noteFormRef}
+//                 blog={blog}
+//               />
+//               <Media>
+//                 <Media.Body>
+//                   <Togglable buttonLabel="write reply" ref={noteFormRef}>
+//                     <CommentReply
+//                       commentObj={commentObj}
+//                       blog={blog}
+//                       noteFormRef={noteFormRef}
+//                     />
+//                   </Togglable>
+//                 </Media.Body>
+//               </Media>
+//             </Card.Body>
+//           </Accordion.Collapse>
+//         </Card>
+//       </Accordion>
+//     );
+//   }
+//   return null;
+// };
 
-export default ReplyFormAccordion;
+export default DisplayReply;

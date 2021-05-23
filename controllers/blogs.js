@@ -12,11 +12,6 @@ const {
   getFileStream,
   uploadFunc,
 } = require("../utils/s3-services");
-// blogsRouter.get("/", (request, response) => {
-//   Bloglist.find({}).then((blogs) => {
-//     response.json(blogs);
-//   });
-// });
 
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Bloglist.find({}).populate("user", {
@@ -27,14 +22,6 @@ blogsRouter.get("/", async (request, response) => {
 
   //response.json(blogs);
 });
-
-// app.get('/api/blogs', (request, response) => {
-//     Blog
-//       .find({})
-//       .then(blogs => {
-//         response.json(blogs)
-//       })
-//   })
 
 blogsRouter.get("/:id", (request, response, next) => {
   Bloglist.findById(request.params.id)
@@ -51,41 +38,6 @@ blogsRouter.get("/:id", (request, response, next) => {
     })
     .catch((error) => next(error));
 });
-
-// notesRouter.post("/", (request, response, next) => {
-//   const body = request.body;
-
-//   const note = new Note({
-//     content: body.content,
-//     important: body.important || false,
-//     date: new Date(),
-//   });
-
-//   note
-//     .save()
-//     .then((savedNote) => {
-//       response.json(savedNote);
-//     })
-//     .catch((error) => next(error));
-// });
-
-// app.post('/api/blogs', (request, response) => {
-//     const blog = new Blog(request.body)
-
-//     blog
-//       .save()
-//       .then(result => {
-//         response.status(201).json(result)
-//       })
-//   })
-
-// const getTokenFrom = (request) => {
-//   const authorization = request.get("authorization");
-//   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
-//     return authorization.substring(7);
-//   }
-//   return null;
-// };
 
 //get user image from s3
 blogsRouter.get("/images/:key", (req, res) => {
@@ -116,6 +68,7 @@ async function handleCreateBlog(req, res, imageid) {
     likes: body.likes || 0,
     user: user._id,
     comments: [],
+    questions: [],
     imageid,
   });
   console.log("working33333");
@@ -131,8 +84,6 @@ blogsRouter.post("/", async (req, res, next) => {
   console.log("started....");
 
   upload(req, res, async (err) => {
-    // const description = req.body.description;
-    // console.log({ description }, "from image");
     if (err) {
       //res.json({ msg: err });
       return res.status(401).json({ error: err });
@@ -202,6 +153,7 @@ async function handleUpdateBlog(req, res, imageid) {
         ? req.body.imageid
         : imageid,
     comments: req.body.comments,
+    questions: req.body.questions,
   };
 
   //console.log({body})
@@ -229,8 +181,6 @@ blogsRouter.put("/:id", async (req, res, next) => {
   upload(req, res, async (err) => {
     console.log(req.body, "bodyyyyyyyyyyy33333333");
 
-    // const description = req.body.description;
-    // console.log({ description }, "from image");
     if (err) {
       //res.json({ msg: err });
       return res.status(401).json({ error: err });
@@ -257,26 +207,6 @@ blogsRouter.put("/:id", async (req, res, next) => {
       }
     }
   });
-  // handleUpdateBlog(req, res, imageid);
-  // console.log("iinnnnnput server");
-  // //const body = request.body;
-  // const blog = {
-  //   title: request.body.title,
-  //   author: request.body.author,
-  //   url: request.body.url,
-  //   likes: request.body.likes,
-  //   comments: request.body.comments,
-  // };
-
-  // //console.log({body})
-  // let updatedBlog = await Bloglist.findByIdAndUpdate(request.params.id, blog, {
-  //   new: true,
-  // });
-  // updatedBlog = updatedBlog.toJSON();
-  // const user = await User.findOne({ _id: updatedBlog.user });
-  // updatedBlog.user = { username: user.username, name: user.name };
-  // console.log({ updatedBlog });
-  // return response.json(updatedBlog);
 });
 
 module.exports = blogsRouter;

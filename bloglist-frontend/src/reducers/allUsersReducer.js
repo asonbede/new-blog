@@ -27,14 +27,28 @@ export const getAllUsers = (content) => {
     console.log({ users }, " in all userss");
     try {
       users = await usersService.getAll();
+      dispatch({
+        type: "GET_ALL_USER",
+        data: users,
+      });
+      localStorage.setItem("allBlogUsers", JSON.stringify(users));
     } catch (error) {
       console.log({ users }, " in geting all userss");
-    }
+      users = JSON.parse(localStorage.getItem("allBlogUsers"));
 
-    dispatch({
-      type: "GET_ALL_USER",
-      data: users ? users : [],
-    });
+      if (users) {
+        dispatch({
+          type: "GET_ALL_USER",
+          data: users,
+        });
+      } else {
+        dispatch({
+          type: "GET_ALL_USER",
+          data: [],
+        });
+        localStorage.setItem("allBlogUsers", JSON.stringify([]));
+      }
+    }
   };
 };
 
