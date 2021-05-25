@@ -73,6 +73,7 @@ const QuestionUpdateForm = ({
       options: { optionA, optionB, optionC, optionD, optionE },
       correctOption,
       explanation,
+      updateTime: new Date().getTime(),
     };
     console.log({ newItemObject });
     const newCommentArray = [...blog.questions].map((item) => {

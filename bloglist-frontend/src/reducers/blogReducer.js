@@ -19,7 +19,7 @@ const blogReducer = (state = [], action) => {
     case "INIT_BLOGS":
       return action.data;
     case "DELETE_BLOG":
-      return action.data;
+      return state.filter((blog) => blog.id !== action.data.id);
 
     case "UPDATE_MAIN_BLOG":
       return state.map((blog) =>
@@ -144,26 +144,17 @@ export const initializeBlogs = () => {
   };
 };
 
-export const removeBlogHandler = (id) => {
+export const sendRemoveBlogHandler = (id) => {
   const successMessage = "Blog-deletion operation was successful";
   const failureMessage = "Blog-deletion operation was not successful";
 
   return async (dispatch) => {
-    const blogs = await blogService.getAll();
-    const blogObject = blogs.find((blog) => blog.id === id);
-    const confirmResult = window.confirm(
-      `Do you really want to delete blog with title ${blogObject.title} from database/server`
-    );
-    if (!confirmResult) {
-      return;
-    }
     try {
       const result = await blogService.deleteBlog(id);
 
-      const newBlogs = blogs.filter((blog) => blog.id !== id);
       dispatch({
         type: "DELETE_BLOG",
-        data: newBlogs,
+        data: id,
       });
 
       dispatch(

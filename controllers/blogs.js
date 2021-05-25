@@ -65,7 +65,7 @@ async function handleCreateBlog(req, res, imageid) {
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes || 0,
+    likes: body.likes || { likeValue: 0, likers: [] },
     user: user._id,
     comments: [],
     questions: [],
@@ -111,7 +111,7 @@ blogsRouter.post("/", async (req, res, next) => {
     }
   });
 });
-
+//MyClass.findById(req.params.id)
 blogsRouter.delete("/:id", async (request, response, next) => {
   console.log("deletingggg");
   const token = request.token;
@@ -121,14 +121,21 @@ blogsRouter.delete("/:id", async (request, response, next) => {
     return response.status(401).json({ error: "token missing or invalid" });
   }
   const userid = decodedToken.id;
-  const user = await User.findById(userid);
+  //const user = await User.findById(userid);
+  console.log("deleti000000000000000000");
   const blog = await Bloglist.findById(blogId);
-  if (blog.user.toString() === userid.toString()) {
+  console.log("deletingggg111111111111111");
+  if (String(blog.user) === userid) {
+    console.log("deletingggg22222222");
     await Bloglist.findByIdAndRemove(blogId);
-    //await User.updateOne({ _id: req.token.id }, { $pull: { 'blogs': req.params.id } });
+    console.log("deletingggg333333");
+    await User.updateOne(
+      { _id: decodedToken.id },
+      { $pull: { blogs: request.params.id } }
+    );
 
-    user.blogs = user.blogs.filter((id) => id !== blogId);
-    await user.save();
+    // user.blogs = user.blogs.filter((id) => id !== blogId);
+    // await user.save();
 
     response.status(204).end();
   } else {

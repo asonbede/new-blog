@@ -27,6 +27,7 @@ const OneBlog = (props) => {
         <BlogTitle blog={blog} />
         <BlogBody
           blog={blog}
+          blogs={blogs}
           user={user}
           noteFormRef={props.noteFormRef}
           paraValue={paraValue}

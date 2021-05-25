@@ -43,6 +43,7 @@ const CreateQuestionsForm = ({ noteFormRef, blog }) => {
         explanation,
 
         postedTime: new Date().getTime(),
+        updateTime: new Date().getTime(),
         commentId: uuidv4(),
         examiner: user.username,
       },

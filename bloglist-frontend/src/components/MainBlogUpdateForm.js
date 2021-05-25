@@ -6,9 +6,9 @@ import BlogTitle from "./BlogTitle";
 import BlogBody from "./BlogBody";
 import { useRouteMatch } from "react-router-dom";
 import Togglable from "./Togglable";
-
+import { sendQuestionUpdate } from "../reducers/commentUpdate";
 //import { handleComment } from "../reducers/blogReducer";
-const MainBlogUpdateForm = ({ noteFormRef }) => {
+const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -20,13 +20,17 @@ const MainBlogUpdateForm = ({ noteFormRef }) => {
   let imageType = "old";
   const dispatch = useDispatch();
 
-  let match = useRouteMatch("/updatemainblog/:id");
-  const blogs = useSelector((state) => state.blogs);
-  const blog = blogs
-    ? blogs.find((blog) => blog.id.toString() === match.params.id)
-    : null;
-  console.log({ blog });
+  // let match = useRouteMatch("/updatemainblog/:id");
+  // const blogs = useSelector((state) => state.blogs);
+  // const blog = blogs
+  //   ? blogs.find((blog) => blog.id.toString() === match.params.id)
+  //   : null;
+  // console.log({ blog });
   const user = useSelector((state) => state.logInUser);
+
+  const mainBlogUpdate = useSelector(
+    (state) => state.updateState.mainBlogUpdate
+  );
 
   useEffect(() => {
     if (blog) {
@@ -65,6 +69,7 @@ const MainBlogUpdateForm = ({ noteFormRef }) => {
     //noteFormRef.current.togglevisibility();
     noteFormRef.current.togglevisibility();
     imageType = "old";
+    dispatch(sendQuestionUpdate(null));
   };
 
   const handleTitleChange = (event) => {
@@ -82,62 +87,65 @@ const MainBlogUpdateForm = ({ noteFormRef }) => {
     setimage(file);
   };
 
-  return (
-    <>
-      <BlogTitle blog={blog} />
-      <BlogBody
-        blog={blog}
-        user={user}
-        noteFormRef={noteFormRef}
-        diabledLink={true}
-      />
+  if (mainBlogUpdate && mainBlogUpdate === blogIdValue) {
+    return (
+      <>
+        <BlogTitle blog={blog} />
+        <BlogBody
+          blog={blog}
+          user={user}
+          noteFormRef={noteFormRef}
+          diabledLink={true}
+        />
 
-      <Togglable buttonLabel="update" ref={noteFormRef}>
-        <Form onSubmit={handleUpdateBlog}>
-          <Form.Group controlId="formTitleId">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              type="text"
-              value={title}
-              onChange={handleTitleChange}
-            />
-          </Form.Group>
+        <Togglable buttonLabel="update" ref={noteFormRef}>
+          <Form onSubmit={handleUpdateBlog}>
+            <Form.Group controlId="formTitleId">
+              <Form.Label>Title</Form.Label>
+              <Form.Control
+                type="text"
+                value={title}
+                onChange={handleTitleChange}
+              />
+            </Form.Group>
 
-          <Form.Group controlId="formAuthorId">
-            <Form.Label> author</Form.Label>
+            <Form.Group controlId="formAuthorId">
+              <Form.Label> author</Form.Label>
 
-            <Form.Control
-              type="text"
-              value={author}
-              onChange={handleAuthorChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formUrlId">
-            <Form.Label> Contents</Form.Label>
+              <Form.Control
+                type="text"
+                value={author}
+                onChange={handleAuthorChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="formUrlId">
+              <Form.Label> Contents</Form.Label>
 
-            <Form.Control
-              type="text"
-              as="textarea"
-              rows={3}
-              value={url}
-              onChange={handleUrlChange}
-            />
-          </Form.Group>
-          <Form.Group controlId="formProfileImageId">
-            <Form.File
-              onChange={fileSelected}
-              accept="image/*"
-              label="Profile Image"
-            />
-          </Form.Group>
+              <Form.Control
+                type="text"
+                as="textarea"
+                rows={3}
+                value={url}
+                onChange={handleUrlChange}
+              />
+            </Form.Group>
+            <Form.Group controlId="formProfileImageId">
+              <Form.File
+                onChange={fileSelected}
+                accept="image/*"
+                label="Profile Image"
+              />
+            </Form.Group>
 
-          <Button type="submit" style={{ margin: 5 }} block>
-            update
-          </Button>
-        </Form>
-      </Togglable>
-    </>
-  );
+            <Button type="submit" style={{ margin: 5 }} block>
+              update
+            </Button>
+          </Form>
+        </Togglable>
+      </>
+    );
+  }
+  return null;
 };
 export default MainBlogUpdateForm;
 //profileimageid

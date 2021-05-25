@@ -9,7 +9,7 @@ import AllUsers from "./components/AllUsers";
 import OneUser from "./components/OneUser";
 import OneBlog from "./components/Oneblog";
 import CreateUser from "./components/CreateUserForm";
-import MainBlogUpdateForm from "./components/MainBlogUpdateForm";
+//import MainBlogUpdateForm from "./components/MainBlogUpdateForm";
 import Comments from "./components/Comments";
 import DisplayQuestion from "./components/DisplayQuestion";
 import ReviewAnswer from "./components/ReviewAnswers";
@@ -260,9 +260,9 @@ const App = (props) => {
             </Togglable>
           </Route>
 
-          <Route path="/updatemainblog">
+          {/* <Route path="/updatemainblog">
             <MainBlogUpdateForm noteFormRef={noteFormRef} />
-          </Route>
+          </Route> */}
 
           <Route path="/comments/:id">
             <Comments noteFormRef={noteFormRef} blogs={blogs} />

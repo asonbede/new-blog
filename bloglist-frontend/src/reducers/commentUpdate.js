@@ -4,12 +4,18 @@ const initialState = {
   replyViewWrite: false,
   replyViewWriteCommentId: null,
   questionUpdateState: null,
+  mainBlogUpdate: null,
 };
 const commentUpdateReducer = (state = initialState, action) => {
   switch (action.type) {
+    case "MAIN_BLOG_UPDATE":
+      //return state.concat(action.data);
+      return { ...state, mainBlogUpdate: action.data };
+
     case "COMMENT_UPDATE":
       //return state.concat(action.data);
       return { ...state, commentUpdateState: action.data };
+
     case "QUESTION_UPDATE":
       //return state.concat(action.data);
       return { ...state, questionUpdateState: action.data };
@@ -56,6 +62,14 @@ export const sendQuestionUpdate = (data) => {
   console.log({ data }, "from question-update");
   return {
     type: "QUESTION_UPDATE",
+    data: data,
+  };
+};
+
+export const sendMainBlogUpdate = (data) => {
+  console.log({ data }, "from question-update");
+  return {
+    type: "MAIN_BLOG_UPDATE",
     data: data,
   };
 };

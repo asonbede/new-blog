@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Alert } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 const Notification = () => {
   const stateMessage = useSelector((state) => state.message);
   const [show, setShow] = useState(true);
-
+  const history = useHistory();
   // if (stateMessage === null) {
   //   return null;
   // }
@@ -18,6 +19,9 @@ const Notification = () => {
 
   if (stateMessage) {
     const { type, message } = stateMessage;
+    if (message === "Blog-deletion operation was successful") {
+      history.push("/");
+    }
 
     if (show) {
       return (
