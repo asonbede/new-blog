@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Alert } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-const Notification = () => {
+import { sendMainBlogUpdate } from "../reducers/commentUpdate";
+const Notification = ({ noteFormRef }) => {
   const stateMessage = useSelector((state) => state.message);
   const [show, setShow] = useState(true);
   const history = useHistory();
+  const dispatch = useDispatch();
   // if (stateMessage === null) {
   //   return null;
   // }
@@ -21,6 +23,11 @@ const Notification = () => {
     const { type, message } = stateMessage;
     if (message === "Blog-deletion operation was successful") {
       history.push("/");
+    }
+    if (message === "main-blog-update operation was successful") {
+      //noteFormRef.current.togglevisibility();
+
+      dispatch(sendMainBlogUpdate(null));
     }
 
     if (show) {

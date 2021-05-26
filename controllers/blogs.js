@@ -70,6 +70,8 @@ async function handleCreateBlog(req, res, imageid) {
     comments: [],
     questions: [],
     imageid,
+    created: body.created,
+    updated: body.updated,
   });
   console.log("working33333");
   const savedBlog = await blog.save();
@@ -161,6 +163,7 @@ async function handleUpdateBlog(req, res, imageid) {
         : imageid,
     comments: req.body.comments,
     questions: req.body.questions,
+    updated: req.body.updated,
   };
 
   //console.log({body})

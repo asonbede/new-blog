@@ -21,6 +21,8 @@ const CreateBlog = (props) => {
     formData.append("title", title);
     formData.append("url", url);
     formData.append("author", author);
+    formData.append("created", new Date().getTime());
+    formData.append("updated", new Date().getTime());
 
     // const newBlogObject = {
     //   title: title,

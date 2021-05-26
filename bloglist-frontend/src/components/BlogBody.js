@@ -71,47 +71,40 @@ const BlogBody = ({
     dispatch(sendCreateMainBlogLike(id, newObj));
   };
 
-  // export const removeBlogHandler = (id) => {
-  //   const successMessage = "Blog-deletion operation was successful";
-  //   const failureMessage = "Blog-deletion operation was not successful";
+  function getTimeDiff(oDatePublished) {
+    const oResult = {};
+    let timeToShow = "";
+    var oToday = new Date();
 
-  //   return async (dispatch) => {
-  //     const blogs = await blogService.getAll();
-  //     const blogObject = blogs.find((blog) => blog.id === id);
-  //     const confirmResult = window.confirm(
-  //       `Do you really want to delete blog with title ${blogObject.title} from database/server`
-  //     );
-  //     if (!confirmResult) {
-  //       return;
-  //     }
-  //     try {
-  //       const result = await blogService.deleteBlog(id);
+    var nDiff = oToday.getTime() - oDatePublished;
+    console.log({ nDiff });
+    // Get diff in days
+    oResult.days = Math.floor(nDiff / 1000 / 60 / 60 / 24);
+    nDiff -= oResult.days * 1000 * 60 * 60 * 24;
 
-  //       const newBlogs = blogs.filter((blog) => blog.id !== id);
-  //       dispatch({
-  //         type: "DELETE_BLOG",
-  //         data: newBlogs,
-  //       });
+    // Get diff in hours
+    oResult.hours = Math.floor(nDiff / 1000 / 60 / 60);
+    nDiff -= oResult.hours * 1000 * 60 * 60;
 
-  //       dispatch(
-  //         renderMessage({
-  //           type: "success",
-  //           message: successMessage,
-  //         })
-  //       );
-  //       // scrollToElement();
-  //       dispatch(trigerRender());
-  //     } catch (error) {
-  //       dispatch(
-  //         renderMessage({
-  //           type: "error",
-  //           message: failureMessage,
-  //         })
-  //       );
-  //       dispatch(trigerRender());
-  //     }
-  //   };
-  // };
+    // Get diff in minutes
+    oResult.minutes = Math.floor(nDiff / 1000 / 60);
+    nDiff -= oResult.minutes * 1000 * 60;
+
+    // Get diff in seconds
+    oResult.seconds = Math.floor(nDiff / 1000);
+
+    // var timeValueArr = [];
+    // for (let time in oResult) {
+    //   timeValueArr.push(oResult[time]);
+    // }
+    // const max = Math.max(...timeValueArr);
+    for (let time in oResult) {
+      if (oResult[time] > 0) {
+        timeToShow = oResult[time].toString() + " " + time + " " + "ago";
+        return timeToShow;
+      }
+    }
+  }
 
   const handleDeleteBlog = () => {
     const blogId = blog.id;
@@ -205,6 +198,40 @@ const BlogBody = ({
                   </Badge>{" "}
                   Questions
                 </Link>{" "}
+                <Link
+                  to="#"
+                  style={{ marginRight: 10, textDecoration: "none" }}
+                >
+                  <span>
+                    Created:{" "}
+                    <Badge pill variant="primary">
+                      {console.log(blog.created, "created----blog")}
+                      {blog.created
+                        ? `${getTimeDiff(blog.created)}`
+                        : "not implemented"}{" "}
+                    </Badge>
+                  </span>
+                </Link>
+                <Link
+                  to="#"
+                  style={{ marginRight: 10, textDecoration: "none" }}
+                >
+                  <span>
+                    Updated:{" "}
+                    <Badge pill variant="primary">
+                      {blog.updated
+                        ? `${getTimeDiff(blog.updated)}`
+                        : "not implemented"}{" "}
+                    </Badge>
+                  </span>
+                </Link>
+                <Link
+                  to="/"
+                  style={{ marginRight: 10, textDecoration: "none" }}
+                >
+                  {" "}
+                  Back{" "}
+                </Link>
                 {user.username === blog.user.username ? (
                   <Card.Link
                     className={diabledLink ? "grey-color" : "blue-color"}
@@ -225,21 +252,19 @@ const BlogBody = ({
                     Update{" "}
                   </Link>
                 ) : null}
-                <Link
-                  to="/"
-                  style={{ marginRight: 10, textDecoration: "none" }}
-                >
-                  {" "}
-                  Blog List{" "}
-                </Link>
-                <Link
+                {/* </Card.Body> */}
+                <MainBlogUpdateForm
+                  blogIdValue={blog.id}
+                  blog={blog}
+                  noteFormRef={noteFormRef}
+                />
+                {/* <Link
                   to={`/blogs/${paraValue}`}
                   style={{ marginRight: 10, textDecoration: "none" }}
                 >
                   {" "}
                   Back{" "}
-                </Link>
-                <MainBlogUpdateForm blogIdValue={blog.id} blog={blog} />
+                </Link> */}
               </Card.Text>
             </Card.Body>
             <Accordion.Collapse eventKey="0">
@@ -247,6 +272,10 @@ const BlogBody = ({
             </Accordion.Collapse>
           </Card>
         </Accordion>
+        <br />
+        <br />
+        <br />
+        <br />
       </>
     );
   }

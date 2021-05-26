@@ -212,7 +212,7 @@ const App = (props) => {
           </Navbar.Collapse>
         </Navbar>
 
-        <Notification />
+        <Notification noteFormRef={noteFormRef} />
 
         <Switch>
           <Route path="/users/:id">

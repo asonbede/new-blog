@@ -8,6 +8,7 @@ import {
   Badge,
   Nav,
   ListGroupItem,
+  Jumbotron,
   ListGroup,
   Form,
 } from "react-bootstrap";
@@ -245,6 +246,11 @@ const InCorrectAnswer = ({ inCorrectAnswer }) => {
                     );
                   }
                 })}
+
+                <Jumbotron>
+                  <h1>Explanation</h1>
+                  <p>{question.explanation}</p>
+                </Jumbotron>
               </ListGroup>
             </Card.Body>
           </Card>

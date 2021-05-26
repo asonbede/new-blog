@@ -18,6 +18,8 @@ const blogSchema = new mongoose.Schema({
   comments: { type: Array },
   questions: { type: Array },
   imageid: { type: String },
+  created: { type: Number },
+  updated: { type: Number },
 });
 
 blogSchema.set("toJSON", {

@@ -67,7 +67,7 @@ export const sendQuestionUpdate = (data) => {
 };
 
 export const sendMainBlogUpdate = (data) => {
-  console.log({ data }, "from question-update");
+  console.log({ data }, "from blog-update");
   return {
     type: "MAIN_BLOG_UPDATE",
     data: data,

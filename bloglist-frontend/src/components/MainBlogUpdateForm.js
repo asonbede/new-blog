@@ -6,7 +6,7 @@ import BlogTitle from "./BlogTitle";
 import BlogBody from "./BlogBody";
 import { useRouteMatch } from "react-router-dom";
 import Togglable from "./Togglable";
-import { sendQuestionUpdate } from "../reducers/commentUpdate";
+import { sendMainBlogUpdate } from "../reducers/commentUpdate";
 //import { handleComment } from "../reducers/blogReducer";
 const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
   const [title, setTitle] = useState("");
@@ -59,7 +59,18 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
       formData.append("likes", likes);
       dispatch(handleUpdateMainBlog(blog.id, formData, "main-blog-update"));
     } else {
-      const newObject = { ...blog, title, author, url, imageType: "old" };
+      const timeValue = new Date().getTime();
+      console.log({ timeValue });
+      console.log(blog, "11111111");
+      const newObject = {
+        ...blog,
+        title,
+        author,
+        url,
+        updated: new Date().getTime(),
+        imageType: "old",
+      };
+      console.log({ newObject }, "222222222222222");
       dispatch(handleUpdateMainBlog(blog.id, newObject));
     }
 
@@ -69,7 +80,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
     //noteFormRef.current.togglevisibility();
     noteFormRef.current.togglevisibility();
     imageType = "old";
-    dispatch(sendQuestionUpdate(null));
+    //dispatch(sendMainBlogUpdate(null));
   };
 
   const handleTitleChange = (event) => {
@@ -90,15 +101,15 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
   if (mainBlogUpdate && mainBlogUpdate === blogIdValue) {
     return (
       <>
-        <BlogTitle blog={blog} />
+        {/* <BlogTitle blog={blog} />
         <BlogBody
           blog={blog}
           user={user}
           noteFormRef={noteFormRef}
           diabledLink={true}
-        />
+        /> */}
 
-        <Togglable buttonLabel="update" ref={noteFormRef}>
+        <Togglable buttonLabel="Click Here To Begin Update" ref={noteFormRef}>
           <Form onSubmit={handleUpdateBlog}>
             <Form.Group controlId="formTitleId">
               <Form.Label>Title</Form.Label>

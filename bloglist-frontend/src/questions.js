@@ -25,6 +25,7 @@ function transformQuestionArray(arrayOfObject) {
       return {
         [item.question]: optionArray,
         correctAnswer: item.correctOption,
+        explanation: item.explanation,
       };
     } else {
       optionArray = [
@@ -38,6 +39,7 @@ function transformQuestionArray(arrayOfObject) {
       return {
         [item.question]: optionArray,
         correctAnswer: item.correctOption,
+        explanation: item.explanation,
       };
     }
   });

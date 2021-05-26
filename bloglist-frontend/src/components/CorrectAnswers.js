@@ -9,6 +9,7 @@ import {
   Nav,
   ListGroupItem,
   ListGroup,
+  Jumbotron,
   Form,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -246,6 +247,10 @@ const CorrectAnswer = ({ correctAnswer }) => {
                   }
                 })}
               </ListGroup>
+              <Jumbotron>
+                <h1>Explanation</h1>
+                <p>{question.explanation}</p>
+              </Jumbotron>
             </Card.Body>
           </Card>
         ))}
