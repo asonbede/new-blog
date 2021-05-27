@@ -28,13 +28,14 @@ const ReviewAnswer = () => {
   );
   //   const blogQuestionArray = window.localStorage.getItem("blogQuestionArray");
 
-  const correctAnswer = JSON.parse(window.localStorage.getItem("correctObj"));
-  const inCorrectAnswer = JSON.parse(
-    window.localStorage.getItem("incorrectObj")
-  );
-  const skippedAnswer = JSON.parse(window.localStorage.getItem("skippObj"));
-  const correctQuestionArrayLen = correctAnswer.blogQuestionArray.length;
-  const inCorrectQuestionArrayLen = inCorrectAnswer.blogQuestionArray.length;
+  // const correctAnswer = JSON.parse(window.localStorage.getItem("correctObj"));
+  // const inCorrectAnswer = JSON.parse(
+  //   window.localStorage.getItem("incorrectObj")
+  // );
+  //const skippedAnswer = JSON.parse(window.localStorage.getItem("skippObj"));
+  const correctQuestionArrayLen = radioNameValue.correctNumber;
+  const inCorrectQuestionArrayLen = radioNameValue.incorrectNumber;
+  const skippedQuestionArrayLen = radioNameValue.skippedNumber;
   const allQuestionArrayLen = radioNameValue.blogQuestionArray.length;
 
   const handleChange = (e) => {
@@ -98,7 +99,7 @@ const ReviewAnswer = () => {
             </InputGroup.Text>
           </InputGroup.Append>
         </InputGroup>
-        <CorrectAnswer correctAnswer={correctAnswer} />
+        <CorrectAnswer radioNameValue={radioNameValue} />
       </div>
     );
   } else if (selectValue === "incorrect") {
@@ -129,7 +130,7 @@ const ReviewAnswer = () => {
           </InputGroup.Append>
         </InputGroup>
 
-        <InCorrectAnswer inCorrectAnswer={inCorrectAnswer} />
+        <InCorrectAnswer radioNameValue={radioNameValue} />
       </div>
     );
   }

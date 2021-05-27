@@ -49,34 +49,11 @@ const AllAnswers = ({ radioNameValue }) => {
   if (blogQuestionArray !== null && nameValueObj !== null) {
     return (
       <div>
-        {/* <Card style={{ width: "70%" }} className="mt-3">
-          <Card.Header>
-            <Nav variant="pills" defaultActiveKey="#first">
-              <Nav.Item>
-                <Nav.Link href="#first">Active</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link href="#link">Link</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link href={ `/aswerrview/${paraValue}`}>
-                  Review Performance
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link href={`/blogs/${paraValue}`}>Back</Nav.Link>
-              </Nav.Item>
-            </Nav>
-          </Card.Header>
-          
-        </Card> */}
-
         {blogQuestionArray.map((question, indexQue) => (
           <Card style={{ width: "100%" }} className="mb-3">
             <Card.Body key={`${question}-${indexQue}`}>
               <Card.Title>
-                <span>{`Question${indexQue + 1}:`}</span>{" "}
-                {Object.keys(question)[0]}
+                <span>{`Question${indexQue + 1}:`}</span> {question.question}
                 <span
                   style={{
                     color:
@@ -92,12 +69,12 @@ const AllAnswers = ({ radioNameValue }) => {
               </Card.Title>
 
               <ListGroup className="list-group-flush">
-                {question[Object.keys(question)[0]].map((option, index) => {
+                {Object.values(question.options).map((option, index) => {
                   if (
                     nameValueObj.hasOwnProperty(`optioname${indexQue}`) &&
                     matchingCorrectAnswer(
-                      question[Object.keys(question)[0]],
-                      question.correctAnswer
+                      Object.values(question.options),
+                      question.correctOption
                     ) === nameValueObj[`optioname${indexQue}`] &&
                     nameValueObj[`optioname${indexQue}`] === option
                   ) {
@@ -128,8 +105,8 @@ const AllAnswers = ({ radioNameValue }) => {
                   } else if (
                     nameValueObj.hasOwnProperty(`optioname${indexQue}`) &&
                     matchingCorrectAnswer(
-                      question[Object.keys(question)[0]],
-                      question.correctAnswer
+                      Object.values(question.options),
+                      question.correctOption
                     ) !== nameValueObj[`optioname${indexQue}`] &&
                     nameValueObj[`optioname${indexQue}`] === option
                   ) {
@@ -163,8 +140,8 @@ const AllAnswers = ({ radioNameValue }) => {
                   ) {
                     if (
                       matchingCorrectAnswer(
-                        question[Object.keys(question)[0]],
-                        question.correctAnswer
+                        Object.values(question.options),
+                        question.correctOption
                       ) === option
                     ) {
                       return (
@@ -207,8 +184,8 @@ const AllAnswers = ({ radioNameValue }) => {
                   } else if (
                     !nameValueObj.hasOwnProperty(`optioname${indexQue}`) &&
                     matchingCorrectAnswer(
-                      question[Object.keys(question)[0]],
-                      question.correctAnswer
+                      Object.values(question.options),
+                      question.correctOption
                     ) === option
                   ) {
                     return (
@@ -228,8 +205,8 @@ const AllAnswers = ({ radioNameValue }) => {
                   } else if (
                     !nameValueObj.hasOwnProperty(`optioname${indexQue}`) &&
                     matchingCorrectAnswer(
-                      question[Object.keys(question)[0]],
-                      question.correctAnswer
+                      Object.values(question.options),
+                      question.correctOption
                     ) !== option
                   ) {
                     return (

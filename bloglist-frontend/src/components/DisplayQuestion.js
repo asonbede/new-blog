@@ -30,7 +30,7 @@ import { sendResultHandler } from "../reducers/resultReducer";
 import { sendQuestionUpdate } from "../reducers/commentUpdate";
 import { sendQuestionDelete } from "../reducers/blogReducer";
 import { sendResulReviewtHandler } from "../reducers/resultReducer";
-
+//import useShowResult from "../hooks/resourse";
 import DisplayResult from "./DisplayResult";
 //window.location.reload()
 const DisplayQuestion = ({ noteFormRef }) => {
@@ -38,8 +38,11 @@ const DisplayQuestion = ({ noteFormRef }) => {
   const [showAlert, setshowAlert] = useState(false);
   const [alertContent, setalertContent] = useState({});
   const [deleteHandlerOutput, setdeleteHandlerOutput] = useState({});
+  const [numValue, setnumValue] = useState(1);
+  //const [blogQuestionObjArray, setblogQuestionObjArray] = useState(blog.questions);
   // const [continueValue, setContinue] = useState(false);
   // const [cancel, setCancel] = useState(false);
+  let blogs;
   let user = useSelector((state) => state.logInUser);
   if (!user) {
     user = JSON.parse(localStorage.getItem("loggedNoteappUser"));
@@ -51,30 +54,46 @@ const DisplayQuestion = ({ noteFormRef }) => {
   const { showResult, reviewResult } = useSelector(
     (state) => state.resultState
   );
+  let match = useRouteMatch("/questions/:id");
+  const paraValue = match.params.id;
+  blogs = useSelector((state) => state.blogs);
+  // useEffect(() => {
+  //   if (blog && blog.questions.length) {
+  //     //blogQuestionObjArray = blog.questions;
+  //     setblogQuestionObjArray(blog.questions);
+  //     //transformQuestionArray()
+  //     //dispatch(sendBlogQuestionArray(blogQuestionObjArray));
+  //   }
+  // }, [paraValue, numValue]);
   //blogQuestionArray: null, nameValueObj
   let now;
   const optionLetters = ["A", "B", "C", "D", "E"];
   //let deleteHandlerOutput = {};
-  let blogQuestionObjArray = [];
-  let match = useRouteMatch("/questions/:id");
-  const paraValue = match.params.id;
+  //let blogQuestionObjArray = [];
+
   console.log({ paraValue });
 
-  let blogs = useSelector((state) => state.blogs);
   if (!blogs.length) {
     blogs = JSON.parse(localStorage.getItem("allBlogs"));
   }
+  console.log({ blogs }, "from display questions");
 
   console.log({ blogs });
   const blog = blogs
     ? blogs.find((blog) => blog.id.toString() === match.params.id)
     : null;
   console.log({ blog });
+  const [blogQuestionObjArray, setblogQuestionObjArray] = useState(
+    blog.questions
+  );
 
-  if (blog && blog.questions.length) {
-    blogQuestionObjArray = transformQuestionArray(blog.questions);
-    //dispatch(sendBlogQuestionArray(blogQuestionObjArray));
-  }
+  // if (blog && blog.questions.length) {
+  //   //blogQuestionObjArray = blog.questions;
+  //   setblogQuestionObjArray(blog.questions);
+  //   //transformQuestionArray()
+  //   //dispatch(sendBlogQuestionArray(blogQuestionObjArray));
+  // }
+
   if (radioNameValue.blogQuestionArray && radioNameValue.nameValueObj) {
     now =
       (Object.keys(radioNameValue.nameValueObj).length /
@@ -182,6 +201,23 @@ const DisplayQuestion = ({ noteFormRef }) => {
     }
   }
 
+  const handleNumberInputChange = (event) => {
+    setnumValue(event.target.value);
+    console.log({ numValue }, "numberrrrvaluee");
+    //const value = event.target.value
+    // this.setState({financialGoal: value});
+    //setblogQuestionObjArray(blog.questions);
+  };
+  const HandleNumberSubmit = (event) => {
+    console.log(event);
+
+    setblogQuestionObjArray(blogQuestionObjArray.slice(0, numValue));
+    console.log({ numValue }, "numberrrrvaluee3333333");
+
+    //const value = event.target.value
+    // this.setState({financialGoal: value});
+  };
+
   console.log({ blog });
   if (blog.questions.length) {
     console.log(blog.questions, "questionnnnnqrray");
@@ -215,7 +251,23 @@ const DisplayQuestion = ({ noteFormRef }) => {
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link href="#link">Link</Nav.Link>
+                <Nav.Link href="#">
+                  {" "}
+                  <label htmlFor="quantity">
+                    {`Quantity (between 1 and ${blog.questions.length})`}:{" "}
+                  </label>
+                  <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    min="1"
+                    max={blog.questions.length}
+                    onChange={handleNumberInputChange}
+                    pattern="[1-9]*"
+                    inputmode="numeric"
+                  />
+                  <button onClick={HandleNumberSubmit}> Go</button>
+                </Nav.Link>
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link
@@ -252,12 +304,11 @@ const DisplayQuestion = ({ noteFormRef }) => {
           >
             <Card.Body key={`${question}-${indexQue}`}>
               <Card.Title>
-                <span>{`Question${indexQue + 1}:`}</span>{" "}
-                {Object.keys(question)[0]}
+                <span>{`Question${indexQue + 1}:`}</span> {question.question}
               </Card.Title>
 
               <ListGroup className="list-group-flush">
-                {question[Object.keys(question)[0]].map((option, index) => (
+                {Object.values(question.options).map((option, index) => (
                   <ListGroupItem key={`question${index}:${indexQue}`}>
                     {" "}
                     <Form.Check
@@ -273,11 +324,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
               </ListGroup>
               {/* {user.username === question.examiner ? ( */}
               <Link
-                onClick={() =>
-                  dispatch(
-                    sendQuestionUpdate(blog.questions[indexQue].commentId)
-                  )
-                }
+                onClick={() => dispatch(sendQuestionUpdate(question.commentId))}
                 to="#"
                 style={{ marginRight: 10, textDecoration: "none" }}
               >
@@ -286,16 +333,14 @@ const DisplayQuestion = ({ noteFormRef }) => {
               {/* ) : null} */}
               <QuestionUpdateForm
                 blog={blog}
-                questionObj={blog.questions[indexQue]}
+                questionObj={question}
                 noteFormRef={noteFormRef}
-                questionIdValue={blog.questions[indexQue].commentId}
+                questionIdValue={question.commentId}
               />
 
               {/* {user.username === question.examiner ? ( */}
               <Link
-                onClick={() =>
-                  handleDeleteQuestion(blog, blog.questions[indexQue])
-                }
+                onClick={() => handleDeleteQuestion(blog, question)}
                 to="#"
                 style={{ marginRight: 10, textDecoration: "none" }}
               >
@@ -311,8 +356,8 @@ const DisplayQuestion = ({ noteFormRef }) => {
                 }}
               >
                 First Published:{" "}
-                {blog.questions[indexQue].postedTime
-                  ? getTimeDiff(blog.questions[indexQue].postedTime)
+                {question.postedTime
+                  ? getTimeDiff(question.postedTime)
                   : "notime"}
               </Link>
 
@@ -325,8 +370,8 @@ const DisplayQuestion = ({ noteFormRef }) => {
                 }}
               >
                 Last Updated:{" "}
-                {blog.questions[indexQue].updateTime
-                  ? getTimeDiff(blog.questions[indexQue].updateTime)
+                {question.updateTime
+                  ? getTimeDiff(question.updateTime)
                   : "notime"}
               </Link>
             </Card.Body>
@@ -337,6 +382,10 @@ const DisplayQuestion = ({ noteFormRef }) => {
         <Togglable buttonLabel="Set Question" ref={noteFormRef}>
           <CreateQuestions blog={blog} noteFormRef={noteFormRef} />
         </Togglable>
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
     );
   }

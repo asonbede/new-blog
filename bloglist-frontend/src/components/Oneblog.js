@@ -31,7 +31,6 @@ const OneBlog = (props) => {
           user={user}
           noteFormRef={props.noteFormRef}
           paraValue={paraValue}
-          diabledLink={false}
         />
         {/* <hr />
         <Comments blog={blog} noteFormRef={props.noteFormRef} />

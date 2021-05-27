@@ -15,14 +15,7 @@ import { useRouteMatch, Link } from "react-router-dom";
 import MainBlogUpdateForm from "./MainBlogUpdateForm";
 import Togglable from "./Togglable";
 //import MainBlogUpdateForm from "./MainBlogUpdateForm";
-const BlogBody = ({
-  blog,
-  blogs,
-  user,
-  noteFormRef,
-  paraValue,
-  diabledLink,
-}) => {
+const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
   const [blogTitleSuffix, setblogTitleSuffix] = useState(true);
   const [showAlert, setshowAlert] = useState(false);
   const [alertContent, setalertContent] = useState({});
@@ -167,7 +160,6 @@ const BlogBody = ({
               <Card.Text>By {blog.author}</Card.Text>
               <Card.Text>
                 <Card.Link
-                  className={diabledLink ? "grey-color" : "blue-color"}
                   href="#"
                   style={{ marginRight: 10 }}
                   onClick={() => handleMainBlogLike(blog.id)}
@@ -179,8 +171,7 @@ const BlogBody = ({
                 </Card.Link>
                 {/* <Card.Link href="#">Comments{blog.comments.length}</Card.Link> */}
                 <Link
-                  to={diabledLink ? "#" : `/comments/${paraValue}`}
-                  className={diabledLink ? "grey-color" : "blue-color"}
+                  to={`/comments/${paraValue}`}
                   style={{ marginRight: 10, textDecoration: "none" }}
                 >
                   <Badge pill variant="primary">
@@ -189,8 +180,7 @@ const BlogBody = ({
                   Comments
                 </Link>
                 <Link
-                  to={diabledLink ? "#" : `/questions/${paraValue}`}
-                  className={diabledLink ? "grey-color" : "blue-color"}
+                  to={`/questions/${paraValue}`}
                   style={{ marginRight: 10, textDecoration: "none" }}
                 >
                   <Badge pill variant="primary">
@@ -234,7 +224,6 @@ const BlogBody = ({
                 </Link>
                 {user.username === blog.user.username ? (
                   <Card.Link
-                    className={diabledLink ? "grey-color" : "blue-color"}
                     href="#"
                     style={{ marginRight: 10 }}
                     onClick={handleDeleteBlog}

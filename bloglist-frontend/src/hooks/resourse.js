@@ -1,11 +1,9 @@
-import { useDispatch, useSelector } from "react-redux";
-import { sendResulReviewtHandler } from "../reducers/resultReducer";
-
-const useShowResult = () => {
-  const dispatch = useDispatch();
-  const resourceFun = () => {
-    dispatch(sendResulReviewtHandler());
-  };
-  return resourceFun;
-};
-export default useShowResult;
+// import React, { useState, useEffect } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// const useShowResult = (paramValue) => {
+//   useEffect(() => {
+//     const blogs = useSelector((state) => state.blogs);
+//   }, [paramValue]);
+//   return blogs;
+// };
+// export default useShowResult;

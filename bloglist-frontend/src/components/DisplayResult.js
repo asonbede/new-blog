@@ -51,9 +51,9 @@ const DisplayResult = ({ radioNameValue }) => {
   // const paraValue = match.params.id;
   //console.log({ paraValue });
 
-  const matchingCorrectAnswer = (optionsArray, optionAlpabet) => {
+  const matchingCorrectAnswer = (optionssArray, optionAlpabet) => {
     const objectAlpha = { a: 0, b: 1, c: 2, d: 3, e: 4 };
-    return optionsArray[objectAlpha[optionAlpabet.toLowerCase()]];
+    return optionssArray[objectAlpha[optionAlpabet.trim().toLowerCase()]];
   };
 
   const markScript = (questionOptionArray, radioButtonNameValueObject) => {
@@ -65,12 +65,12 @@ const DisplayResult = ({ radioNameValue }) => {
     let objectItem;
     let score = 0;
     questionOptionArray.map((question, indexQue) => {
-      const questionString = Object.keys(question)[0];
-      const optionsArray = question[questionString];
-
+      let questionString = question.question;
+      let optionsArray = Object.values(question.options);
+      console.log({ question }, "from displayyyyyy");
       if (
         radioButtonNameValueObject.hasOwnProperty(`optioname${indexQue}`) &&
-        matchingCorrectAnswer(optionsArray, question.correctAnswer) ===
+        matchingCorrectAnswer(optionsArray, question.correctOption) ===
           radioButtonNameValueObject[`optioname${indexQue}`]
       ) {
         score = score + 1;
@@ -79,7 +79,7 @@ const DisplayResult = ({ radioNameValue }) => {
         correctArray.push(objectItem);
       } else if (
         radioButtonNameValueObject.hasOwnProperty(`optioname${indexQue}`) &&
-        matchingCorrectAnswer(optionsArray, question.correctAnswer) !==
+        matchingCorrectAnswer(optionsArray, question.correctOption) !==
           radioButtonNameValueObject[`optioname${indexQue}`]
       ) {
         objectItem = { ...question, markStatus: "incorrect" };
@@ -98,25 +98,12 @@ const DisplayResult = ({ radioNameValue }) => {
     const radioObj = {
       blogQuestionArray: newQuestionArray,
       nameValueObj: radioButtonNameValueObject,
-    };
-    const correctObj = {
-      blogQuestionArray: correctArray,
-      nameValueObj: radioButtonNameValueObject,
-    };
-    const incorrectObj = {
-      blogQuestionArray: incorrectArray,
-      nameValueObj: radioButtonNameValueObject,
-    };
-
-    const skippObj = {
-      blogQuestionArray: skippedArray,
-      nameValueObj: radioButtonNameValueObject,
+      correctNumber: correctArray.length,
+      incorrectNumber: incorrectArray.length,
+      skippedNumber: skippedArray.length,
     };
 
     window.localStorage.setItem("radioNameValue", JSON.stringify(radioObj));
-    window.localStorage.setItem("correctObj", JSON.stringify(correctObj));
-    window.localStorage.setItem("incorrectObj", JSON.stringify(incorrectObj));
-    window.localStorage.setItem("skippObj", JSON.stringify(skippObj));
     flag = true;
     //sendResultReview();
     return { newQuestionArray, scoreValue, skippedArray };
