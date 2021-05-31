@@ -15,13 +15,13 @@ const BlogTitle = ({ blog }) => {
   if (blog) {
     if (blog.title.length < 100) {
       return (
-        <Card style={{ width: "80%" }}>
+        <Card style={{ width: "70%", fontSize: "20px" }}>
           <Card.Body>{blog.title}</Card.Body>
         </Card>
       );
     } else {
       return (
-        <Accordion style={{ width: "80%" }}>
+        <Accordion style={{ width: "70%", fontSize: "20px" }}>
           <Card>
             <Accordion.Toggle
               as={Card.Header}

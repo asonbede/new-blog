@@ -38,7 +38,8 @@ const DisplayQuestion = ({ noteFormRef }) => {
   const [showAlert, setshowAlert] = useState(false);
   const [alertContent, setalertContent] = useState({});
   const [deleteHandlerOutput, setdeleteHandlerOutput] = useState({});
-  const [numValue, setnumValue] = useState(1);
+  const [numValue1, setnumValue1] = useState(1);
+  const [numValue2, setnumValue2] = useState(1);
   //const [blogQuestionObjArray, setblogQuestionObjArray] = useState(blog.questions);
   // const [continueValue, setContinue] = useState(false);
   // const [cancel, setCancel] = useState(false);
@@ -202,17 +203,22 @@ const DisplayQuestion = ({ noteFormRef }) => {
   }
 
   const handleNumberInputChange = (event) => {
-    setnumValue(event.target.value);
-    console.log({ numValue }, "numberrrrvaluee");
+    setnumValue1(event.target.value);
+
+    console.log({ numValue1 }, "numberrrrvaluee");
     //const value = event.target.value
     // this.setState({financialGoal: value});
     //setblogQuestionObjArray(blog.questions);
   };
+  const handleNumberInputChange2 = (event) => {
+    setnumValue2(event.target.value);
+    console.log({ numValue2 }, "numberrrrvaluee");
+  };
   const HandleNumberSubmit = (event) => {
     console.log(event);
 
-    setblogQuestionObjArray(blogQuestionObjArray.slice(0, numValue));
-    console.log({ numValue }, "numberrrrvaluee3333333");
+    setblogQuestionObjArray(blog.questions.slice(numValue1 - 1, numValue2));
+    //console.log({ numValue1 }, "numberrrrvaluee3333333");
 
     //const value = event.target.value
     // this.setState({financialGoal: value});
@@ -251,25 +257,6 @@ const DisplayQuestion = ({ noteFormRef }) => {
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link href="#">
-                  {" "}
-                  <label htmlFor="quantity">
-                    {`Quantity (between 1 and ${blog.questions.length})`}:{" "}
-                  </label>
-                  <input
-                    type="number"
-                    id="quantity"
-                    name="quantity"
-                    min="1"
-                    max={blog.questions.length}
-                    onChange={handleNumberInputChange}
-                    pattern="[1-9]*"
-                    inputmode="numeric"
-                  />
-                  <button onClick={HandleNumberSubmit}> Go</button>
-                </Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
                 <Nav.Link
                   href="/aswerrview"
                   target="_blank"
@@ -278,6 +265,49 @@ const DisplayQuestion = ({ noteFormRef }) => {
                   Review
                 </Nav.Link>
               </Nav.Item>
+              <Nav.Item>
+                <Nav.Link href="#" style={{ cursor: "none" }}>
+                  {" "}
+                  <Form inline style={{ width: "20%" }}>
+                    <Form.Group controlId="exampleForm.ControlInput1">
+                      <Form.Label htmlFor="quantity1">
+                        {" "}
+                        {`Quantity:1 - ${blog.questions.length}`}: Between{" "}
+                      </Form.Label>
+                      <Form.Control
+                        type="number"
+                        id="quantity1"
+                        name="quantity1"
+                        min="1"
+                        max={blog.questions.length - 1}
+                        onChange={handleNumberInputChange}
+                        pattern="[1-9]*"
+                        inputmode="numeric"
+                        // value="1"
+                        size="sm"
+                      />{" "}
+                      <Form.Label htmlFor="quantity2">to</Form.Label>
+                      <Form.Control
+                        type="number"
+                        id="quantity2"
+                        name="quantity2"
+                        min="1"
+                        max={blog.questions.length}
+                        onChange={handleNumberInputChange2}
+                        pattern="[1-9]*"
+                        inputmode="numeric"
+                        // value={blog.questions.length}
+                        size="sm"
+                      />
+                      <Button onClick={HandleNumberSubmit} size="sm">
+                        {" "}
+                        Go
+                      </Button>
+                    </Form.Group>
+                  </Form>
+                </Nav.Link>
+              </Nav.Item>
+
               <Nav.Item>
                 <Nav.Link href={`/blogs/${paraValue}`}>Back</Nav.Link>
               </Nav.Item>
