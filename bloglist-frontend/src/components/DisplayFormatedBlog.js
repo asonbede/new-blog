@@ -45,12 +45,14 @@ const DisplayFormatedBlog = ({ blog }) => {
         // editorClassName="editor-class"
         editorStyle={{
           width: "100%",
-          height: "100%",
+          // height: "100%",
           backgroundColor: "lightgray",
           padding: "1rem",
+          minHeight: "100%",
           // border: 1px solid #ccc
         }}
         toolbarStyle={{ display: "none" }}
+        wrapperStyle={{ padding: "0rem", border: "none" }}
         // toolbarClassName="toolbar-class"
         toolbar={{
           inline: { inDropdown: true },

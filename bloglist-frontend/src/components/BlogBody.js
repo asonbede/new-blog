@@ -133,18 +133,18 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
 
   //   return stateToHTML(convertFromRawJSON.parse((text)));
   // };
-  const convertFromJSONToHTML = (text) => {
-    return stateToHTML(convertFromRaw(JSON.parse(text)));
-  };
+  // const convertFromJSONToHTML = (text) => {
+  //   return stateToHTML(convertFromRaw(JSON.parse(text)));
+  // };
 
   if (blog) {
-    {
-      console.log(convertFromJSONToHTML(blog.url), "fromm blog-bodyyy");
-    }
+    // {
+    //   console.log(convertFromJSONToHTML(blog.url), "fromm blog-bodyyy");
+    // }
     const imagePath = blog.imageid
       ? `http://localhost:8082${blog.imageid}`
       : require(`../images/default-photo.jpeg`);
-
+    console.log(blog.imageid, "imageeeeeididddddd");
     return (
       <>
         <AlertComponent
@@ -259,10 +259,10 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
           <Card.Body>
             <DisplayFormatedBlog blog={blog} />
           </Card.Body>
-          <Card.Body>
+          {/* <Card.Body>
             <Card.Link href="#">Card Link</Card.Link>
             <Card.Link href="#">Another Link</Card.Link>
-          </Card.Body>
+          </Card.Body> */}
         </Card>
 
         <br />

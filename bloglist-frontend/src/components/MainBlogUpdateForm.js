@@ -21,8 +21,9 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
   const [image, setimage] = useState("");
   const [oldImage, setoldimage] = useState("");
   const [comment, setcomment] = useState([]);
+  const [questions, setquestions] = useState([]);
   //const [state, setstate] = useState(in)
-  const [likes, setlikes] = useState(0);
+  const [likes, setlikes] = useState({});
   // const [content, setcontent] = useState({});
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -45,7 +46,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
   // const blog = blogs
   //   ? blogs.find((blog) => blog.id.toString() === match.params.id)
   //   : null;
-  // console.log({ blog });
+  console.log({ blog }, "fromblogggggggggg");
   const user = useSelector((state) => state.logInUser);
 
   const mainBlogUpdate = useSelector(
@@ -54,12 +55,15 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
 
   useEffect(() => {
     if (blog) {
+      console.log(blog.likes, "blog likesssss");
       //setUrl(blog.url);
       setAuthor(blog.author);
       setTitle(blog.title);
       setoldimage(blog.imageid);
       setcomment(blog.comments);
       setlikes(blog.likes);
+      setquestions(blog.questions);
+
       const content = convertFromRaw(JSON.parse(blog.url));
       if (content) {
         setEditorState(() =>
@@ -79,17 +83,21 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
     event.preventDefault();
     if (image) {
       imageType = "new";
+      const url = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
       console.log(blog.comments, "commmmmmentsss");
       const formData = new FormData();
       formData.append("image", image);
       formData.append("title", title);
-      //formData.append("url", url);
+      formData.append("url", url);
       formData.append("author", author);
       formData.append("oldimage", oldImage);
       formData.append("imagetype", imageType);
-      formData.append("comments", comment);
-      formData.append("likes", likes);
-      dispatch(handleUpdateMainBlog(blog.id, formData, "main-blog-update"));
+      formData.append("comments", JSON.stringify(comment));
+      formData.append("likes", JSON.stringify(likes));
+      formData.append("questions", JSON.stringify(questions));
+      formData.append("updated", new Date().getTime());
+
+      dispatch(handleUpdateMainBlog(blog.id, formData));
     } else {
       const url = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
       const timeValue = new Date().getTime();
@@ -97,9 +105,13 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
       console.log(blog, "11111111");
       const newObject = {
         ...blog,
+
         title,
         author,
         url,
+        comments: JSON.stringify(blog.comments),
+        questions: JSON.stringify(blog.questions),
+        likess: JSON.stringify(blog.likes),
         updated: new Date().getTime(),
         imageType: "old",
       };

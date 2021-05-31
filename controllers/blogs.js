@@ -11,6 +11,7 @@ const {
   uploadFile,
   getFileStream,
   uploadFunc,
+  deleteFile,
 } = require("../utils/s3-services");
 
 blogsRouter.get("/", async (request, response) => {
@@ -92,7 +93,10 @@ blogsRouter.post("/", async (req, res, next) => {
     } else {
       if (req.file == undefined) {
         // res.json({ msg: "Error-no file selected" });
-        return res.status(401).json({ error: "Error-no file selected" });
+        console.log("no file selectedddddd");
+        handleCreateBlog(req, res, "");
+        return res.status(204).end();
+        //return res.status(401).json({ error: "Error-no file selected" });
       } else {
         const file = req.file;
 
@@ -155,14 +159,14 @@ async function handleUpdateBlog(req, res, imageid) {
     title: req.body.title,
     author: req.body.author,
     url: req.body.url,
-    likes: req.body.likes,
-    comments: req.body.comments,
+    likes: JSON.parse(req.body.likes),
+    comments: JSON.parse(req.body.comments),
     imageid:
       req.body.imagetype === "old" || req.body.imagetype === undefined
         ? req.body.imageid
         : imageid,
-    comments: req.body.comments,
-    questions: req.body.questions,
+    //comments: req.body.comments,
+    questions: JSON.parse(req.body.questions),
     updated: req.body.updated,
   };
 
@@ -179,16 +183,21 @@ async function handleUpdateBlog(req, res, imageid) {
 
 blogsRouter.put("/:id", async (req, res, next) => {
   console.log(req.body, "bodyyyyyyyyyyy");
-  const imagetype = req.body.imagetype;
+  //const imagetype = req.body.imagetype;
 
-  if (imagetype === "old" || imagetype === undefined) {
-    handleUpdateBlog(req, res);
-    return;
-  }
+  // if (imagetype === "old" || imagetype === undefined ) {
+  //   handleUpdateBlog(req, res);
+  //   return;
+  // }
   const upload = uploadFunc(9000000);
   console.log("started....");
 
   upload(req, res, async (err) => {
+    const imagetype = req.body.imagetype;
+    if (imagetype === "old" || imagetype === undefined) {
+      handleUpdateBlog(req, res);
+      return;
+    }
     console.log(req.body, "bodyyyyyyyyyyy33333333");
 
     if (err) {
@@ -211,9 +220,13 @@ blogsRouter.put("/:id", async (req, res, next) => {
         // const description = req.body.description;
         // console.log(description);
         const imageid = `/api/blogs/images/${result.key}`;
-        // handleRegister(req.body, imageid, res);
+
         handleUpdateBlog(req, res, imageid);
-        //res.json({ imagePath: `/api/users/images/${result.key}` });
+        console.log("continue to delete");
+        //remove the old file from s3
+        const oldImage = req.body.oldimage.split("/");
+        const oldFileName = oldImage[oldImage.length - 1];
+        deleteFile(oldFileName);
       }
     }
   });

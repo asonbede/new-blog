@@ -13,6 +13,22 @@ const s3 = new S3({
   accessKeyId,
   secretAccessKey,
 });
+
+//delete a file from s3
+function deleteFile(file) {
+  //var AWS = require('aws-sdk');
+
+  //AWS.config.loadFromPath('./credentials-ehl.json');
+
+  //var s3 = new AWS.S3();
+  const deleteParams = { Bucket: bucketName, Key: file };
+
+  s3.deleteObject(deleteParams, function (err, data) {
+    if (err) console.log(err, err.stack);
+    // error
+    else console.log("deleted"); // deleted
+  });
+}
 //upload a file to s3
 function uploadFile(file) {
   const fileStream = fs.createReadStream(file.path);
@@ -73,3 +89,4 @@ function uploadFunc(fileSize) {
 exports.uploadFile = uploadFile;
 exports.getFileStream = getFileStream;
 exports.uploadFunc = uploadFunc;
+exports.deleteFile = deleteFile;
