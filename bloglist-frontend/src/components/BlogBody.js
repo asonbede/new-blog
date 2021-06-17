@@ -18,6 +18,9 @@ import { stateToHTML } from "draft-js-export-html";
 import { convertFromRaw, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import DisplayFormatedBlog from "./DisplayFormatedBlog";
+import StrLineGraphAndTableOfValue from "./data-presentation/StrLineGraphAndTableOfValue";
+import GraphTableExplanation from "./data-presentation/GraphTableExplanation";
+import imageSize from "image-size";
 //import MainBlogUpdateForm from "./MainBlogUpdateForm";
 const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
   const [blogTitleSuffix, setblogTitleSuffix] = useState(true);
@@ -27,6 +30,12 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
 
   const classVarr = blogTitleSuffix ? "add-on-present" : "add-on-addsent";
   const dispatch = useDispatch();
+  const blogIdItems = {
+    "60c8ccabc7580d2db825db5b": [
+      () => <StrLineGraphAndTableOfValue />,
+      () => <GraphTableExplanation />,
+    ],
+  };
 
   const handleMainBlogLike = (id) => {
     let newObj;
@@ -145,6 +154,7 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
       ? `http://localhost:8082${blog.imageid}`
       : require(`../images/default-photo.jpeg`);
     console.log(blog.imageid, "imageeeeeididddddd");
+    console.log(blog, "from body");
     return (
       <>
         <AlertComponent
@@ -153,9 +163,13 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
           cancelHandler={cancelHandler}
           alertContent={alertContent}
         />
-
-        <Card style={{ width: "70%" }}>
-          <Card.Img variant="top" src={`${imagePath}`} alt="blog image" />
+        {/* <p><img src></p> */}
+        <Card style={{ width: "100%" }}>
+          {blog.id in blogIdItems ? (
+            blogIdItems[blog.id][0]()
+          ) : (
+            <Card.Img variant="top" src={`${imagePath}`} alt="blog image" />
+          )}
 
           {/* <Image
             variant="top"
@@ -166,103 +180,108 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
           /> */}
           <Card.Body>
             <Card.Text>By {blog.author}</Card.Text>
-            <Card.Text>
-              <Card.Link
-                href="#"
-                style={{ marginRight: 10 }}
-                onClick={() => handleMainBlogLike(blog.id)}
-              >
+            {/* <Card.Text> */}
+            <Card.Link
+              href="#"
+              style={{ marginRight: 10 }}
+              onClick={() => handleMainBlogLike(blog.id)}
+            >
+              <Badge pill variant="primary">
+                {blog.likes.likeValue}{" "}
+              </Badge>
+              Likes
+            </Card.Link>
+            {/* <Card.Link href="#">Comments{blog.comments.length}</Card.Link> */}
+            <Link
+              to={`/comments/${paraValue}`}
+              style={{ marginRight: 10, textDecoration: "none" }}
+            >
+              <Badge pill variant="primary">
+                {blog.comments.length}{" "}
+              </Badge>{" "}
+              Comments
+            </Link>
+            <Link
+              to={`/questions/${paraValue}`}
+              style={{ marginRight: 10, textDecoration: "none" }}
+            >
+              <Badge pill variant="primary">
+                {blog.questions.length}{" "}
+              </Badge>{" "}
+              Questions
+            </Link>{" "}
+            <Link to="#" style={{ marginRight: 10, textDecoration: "none" }}>
+              <span>
+                Created:{" "}
                 <Badge pill variant="primary">
-                  {blog.likes.likeValue}{" "}
+                  {console.log(blog.created, "created----blog")}
+                  {blog.created
+                    ? `${getTimeDiff(blog.created)}`
+                    : "not implemented"}{" "}
                 </Badge>
-                Likes
-              </Card.Link>
-              {/* <Card.Link href="#">Comments{blog.comments.length}</Card.Link> */}
-              <Link
-                to={`/comments/${paraValue}`}
-                style={{ marginRight: 10, textDecoration: "none" }}
-              >
+              </span>
+            </Link>
+            <Link to="#" style={{ marginRight: 10, textDecoration: "none" }}>
+              <span>
+                Updated:{" "}
                 <Badge pill variant="primary">
-                  {blog.comments.length}{" "}
-                </Badge>{" "}
-                Comments
-              </Link>
-              <Link
-                to={`/questions/${paraValue}`}
-                style={{ marginRight: 10, textDecoration: "none" }}
-              >
-                <Badge pill variant="primary">
-                  {blog.questions.length}{" "}
-                </Badge>{" "}
-                Questions
-              </Link>{" "}
-              <Link to="#" style={{ marginRight: 10, textDecoration: "none" }}>
-                <span>
-                  Created:{" "}
-                  <Badge pill variant="primary">
-                    {console.log(blog.created, "created----blog")}
-                    {blog.created
-                      ? `${getTimeDiff(blog.created)}`
-                      : "not implemented"}{" "}
-                  </Badge>
-                </span>
-              </Link>
-              <Link to="#" style={{ marginRight: 10, textDecoration: "none" }}>
-                <span>
-                  Updated:{" "}
-                  <Badge pill variant="primary">
-                    {blog.updated
-                      ? `${getTimeDiff(blog.updated)}`
-                      : "not implemented"}{" "}
-                  </Badge>
-                </span>
-              </Link>
-              <Link to="/" style={{ marginRight: 10, textDecoration: "none" }}>
-                {" "}
-                Back{" "}
-              </Link>
-              {user.username === blog.user.username ? (
-                <Card.Link
-                  href="#"
-                  style={{ marginRight: 10 }}
-                  onClick={handleDeleteBlog}
-                >
-                  Delete
-                </Card.Link>
-              ) : null}
-              {user.username === blog.user.username ? (
-                <Link
-                  onClick={() => dispatch(sendMainBlogUpdate(blog.id))}
-                  to={"#"}
-                  style={{ marginRight: 10, textDecoration: "none" }}
-                >
-                  {" "}
-                  Update{" "}
-                </Link>
-              ) : null}
-              {/* </Card.Body> */}
-              <MainBlogUpdateForm
-                blogIdValue={blog.id}
-                blog={blog}
-                noteFormRef={noteFormRef}
-              />
-              {/* <Link
+                  {blog.updated
+                    ? `${getTimeDiff(blog.updated)}`
+                    : "not implemented"}{" "}
+                </Badge>
+              </span>
+            </Link>
+            <Link to="/" style={{ marginRight: 10, textDecoration: "none" }}>
+              {" "}
+              Back{" "}
+            </Link>
+            {/* <Link
                   to={`/blogs/${paraValue}`}
                   style={{ marginRight: 10, textDecoration: "none" }}
                 >
                   {" "}
                   Back{" "}
                 </Link> */}
-            </Card.Text>
+            {/* </Card.Text> */}
           </Card.Body>
 
           <Card.Body>
-            <DisplayFormatedBlog blog={blog} />
+            {blog.id in blogIdItems ? (
+              blogIdItems[blog.id][1]()
+            ) : (
+              <DisplayFormatedBlog blog={blog} />
+            )}
           </Card.Body>
-          {/* <Card.Body>
-            <Card.Link href="#">Card Link</Card.Link>
-            <Card.Link href="#">Another Link</Card.Link>
-          </Card.Body> */}
+          <Card.Body>
+            {user.username === blog.user.username ? (
+              <Card.Link
+                href="#"
+                style={{ marginRight: 10 }}
+                onClick={handleDeleteBlog}
+              >
+                Delete
+              </Card.Link>
+            ) : null}
+
+            {user.username === blog.user.username ? (
+              <Link
+                onClick={() => dispatch(sendMainBlogUpdate(blog.id))}
+                to={"#"}
+                style={{ marginRight: 10, textDecoration: "none" }}
+              >
+                {" "}
+                Update{" "}
+              </Link>
+            ) : null}
+            {/* </Card.Body> */}
+            <MainBlogUpdateForm
+              blogIdValue={blog.id}
+              blog={blog}
+              noteFormRef={noteFormRef}
+            />
+            {/* <Card.Link href="#">Card Link</Card.Link>
+            <Card.Link href="#">Another Link</Card.Link> */}
+          </Card.Body>
         </Card>
 
         <br />

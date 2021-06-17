@@ -237,7 +237,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
         />
         <Card
           style={{
-            width: "70%",
+            width: "80%",
             position: "fixed",
             zIndex: 1,
             top: "8%",
@@ -327,7 +327,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
 
         {blogQuestionObjArray.map((question, indexQue) => (
           <Card
-            style={{ width: "70%" }}
+            style={{ width: "80%" }}
             className={`${
               indexQue === 0 ? "first-card-margin" : "other-card-margin"
             }`}

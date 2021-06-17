@@ -202,6 +202,9 @@ blogsRouter.put("/:id", async (req, res, next) => {
 
     if (err) {
       //res.json({ msg: err });
+      // console.log("no file selectedddddd");
+      // handleUpdateBlog(req, res, "");
+      // return res.status(204).end();
       return res.status(401).json({ error: err });
     } else {
       if (req.file == undefined) {

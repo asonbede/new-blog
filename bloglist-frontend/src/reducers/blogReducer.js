@@ -2,15 +2,33 @@ import blogService from "../services/blogs";
 import { trigerRender } from "./trigarRender";
 import { renderMessage } from "./messageReducer";
 
-// const initialState = [
-//   {
-//     content: "reducer defines how redux store works",
-//     important: true,
-//     id: 1,
-//   },
-//   { content: "state of store can contain any data", important: false, id: 2 },
-// ];
-
+// const newItemObject = {
+//   ...questionObj,
+//   question,
+//   options: { optionA, optionB, optionC, optionD, optionE },
+//   correctOption,
+//   explanation,
+//   updateTime: new Date().getTime(),
+// };
+// console.log({ newItemObject });
+// const newCommentArray = [...blog.questions].map((item) => {
+//   if (item.commentId === questionObj.commentId) {
+//     return newItemObject;
+//   } else {
+//     return item;
+//   }
+// });
+// console.log({ newCommentArray });
+const updateQuestionFunc = (blogItem, questionObj) => {
+  const newCommentArray = [...blogItem.questions].map((item) => {
+    if (item.commentId === questionObj.commentId) {
+      return questionObj;
+    } else {
+      return item;
+    }
+  });
+  return { ...blogItem, questions: newCommentArray };
+};
 const blogReducer = (state = [], action) => {
   switch (action.type) {
     //----------main-blogs operations-----------
@@ -101,7 +119,9 @@ const blogReducer = (state = [], action) => {
 
     case "UPDATE_QUESTION":
       return state.map((blog) =>
-        blog.id === action.data.id ? action.data : blog
+        blog.id === action.data.response.id
+          ? updateQuestionFunc(action.data.response, action.data.newItemObject)
+          : blog
       );
 
     case "DELETE_QUESTION":
@@ -668,7 +688,7 @@ export const sendCreateQuestion = (id, content) => {
   };
 };
 
-export const handleQuestionUpdateComment = (id, content) => {
+export const handleQuestionUpdateComment = (id, content, newItemObject) => {
   const successMessage = "Question-update was successful";
   const failureMessage = "Question-update was not successful";
 
@@ -680,7 +700,7 @@ export const handleQuestionUpdateComment = (id, content) => {
       console.log({ response });
       dispatch({
         type: "UPDATE_QUESTION",
-        data: response,
+        data: { response, newItemObject },
       });
 
       dispatch(

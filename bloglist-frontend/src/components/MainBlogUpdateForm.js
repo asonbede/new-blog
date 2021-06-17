@@ -111,7 +111,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
         url,
         comments: JSON.stringify(blog.comments),
         questions: JSON.stringify(blog.questions),
-        likess: JSON.stringify(blog.likes),
+        likes: JSON.stringify(blog.likes),
         updated: new Date().getTime(),
         imageType: "old",
       };

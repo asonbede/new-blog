@@ -86,10 +86,16 @@ const QuestionUpdateForm = ({
     console.log({ newCommentArray });
 
     dispatch(
-      handleQuestionUpdateComment(blog.id, {
-        ...blog,
-        questions: newCommentArray,
-      })
+      handleQuestionUpdateComment(
+        blog.id,
+        {
+          ...blog,
+          likes: JSON.stringify(blog.likes),
+          comments: JSON.stringify(blog.comments),
+          questions: JSON.stringify(newCommentArray),
+        },
+        newItemObject
+      )
     );
     noteFormRef.current.togglevisibility();
 

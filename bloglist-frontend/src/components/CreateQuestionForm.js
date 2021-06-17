@@ -49,7 +49,12 @@ const CreateQuestionsForm = ({ noteFormRef, blog }) => {
       },
     ];
     dispatch(
-      sendCreateQuestion(blog.id, { ...blog, questions: questionArray })
+      sendCreateQuestion(blog.id, {
+        ...blog,
+        likes: JSON.stringify(blog.likes),
+        comments: JSON.stringify(blog.comments),
+        questions: JSON.stringify(questionArray),
+      })
     );
     noteFormRef.current.togglevisibility();
 

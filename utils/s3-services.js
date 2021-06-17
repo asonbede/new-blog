@@ -63,7 +63,7 @@ const storage = multer.diskStorage({
 //check file type func
 function checkFileType(file, cb) {
   //allowed extention
-  const fileTypes = /jpeg|jpg|png|gif/;
+  const fileTypes = /jpeg|jpg|png|gif|svg/;
   //check extension
   const isRightExtention = fileTypes.test(
     path.extname(file.originalname).toLocaleLowerCase()
