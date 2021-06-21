@@ -19,6 +19,8 @@ import QuestionUpdateForm from "./QuestionUpdateForm";
 
 import CreateQuestions from "./CreateQuestionForm";
 import AlertComponent from "./AlertComponent";
+
+import DataQuestion from "./data-presentation/DataQuestion";
 import { transformQuestionArray } from "../questions";
 //import { useRouteMatch } from "react-router-dom";
 import { useRouteMatch, Link } from "react-router-dom";
@@ -43,6 +45,10 @@ const DisplayQuestion = ({ noteFormRef }) => {
   //const [blogQuestionObjArray, setblogQuestionObjArray] = useState(blog.questions);
   // const [continueValue, setContinue] = useState(false);
   // const [cancel, setCancel] = useState(false);
+
+  const blogIdItems = {
+    "60c8ccabc7580d2db825db5b": [() => <DataQuestion />],
+  };
   let blogs;
   let user = useSelector((state) => state.logInUser);
   if (!user) {
@@ -324,6 +330,8 @@ const DisplayQuestion = ({ noteFormRef }) => {
             />{" "}
           </Card.Body>
         </Card>
+
+        {blog.id in blogIdItems ? blogIdItems[blog.id][0]() : null}
 
         {blogQuestionObjArray.map((question, indexQue) => (
           <Card

@@ -6,22 +6,26 @@ import { Table, Image } from "react-bootstrap";
 const GraphTableExplanation = () => {
   return (
     <div style={{ marginTop: 20, width: "100%" }}>
-      <h2> How experimental data is presented</h2>
+      <h2 className="text-center"> How experimental data is presented</h2>
       <p>
         Data gathered from scientific experiment has to be presented in such a
         way that readers can easily see the overall pattern in the data. Two
         common way of presenting data from experiment are tables and graphs.
       </p>
-      <h3>Data Tables</h3>
+      <h3 className="text-center">Data Tables</h3>
       <p>
-        An example of a data table is the one shown above. The data was
-        collected by a student who had conducted an experiment to investigate
-        how changing the the temperature of a gase affects its volume when
-        pressure and mass of the gas are kept constant.{" "}
+        Table is the organisation of data using rows and columns. An example of
+        a data table is the one shown below. The data was collected by a student
+        who had conducted an experiment to investigate how changing the the
+        temperature of a gase affects its volume when pressure and mass of the
+        gas are kept constant.{" "}
       </p>
-      <h4> How data is entered on the data table</h4>
+      <h4 className="text-center"> How data is entered on the data table</h4>
       <ul>
-        <li> The indepent variable is usually entered in the first column </li>
+        <li>
+          {" "}
+          The independent variable is usually entered in the first column{" "}
+        </li>
         <li> The dependent variable is typically entered in the last column</li>
         <li> The controlled variables are not include at all</li>
         <li>
@@ -31,10 +35,10 @@ const GraphTableExplanation = () => {
         </li>
       </ul>
       <p>
-        In the above table for instance, the temperature(the independent
+        In the below table for instance, the temperature(the independent
         variable is entered in the first column), the volume(the dependent
         variable) is entered in the last column while the control
-        variables(pressure, mass of gas) are were not included.
+        variables(pressure, mass of gas) were not included.
         <br />
         The table makes it easy to see that the volume increases as the
         temperature increases. Take another look at the data table again
@@ -81,11 +85,11 @@ const GraphTableExplanation = () => {
           </tr>
         </tbody>
       </Table>
-      <h3>Graphs</h3>
+      <h3 className="text-center">Graphs</h3>
       <p>
         Graphs is a pictorial representation of data using a cordinate system.
         After data has been tabulated, the next step is usually to plot it in a
-        graph. A graph ploted from the data table is shown below.
+        graph. A graph ploted from the above data table is shown below.
       </p>
       <h4>How to plot a graph</h4>
       <ul>
@@ -130,7 +134,7 @@ const GraphTableExplanation = () => {
           //   rounded
         />
       </div>
-      <h3>The Scale</h3>
+      <h3 className="text-center">The Scale</h3>
       <p>
         The graph is made up of squares or boxes. <br />
         The value which these squares represent is called the scale.
@@ -142,15 +146,20 @@ const GraphTableExplanation = () => {
         <ul>
           <li>
             {" "}
-            identify the lowest x-value and place it on the far left side of the
-            paper while the highest x-value should be placed on the far right
-            side of the graph paper.
+            identify the lowest measured x-value and place it on the far left
+            side of the paper while the highest x-value should be placed on the
+            far right side of the graph paper. In the above graph, the lowest
+            measured x value is 20 K and it is placed on the far left side of
+            the graph paper while the highest measured x value, 120 K is placed
+            on the far right side of the graph paper.
           </li>
           <li>
             {" "}
             Do the same to y-value. The lowest y-value should be placed near the
             bottom of the graph paper while the highest y-value should be placed
-            near the top of the paper.
+            near the top of the paper. In the above graph, the lowest measured y
+            value is 60 mL near the bottom of the graph paper while the highest
+            measured y value, 360 K is placed near the top of the paper..
           </li>
         </ul>
         In the above graph for instance, 1 square represents 5 units of
@@ -158,7 +167,7 @@ const GraphTableExplanation = () => {
         square represents 20 units of volume on the y-axis, this is the scale on
         the y-axis.
         <br />
-        This scale will space-out the lowest and highest x,y values and
+        This scale will space-out the lowest and highest x, y values and
         therefore, make the graph take up as much graph paper as possible.{" "}
         <br />
         For this graph, the x and y axis have different scales, but they can
@@ -168,11 +177,11 @@ const GraphTableExplanation = () => {
         must represents 5 units of temperature along the entire the x-axis, and
         1 square must represents 20 units of volume along the entire y-axis,{" "}
       </p>
-      <h3>Reading information from the graph.</h3>
+      <h3 className="text-center">Reading information from the graph.</h3>
       in addition to enabling us to see the overall pattern in the experimental
       data, graph can also enable us to obtain information as well. Information
       can be obtained from the graph through interpolation and extrapolation
-      <h4>Interpolation</h4>
+      <h4 className="text-center">Interpolation</h4>
       <div>
         <img
           //variant="top"
@@ -193,14 +202,18 @@ const GraphTableExplanation = () => {
         Suppose we are interested in knowing the volume at a temperature of 110
         K. We can't get that information from the data table. 110 K is not in
         the data table. So to get the information, locate where 110 K lies on
-        the x-axis. This is between 100 K and 120 K then we trace as shown above
-        until we arrieve at 330 mL. So the volume at 110 K is 330 mL. This is
-        called interpolation. Although 110 K is not in the data table, it is
-        still within the range of the plotted points. on the x-axis which is 20
-        K to 120 K. Obtaining information from a graph by tracing using the
-        range of The plotted data points is called interpolation.
+        the x-axis. 110 K lies between 100 K and 120 K. Next, we trace as shown
+        above until we arrieve at 330 mL. So the volume at 110 K is 330 mL. This
+        is called interpolation. Although 110 K is not in the data table, it is
+        still within the range of the plotted points on the x-axis which is
+        between 20K to 120 K.
+        <br />{" "}
+        <strong>
+          Obtaining information from a graph by tracing using the range of The
+          plotted data points is called interpolation.
+        </strong>
       </p>
-      <h4>Extrapolation</h4>
+      <h4 className="text-center">Extrapolation</h4>
       <div>
         <img
           //variant="top"
@@ -221,14 +234,20 @@ const GraphTableExplanation = () => {
         Suppose we are interested in knowing the volume at a temperature of 130
         K. We can't get that information from the data table also. 130 K is not
         in the data table. So to get the information, locate where 130 K lies on
-        the x-axis. This is after 120 K then we trace as we did previously,
-        first to the connecting line and then to the y axis. So the volume at
-        130 K is 370 mL. This is called extrapolation. 130 K lies outside the
-        plotted points on the x-axis which is between 20 K and 120 K. Obtaining
-        information from a graph by tracing outside the plotted data points is
-        called extrapolation.
+        the x-axis. 130 lies after 120 K. But the best fit line ends at 120 K.
+        <br />
+        So we have to extend the line to match the pattern already drawn. Then
+        we trace as we did previously, first to the connecting line and then to
+        the y axis. So the volume at 130 K is 390 mL.
+        <strong>
+          {" "}
+          Obtaining information from a graph by extending the best fit line
+          outside the plotted data points is called extrapolation.
+        </strong>
+        Notice that when the best fit line is extended downwards it passes
+        through the origin and can enable to obtain the volume at 0 k.
       </p>
-      <h4>Slope</h4>
+      <h4 className="text-center">Slope</h4>
       <img
         //variant="top"
         style={{
@@ -243,31 +262,64 @@ const GraphTableExplanation = () => {
         //   rounded
       />
       <p>
-        How to find the slope of a graph The slope portrays the rate at which
-        one parameter is undergoing change when compared to another parameter.
-        The slope is the same for the entire line in a straight-line graph. On
-        the contrary, the slope varies along the line for a non-linear graph.
-        For a straightline graph,any section of the graph can be used to
-        determine the slope. For a non-linear graph, the must be determined for
-        each point from data at that point. Consider the given data table and
-        the linear graph that follows. The relationship in this set of data is
-        linear, that is, it produces a straight-line graph. The slope of this
-        line is constant at all points on the line. The slope of a line is
-        defined as the rise (change in vertical position) divided by the run
-        (change in horizontal position). Frequently in science, all of our data
-        points do not fall exactly on a line. In this situation, we draw a best
-        fit line, or a line that goes as close to all of our points as possible.
-        When finding the slope, it is important to use two points that are on
-        the best fit line itself, instead of our measured data points which may
-        not be on our best fit line. For a pair of points on the line, the
-        coordinates of the points are identified as (x1, y1) and (x2, y2). In
-        this case, the points selected are (260, 1.3) and (180, 0.9). The slope
-        can then be calculated in the manner: Therefore, the slope of the line
-        is 0.005 atm/K. The fact that the slope is positive indicates that the
-        line is rising as it moves from left to right and that the pressure
-        increases by 0.005 atm for each 1 Kelvin increase in temperature. A
-        negative slope would indicate that the line was falling as it moves from
-        left to right
+        <h5 className="text-center">
+          {" "}
+          How to find the slope of a graph and what the slope represents
+        </h5>
+        The slope reveals the rate at which one parameter is undergoing change
+        when compared to another parameter.
+        <br />
+        For a straightline graph such as the one above, the slope is constant
+        for the entire lie and therefore, can be calculated from any section of
+        the graph.
+        <br />
+        The slope of a line is defined as the rise (change in vertical position)
+        divided by the run (change in horizontal position).
+        <br />
+        On the contrary, the slope varies along the line for a non-linear graph
+        and to determine it at any point, we have to use the data at that point.
+        <br />
+        The followig steps can be used to determine the slope of a straightline
+        graph:
+        <ul>
+          <li>
+            Identify two points on the best fit line, call them points A and
+            point B, or what ever you want to call them.
+          </li>
+          <li>
+            Identify the x and y coordinates of those points. In the above
+            graph, the x and y coordinates of point A are x1=40 , y1=120 While
+            the x and y coordinates of point B are x2=100, y2=300
+          </li>
+          <li>
+            {" "}
+            The slope can be calculated using the formula: (y2-y1)/(x2-y2), that
+            is, increase in y/increase in x
+          </li>
+          <li>
+            In the graph above, this evaluates to: (300-120)mL/(100-40)K = 3
+            mL/K
+          </li>
+        </ul>
+        So the slope is 3 mL/K. What does this mean? I told you eailer that the
+        slope is a measure of how one variable is changing when compared to the
+        other. In this case, therefore, the volume is changing 3 times when
+        compared to the temperature. This means that if we know the slope and
+        one variable we can easily calculate the other variable without even
+        doing interpolation or extrapolation.
+        <br />
+        Let us try it out. if 1 K is equivalent to 3 mL, therefore 110 K will be
+        110 * 3 = 330 mL, which agrees with what we obtained earlier by
+        interpolation.
+        <br />
+        again 130 K will be equivalent to 130 * 3 = 390 mL, which also agrees
+        with what we obtained earlier through extrapolation. It means that with
+        the slope, any variable is within our reach. This is very useful.
+        Suppose we want to predict the volume when the temperature is five
+        million Kelvins(5000000 K). We can extend the best fit line and
+        extrapolate. This will work but very inconvenient since a lot of paper
+        time, energy space will be consumed. Using the slope we can easily do
+        5000000 K * 3 mL/K = 15000000 mL.
       </p>
     </div>
   );
