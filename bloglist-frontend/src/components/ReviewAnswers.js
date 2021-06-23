@@ -16,9 +16,9 @@ import {
   FormGroup,
   Form,
 } from "react-bootstrap";
-//import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-//import { useRouteMatch, Link } from "react-router-dom";
+import { useRouteMatch, Link } from "react-router-dom";
 
 const ReviewAnswer = () => {
   const [selectValue, setselectValue] = useState("all");
@@ -26,6 +26,25 @@ const ReviewAnswer = () => {
   const radioNameValue = JSON.parse(
     window.localStorage.getItem("radioNameValue")
   );
+  let match = useRouteMatch("/aswerrview/:id");
+  const paraValue = match.params.id;
+  const blogs = useSelector((state) => state.blogs);
+
+  if (!blogs.length) {
+    blogs = JSON.parse(localStorage.getItem("allBlogs"));
+  }
+  // const
+  // allBlogs = JSON.parse(
+  //   window.localStorage.getItem("allBlogs")
+  // );
+
+  // let match = useRouteMatch("/blogs/:id");
+  // const paraValue = match.params.id;
+  //const blogs = useSelector((state) => state.blogs);
+  const blog = blogs
+    ? blogs.find((blog) => blog.id.toString() === match.params.id)
+    : null;
+  console.log({ blog });
   //   const blogQuestionArray = window.localStorage.getItem("blogQuestionArray");
 
   // const correctAnswer = JSON.parse(window.localStorage.getItem("correctObj"));
@@ -69,7 +88,7 @@ const ReviewAnswer = () => {
             </InputGroup.Text>
           </InputGroup.Append>
         </InputGroup>
-        <AllAnswers radioNameValue={radioNameValue} />
+        <AllAnswers radioNameValue={radioNameValue} blog={blog} />
       </div>
     );
   } else if (selectValue === "correct") {
@@ -99,7 +118,7 @@ const ReviewAnswer = () => {
             </InputGroup.Text>
           </InputGroup.Append>
         </InputGroup>
-        <CorrectAnswer radioNameValue={radioNameValue} />
+        <CorrectAnswer radioNameValue={radioNameValue} blog={blog} />
       </div>
     );
   } else if (selectValue === "incorrect") {
@@ -130,7 +149,7 @@ const ReviewAnswer = () => {
           </InputGroup.Append>
         </InputGroup>
 
-        <InCorrectAnswer radioNameValue={radioNameValue} />
+        <InCorrectAnswer radioNameValue={radioNameValue} blog={blog} />
       </div>
     );
   }

@@ -271,7 +271,7 @@ const App = (props) => {
             <DisplayQuestion noteFormRef={noteFormRef} blogs={blogs} />
           </Route>
 
-          <Route path="/aswerrview">
+          <Route path="/aswerrview/:id">
             <ReviewAnswer />
           </Route>
 

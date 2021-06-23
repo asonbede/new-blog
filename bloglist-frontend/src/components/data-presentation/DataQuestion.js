@@ -13,8 +13,8 @@ const DataQuestion = () => {
   return (
     <div style={{ marginTop: "30%", width: "100%" }}>
       <div style={{ marginBottom: "3%", width: "100%", fontSize: "20px" }}>
-        The above data table and the graph below were prepared by a student in a
-        certain experiment. Use it to answer the questions 1- 10.
+        The data table below and the graph following it were prepared by a
+        student in a certain experiment. Use them to answer questions 1- 10.
       </div>
       <Table striped bordered hover size="sm" variant="dark" responsive="lg">
         <thead>

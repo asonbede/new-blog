@@ -22,8 +22,9 @@ import {
   sendRadioButtonNameValue,
   sendBlogQuestionArray,
 } from "../reducers/radioButtonNameValueReducer";
+import ExplanationOfQuize from "./ExplanationOfQuize";
 //window.location.reload()
-const AllAnswers = ({ radioNameValue }) => {
+const AllAnswers = ({ radioNameValue, blog }) => {
   const dispatch = useDispatch();
   //const { blogQuestionArray, nameValueObj } = useSelector((state) => {
   //     return state.radioNameValue;
@@ -36,6 +37,9 @@ const AllAnswers = ({ radioNameValue }) => {
   const blogQuestionArray = radioNameValue.blogQuestionArray;
   const nameValueObj = radioNameValue.nameValueObj;
   const optionLetters = ["A", "B", "C", "D", "E"];
+  const blogIdItems = {
+    "60c8ccabc7580d2db825db5b": { quizeObj: { 1: "" } },
+  };
 
   //let match = useRouteMatch("/questions/:id");
   // const paraValue = match.params.id;
@@ -224,10 +228,16 @@ const AllAnswers = ({ radioNameValue }) => {
                   }
                 })}
               </ListGroup>
-              <Jumbotron>
+              {/* <Jumbotron>
                 <h1>Explanation</h1>
                 <p>{question.explanation}</p>
-              </Jumbotron>
+              </Jumbotron> */}
+              <ExplanationOfQuize
+                blogIdItems={blogIdItems}
+                question={question}
+                blog={blog}
+                quizeNum={indexQue + 1}
+              />
             </Card.Body>
           </Card>
         ))}

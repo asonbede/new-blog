@@ -21,10 +21,15 @@ import {
   sendBlogQuestionArray,
 } from "../reducers/radioButtonNameValueReducer";
 //window.location.reload()
-const CorrectAnswer = ({ radioNameValue }) => {
+import ExplanationOfQuize from "./ExplanationOfQuize";
+const CorrectAnswer = ({ radioNameValue, blog }) => {
   const dispatch = useDispatch();
 
   const optionLetters = ["A", "B", "C", "D", "E"];
+
+  const blogIdItems = {
+    "60c8ccabc7580d2db825db5b": { quizeObj: { 1: "" } },
+  };
 
   const blogQuestionArray = radioNameValue.blogQuestionArray;
   const nameValueObj = radioNameValue.nameValueObj;
@@ -113,10 +118,16 @@ const CorrectAnswer = ({ radioNameValue }) => {
               </ListGroup>
               {question.markStatus === "correct" ? (
                 <>
-                  <Jumbotron>
+                  {/* <Jumbotron>
                     <h1>Explanation</h1>
                     <p>{question.explanation}</p>
-                  </Jumbotron>
+                  </Jumbotron> */}
+                  <ExplanationOfQuize
+                    blogIdItems={blogIdItems}
+                    question={question}
+                    blog={blog}
+                    quizeNum={indexQue + 1}
+                  />
                 </>
               ) : null}
             </Card.Body>

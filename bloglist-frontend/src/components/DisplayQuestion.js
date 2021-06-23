@@ -264,7 +264,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
               </Nav.Item>
               <Nav.Item>
                 <Nav.Link
-                  href="/aswerrview"
+                  href={`/aswerrview/${paraValue}`}
                   target="_blank"
                   disabled={reviewResult}
                 >

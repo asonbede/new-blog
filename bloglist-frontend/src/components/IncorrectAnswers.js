@@ -22,8 +22,9 @@ import {
   sendRadioButtonNameValue,
   sendBlogQuestionArray,
 } from "../reducers/radioButtonNameValueReducer";
+import ExplanationOfQuize from "./ExplanationOfQuize";
 //window.location.reload()
-const InCorrectAnswer = ({ radioNameValue }) => {
+const InCorrectAnswer = ({ radioNameValue, blog }) => {
   const dispatch = useDispatch();
   //const { blogQuestionArray, nameValueObj } = useSelector((state) => {
   //     return state.radioNameValue;
@@ -37,6 +38,10 @@ const InCorrectAnswer = ({ radioNameValue }) => {
   // const blogQuestionArray = inCorrectAnswer.blogQuestionArray;
   // const nameValueObj = inCorrectAnswer.nameValueObj;
   const optionLetters = ["A", "B", "C", "D", "E"];
+
+  const blogIdItems = {
+    "60c8ccabc7580d2db825db5b": { quizeObj: { 1: "" } },
+  };
   // console.log({ blogQuestionArray }, "from incorrec");
   // console.log({ nameValueObj }, "from incorrec");
   const blogQuestionArray = radioNameValue.blogQuestionArray;
@@ -44,7 +49,7 @@ const InCorrectAnswer = ({ radioNameValue }) => {
 
   //let match = useRouteMatch("/questions/:id");
   // const paraValue = match.params.id;
-  //console.log({ paraValue });
+  //console.log({ paraValue });jjjjj
 
   const matchingCorrectAnswer = (optionsArray, optionAlpabet) => {
     const objectAlpha = { a: 0, b: 1, c: 2, d: 3, e: 4 };
@@ -56,7 +61,7 @@ const InCorrectAnswer = ({ radioNameValue }) => {
       <div>
         {blogQuestionArray.map((question, indexQue) => (
           // {  if (question.markStatus!=="incorrect") {
-          //    continue
+          //    continue///
           //  }}
           <Card style={{ width: "100%" }} className="mb-3">
             <Card.Body key={`${question}-${indexQue}`}>
@@ -160,10 +165,16 @@ const InCorrectAnswer = ({ radioNameValue }) => {
               </ListGroup>
               {question.markStatus === "incorrect" ? (
                 <>
-                  <Jumbotron>
+                  {/* <Jumbotron>
                     <h1>Explanation</h1>
                     <p>{question.explanation}</p>
-                  </Jumbotron>
+                  </Jumbotron> */}
+                  <ExplanationOfQuize
+                    blogIdItems={blogIdItems}
+                    question={question}
+                    blog={blog}
+                    quizeNum={indexQue + 1}
+                  />
                 </>
               ) : null}
             </Card.Body>
