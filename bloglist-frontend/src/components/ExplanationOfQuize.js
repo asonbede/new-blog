@@ -3,7 +3,12 @@ import React from "react";
 //import { Link } from "react-router-dom";
 import { Table, Image, Jumbotron } from "react-bootstrap";
 
-const ExplanationOfQuize = (question, blogIdItems, blog, quizeNum) => {
+const ExplanationOfQuize = ({ question, blogIdItems, paraValue, quizeNum }) => {
+  console.log(question.explanation, "explanation");
+  console.log({ question });
+  console.log({ quizeNum });
+  console.log({ paraValue });
+  //console.log(blogIdItems[paraValue].quizeObj[quizeNum]);
   //   const dispatch = useDispatch();
   //   let blogs = useSelector(({ blogs }) => {
   //     return blogs;
@@ -13,21 +18,17 @@ const ExplanationOfQuize = (question, blogIdItems, blog, quizeNum) => {
   return (
     <Jumbotron>
       <h1>Explanation</h1>
-      {blog.id in blogIdItems && quizeNum in blogIdItems.quizeObj ? (
-        //   <Card.Img variant="top" src={`${imagePath}`} alt="blog image" />
-
+      {paraValue in blogIdItems &&
+      quizeNum in blogIdItems[paraValue].quizeObj ? (
         <img
-          //variant="top"
           style={{
             marginBottom: 5,
             marginRight: 4,
             width: "100%",
             height: "auto",
           }}
-          src={blogIdItems.quizeObj[quizeNum]}
+          src={blogIdItems[paraValue].quizeObj[quizeNum]}
           alt="blog image"
-          //   fluid
-          //   rounded
         />
       ) : null}
       <p>{question.explanation}</p>

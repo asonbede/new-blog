@@ -28,7 +28,7 @@ const ReviewAnswer = () => {
   );
   let match = useRouteMatch("/aswerrview/:id");
   const paraValue = match.params.id;
-  const blogs = useSelector((state) => state.blogs);
+  let blogs = useSelector((state) => state.blogs);
 
   if (!blogs.length) {
     blogs = JSON.parse(localStorage.getItem("allBlogs"));
@@ -88,7 +88,7 @@ const ReviewAnswer = () => {
             </InputGroup.Text>
           </InputGroup.Append>
         </InputGroup>
-        <AllAnswers radioNameValue={radioNameValue} blog={blog} />
+        <AllAnswers radioNameValue={radioNameValue} paraValue={paraValue} />
       </div>
     );
   } else if (selectValue === "correct") {
