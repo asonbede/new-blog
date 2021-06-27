@@ -1,19 +1,10 @@
 import React, { useState, useEffect } from "react";
-// import { handleUpdateMainBlog } from "../reducers/blogReducer";
-// import { useDispatch, useSelector } from "react-redux";
-// import { Form, Button } from "react-bootstrap";
-// import BlogTitle from "./BlogTitle";
-// import BlogBody from "./BlogBody";
-// import { useRouteMatch } from "react-router-dom";
-// import Togglable from "./Togglable";
-// import { sendMainBlogUpdate } from "../reducers/commentUpdate";
+
 import { convertToRaw, convertFromRaw, EditorState } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-// import draftToHtml from "draftjs-to-html";
-// import { stateToHTML } from "draft-js-export-html";
-//import { handleComment } from "../reducers/blogReducer";
+
 const DisplayFormatedBlog = ({ blog }) => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -60,10 +51,6 @@ const DisplayFormatedBlog = ({ blog }) => {
           textAlign: { inDropdown: true },
           link: { inDropdown: true },
           history: { inDropdown: true },
-          // image: {
-          //   uploadCallback: uploadImageCallBack,
-          //   alt: { present: true, mandatory: false },
-          // },
         }}
         readOnly={true}
       />
@@ -71,4 +58,3 @@ const DisplayFormatedBlog = ({ blog }) => {
   );
 };
 export default DisplayFormatedBlog;
-//profileimageid

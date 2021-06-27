@@ -7,7 +7,12 @@ import BlogBody from "./BlogBody";
 import { useRouteMatch } from "react-router-dom";
 import Togglable from "./Togglable";
 import { sendMainBlogUpdate } from "../reducers/commentUpdate";
-import { convertToRaw, convertFromRaw, EditorState } from "draft-js";
+import {
+  convertToRaw,
+  convertFromRaw,
+  EditorState,
+  AtomicBlockUtils,
+} from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 //import "..../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -25,6 +30,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
   //const [state, setstate] = useState(in)
   const [likes, setlikes] = useState({});
   // const [content, setcontent] = useState({});
+  const [imageBlog, setimageBlog] = useState("");
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -137,9 +143,30 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
     setAuthor(event.target.value);
   };
 
-  // const handleEditorChange = (event) => {
-  //   setUrl(event.target.value);
-  // };
+  const handleImageBlogChange = (event) => {
+    setimageBlog(event.target.value);
+  };
+
+  //handle blog image
+  const handleImageInsert = () => {
+    const newEditorState = insertImage(editorState, imageBlog);
+    handleEditorChange(newEditorState);
+  };
+
+  const insertImage = (editorState, imageBlog) => {
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      "IMAGE",
+      "IMMUTABLE",
+      { src: imageBlog }
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity,
+    });
+    return AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ");
+  };
+
   const fileSelected = (event) => {
     const file = event.target.files[0];
     setimage(file);
@@ -148,14 +175,6 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
   if (mainBlogUpdate && mainBlogUpdate === blogIdValue) {
     return (
       <>
-        {/* <BlogTitle blog={blog} />
-        <BlogBody
-          blog={blog}
-          user={user}
-          noteFormRef={noteFormRef}
-          diabledLink={true}
-        /> */}
-
         <Togglable buttonLabel="Click Here To Begin Update" ref={noteFormRef}>
           <Form onSubmit={handleUpdateBlog}>
             <Form.Group controlId="formTitleId">
@@ -176,17 +195,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
                 onChange={handleAuthorChange}
               />
             </Form.Group>
-            {/* <Form.Group controlId="formUrlId">
-              <Form.Label> Contents</Form.Label>
 
-              <Form.Control
-                type="text"
-                as="textarea"
-                rows={3}
-                value={url}
-                onChange={handleUrlChange}
-              />
-            </Form.Group> */}
             <Form.Group controlId="formUrlId">
               <Form.Label className="App-header"> Contents</Form.Label>
               {/* <div className="App-main"> */}
@@ -207,13 +216,18 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
                   textAlign: { inDropdown: true },
                   link: { inDropdown: true },
                   history: { inDropdown: true },
-                  // image: {
-                  //   uploadCallback: uploadImageCallBack,
-                  //   alt: { present: true, mandatory: false },
-                  // },
                 }}
               />
-              {/* </div> */}
+            </Form.Group>
+            <Form.Group controlId="formBlogImageId">
+              <Form.Label>Blog image</Form.Label>
+              <Form.Control
+                type="text"
+                value={imageBlog}
+                onChange={handleImageBlogChange}
+                as="textarea"
+                rows={2}
+              />
             </Form.Group>
             <Form.Group controlId="formProfileImageId">
               <Form.File
@@ -222,6 +236,9 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
                 label="Profile Image"
               />
             </Form.Group>
+            <Button onClick={handleImageInsert} style={{ margin: 5 }}>
+              Insert Image
+            </Button>
 
             <Button type="submit" style={{ margin: 5 }} block>
               update
