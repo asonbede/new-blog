@@ -165,6 +165,7 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
         />
         {/* <p><img src></p> */}
         <Card style={{ width: "100%" }}>
+          <DisplayFormatedBlog contentFromServer={blog.title} />
           {blog.id in blogIdItems ? (
             blogIdItems[blog.id][0]()
           ) : (
@@ -249,7 +250,7 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
             {blog.id in blogIdItems ? (
               blogIdItems[blog.id][1]()
             ) : (
-              <DisplayFormatedBlog blog={blog} />
+              <DisplayFormatedBlog contentFromServer={blog.url} />
             )}
           </Card.Body>
           <Card.Body>

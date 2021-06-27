@@ -75,7 +75,7 @@
 }
 /* --------graph data presentation */
 .text-center {
-  /* text-align: left; */
+  text-align: center;
   color: green;
   font-size: 22px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;

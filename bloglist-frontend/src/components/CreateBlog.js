@@ -1,23 +1,24 @@
 import React, { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
-import { Table, Form, Button, Alert, Navbar, Nav } from "react-bootstrap";
-import {
-  convertToRaw,
-  convertFromRaw,
-  EditorState,
-  AtomicBlockUtils,
-} from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
+import { Form, Button } from "react-bootstrap";
+// import {
+//   convertToRaw,
+//   convertFromRaw,
+//   EditorState,
+//   AtomicBlockUtils,
+// } from "draft-js";
+// import { Editor } from "react-draft-wysiwyg";
 
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import draftToHtml from "draftjs-to-html";
-import { stateToHTML } from "draft-js-export-html";
+// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+// import draftToHtml from "draftjs-to-html";
+// import { stateToHTML } from "draft-js-export-html";
 import {
   useField,
   useResource,
   useEditor,
   handleImageInsert,
+  MyRichEditor,
 } from "../hooks/resourse";
 
 const CreateBlog = (props) => {
@@ -34,9 +35,11 @@ const CreateBlog = (props) => {
   const useFieldAuthor = useField("text");
   const useFieldImage = useField("text");
   const useEditorMainBlog = useEditor();
+  const useEditorMainBlogTitle = useEditor();
 
   const { url, editorState, onEditorStateChange } = useEditorMainBlog;
-  const { value: title } = useFieldTitle;
+  const { url: title } = useEditorMainBlogTitle;
+  //const { value: title } = useFieldTitle;
   const { value: author } = useFieldAuthor;
   const { value: imageBlog } = useFieldImage;
   const dispatch = useDispatch();
@@ -102,8 +105,13 @@ const CreateBlog = (props) => {
   return (
     <Form onSubmit={handleCreateBlog}>
       <Form.Group controlId="formTitleId">
-        <Form.Label>Title</Form.Label>
-        <Form.Control {...useFieldTitle} />
+        <Form.Label className="App-header">Title</Form.Label>
+        {/* <Form.Control {...useFieldTitle} /> */}
+        <MyRichEditor
+          useEditorMainBlog={useEditorMainBlogTitle}
+          readOnly={false}
+          toolbarOnFocus={false}
+        />
       </Form.Group>
       {/* type="text" value={title} onChange={handleTitleChange}  */}
       <Form.Group controlId="formAuthorId">
@@ -120,23 +128,10 @@ const CreateBlog = (props) => {
       <Form.Group controlId="formUrlId">
         <Form.Label className="App-header"> Contents</Form.Label>
 
-        <Editor
-          //initialEditorState
-          //defaultEditorState={editorState}
-          //editorState={editorState}
-          // onChange={setEditorState}
-          // onEditorStateChange={handleEditorChange}
-          //wrapperClassName="wrapper-class"
-          //editorClassName="editor-class"
-          // toolbarClassName="toolbar-class"
-          {...useEditorMainBlog}
-          toolbar={{
-            inline: { inDropdown: true },
-            list: { inDropdown: true },
-            textAlign: { inDropdown: true },
-            link: { inDropdown: true },
-            history: { inDropdown: true },
-          }}
+        <MyRichEditor
+          useEditorMainBlog={useEditorMainBlog}
+          readOnly={false}
+          toolbarOnFocus={false}
         />
       </Form.Group>
 

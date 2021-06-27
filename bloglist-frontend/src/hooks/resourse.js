@@ -34,6 +34,21 @@ export const useEditor = () => {
   };
   const url = JSON.stringify(convertToRaw(editorState.getCurrentContent())); //JSON.stringify()
 
+  const useServerContent = (contentFromServer) => {
+    useEffect(() => {
+      if (contentFromServer) {
+        //setUrl(blog.url);
+
+        const content = convertFromRaw(JSON.parse(contentFromServer));
+        if (content) {
+          setEditorState(() =>
+            EditorState.push(editorState, content, "remove-range")
+          );
+        }
+      }
+    }, [contentFromServer]);
+  };
+
   return {
     wrapperClassName: "wrapper-class",
     editorClassName: "editor-class",
@@ -41,6 +56,7 @@ export const useEditor = () => {
 
     url,
     editorState,
+    useServerContent,
     onEditorStateChange: handleEditorChange,
     // toolbar: {
     //   inline: { inDropdown: true },
@@ -76,6 +92,26 @@ const insertImage = (editorState, imageBlog) => {
   return AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ");
 };
 
+export const MyRichEditor = ({
+  useEditorMainBlog,
+  readOnly,
+  toolbarOnFocus,
+}) => {
+  return (
+    <Editor
+      {...useEditorMainBlog}
+      toolbar={{
+        inline: { inDropdown: true },
+        list: { inDropdown: true },
+        textAlign: { inDropdown: true },
+        link: { inDropdown: true },
+        history: { inDropdown: true },
+      }}
+      readOnly={readOnly}
+      toolbarOnFocus={toolbarOnFocus}
+    />
+  );
+};
 //export {useField,useEditor}
 
 //   const useResource = (baseUrl) => {

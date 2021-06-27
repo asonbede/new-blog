@@ -24,7 +24,7 @@ const OneBlog = (props) => {
   if (blog) {
     return (
       <div>
-        <BlogTitle blog={blog} />
+        {/* <BlogTitle blog={blog} /> */}
         <BlogBody
           blog={blog}
           blogs={blogs}
@@ -32,7 +32,7 @@ const OneBlog = (props) => {
           noteFormRef={props.noteFormRef}
           paraValue={paraValue}
         />
-        {/* <hr />
+        {/* <hr /> 
         <Comments blog={blog} noteFormRef={props.noteFormRef} />
         <hr />
         <CommentForm blog={blog} /> */}

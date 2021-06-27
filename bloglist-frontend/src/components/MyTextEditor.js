@@ -1,125 +1,152 @@
-import React, { Component } from "react";
-import { convertToRaw, convertFromRaw, EditorState } from "draft-js";
+import React, { useState, useRef } from "react";
+//import { useDispatch } from "react-redux";
+//import { createBlog } from "../reducers/blogReducer";
+import { Table, Form, Button, Alert, Navbar, Nav } from "react-bootstrap";
+import {
+  convertToRaw,
+  convertFromRaw,
+  EditorState,
+  AtomicBlockUtils,
+} from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
-import "../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from "draftjs-to-html";
+import { stateToHTML } from "draft-js-export-html";
+const MyTextEditor = (props) => {
+  // const [title, setTitle] = useState("");
+  // const [author, setAuthor] = useState("");
+  //const [url, setUrl] = useState("");
+  //const [image, setimage] = useState("");
+  //const [imageBlog, setimageBlog] = useState("");
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
 
-export default class TextEditor extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      editorState: EditorState.createEmpty(),
-      message: "Try the editor below!",
-      rawMessage: "",
-    };
+  //const dispatch = useDispatch();
 
-    this.onEditorStateChange = this.onEditorStateChange.bind(this);
-    this.handleEditorStateToMessage =
-      this.handleEditorStateToMessage.bind(this);
-  }
+  const handleCreateBlog = (event) => {
+    event.preventDefault();
+    const url = JSON.stringify(convertToRaw(editorState.getCurrentContent())); //JSON.stringify()
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("title", title);
+    formData.append("url", url);
+    formData.append("author", author);
+    formData.append("created", new Date().getTime());
+    formData.append("updated", new Date().getTime());
 
-  onEditorStateChange(editorState) {
-    this.setState({
-      editorState,
-      rawMessage: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-    });
-    console.log(typeof this.state.message, "messageeeeeeeeee");
-  }
+    props.noteFormRef.current.togglevisibility();
 
-  handleEditorStateToMessage() {
-    this.setState({
-      message: this.state.rawMessage,
-    });
-  }
+    dispatch(createBlog(formData));
+    setTitle("");
+    setAuthor("");
+  };
 
-  render() {
-    const { editorState } = this.state;
-    const wrapperStyle = {
-      border: "1px solid #969696",
-    };
-    const editorStyle = {
-      height: "10rem",
-      padding: "1rem",
-    };
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  };
+  const handleAuthorChange = (event) => {
+    setAuthor(event.target.value);
+  };
 
-    // function uploadImageCallBack(file) {
-    //   return new Promise((resolve, reject) => {
-    //     const xhr = new XMLHttpRequest();
-    //     xhr.open("POST", "https://api.imgur.com/3/image");
-    //     xhr.setRequestHeader("Authorization", "Client-ID ##clientid###");
-    //     const data = new FormData();
-    //     data.append("image", file);
-    //     xhr.send(data);
-    //     xhr.addEventListener("load", () => {
-    //       const response = JSON.parse(xhr.responseText);
-    //       console.log(response);
-    //       resolve(response);
-    //     });
-    //     xhr.addEventListener("error", () => {
-    //       const error = JSON.parse(xhr.responseText);
-    //       console.log(error);
-    //       reject(error);
-    //     });
-    //   });
-    // }
-    return (
-      <React.Fragment>
-        <div>
-          <div></div>
-          <div
-            style={{
-              border: "1px solid #969696",
-              borderRadius: "3px",
-              height: "10rem",
-              padding: "1rem",
-            }}
-          >
-            <div dangerouslySetInnerHTML={{ __html: this.state.message }}></div>
-          </div>
-          <div></div>
-        </div>
-        <div style={{ marginTop: "5%" }}>
-          <Editor
-            // toolbarOnFocus
-            initialEditorState={editorState}
-            wrapperClassName="wrapper-class"
-            wrapperStyle={wrapperStyle}
-            editorStyle={editorStyle}
-            // toolbarStyle={toolbarStyle}
-            editorClassName="demo-editor"
-            onEditorStateChange={this.onEditorStateChange}
-            toolbar={{
-              inline: { inDropdown: true },
-              list: { inDropdown: true },
-              textAlign: { inDropdown: true },
-              link: { inDropdown: true },
-              history: { inDropdown: true },
-              // image: {
-              //   uploadCallback: uploadImageCallBack,
-              //   alt: { present: true, mandatory: false },
-              // },
-            }}
-          />
-        </div>
-        <div style={{ marginTop: "2%" }}>
-          <button variant="outlined" onClick={this.handleEditorStateToMessage}>
-            submit
-          </button>
-        </div>
-      </React.Fragment>
+  const handleImageBlogChange = (event) => {
+    setimageBlog(event.target.value);
+  };
+
+  const handleEditorChange = (editorState) => {
+    setEditorState(editorState);
+  };
+
+  const fileSelected = (event) => {
+    const file = event.target.files[0];
+    setimage(file);
+  };
+
+  //handle blog image
+  const handleImageInsert = () => {
+    const newEditorState = insertImage(editorState, imageBlog);
+    handleEditorChange(newEditorState);
+  };
+
+  const insertImage = (editorState, imageBlog) => {
+    const contentState = editorState.getCurrentContent();
+    const contentStateWithEntity = contentState.createEntity(
+      "IMAGE",
+      "IMMUTABLE",
+      { src: imageBlog }
     );
-  }
-}
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: contentStateWithEntity,
+    });
+    return AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ");
+  };
 
-// In order to store this data on the backend, we are going to need to change the EditorState information to be in JSON. This is where the convertToRaw function comes in. Use the function below to get the data back in JSON
-// convertToRaw(this.state.editorState.getCurrentContent())
-// From here you will just need to do a simple fetch POST request to your backend.
-//npm install draft-js-export-html.
-// import {stateToHTML} from 'draft-js-export-html';
-// import { convertFromRaw } from 'draft-js';
-// convertCommentFromJSONToHTML = (text) => {                     return stateToHTML(convertFromRaw(JSON.parse(text))) }
-{
-  /* <div id="comment-div">
-<div dangerouslySetInnerHTML={{ __html: this.convertCommentFromJSONToHTML(this.props.comment.content)}}>  </div>
-</div> */
-}
+  return (
+    <Form onSubmit={handleCreateBlog}>
+      <Form.Group controlId="formTitleId">
+        <Form.Label>Title</Form.Label>
+        <Form.Control type="text" value={title} onChange={handleTitleChange} />
+      </Form.Group>
+
+      <Form.Group controlId="formAuthorId">
+        <Form.Label> author</Form.Label>
+
+        <Form.Control
+          type="text"
+          value={author}
+          onChange={handleAuthorChange}
+        />
+      </Form.Group>
+
+      <Form.Group controlId="formUrlId">
+        <Form.Label className="App-header"> Contents</Form.Label>
+
+        <Editor
+          //initialEditorState
+          //defaultEditorState={editorState}
+          editorState={editorState}
+          // onChange={setEditorState}
+          onEditorStateChange={handleEditorChange}
+          wrapperClassName="wrapper-class"
+          editorClassName="editor-class"
+          toolbarClassName="toolbar-class"
+          toolbar={{
+            inline: { inDropdown: true },
+            list: { inDropdown: true },
+            textAlign: { inDropdown: true },
+            link: { inDropdown: true },
+            history: { inDropdown: true },
+          }}
+        />
+      </Form.Group>
+
+      <Form.Group controlId="formBlogImageId">
+        <Form.Label>Blog image</Form.Label>
+        <Form.Control
+          type="text"
+          value={imageBlog}
+          onChange={handleImageBlogChange}
+          as="textarea"
+          rows={2}
+        />
+      </Form.Group>
+
+      <Form.Group controlId="formProfileIigeId">
+        <Form.File
+          onChange={fileSelected}
+          accept="image/*"
+          label="Profile Image"
+        />
+      </Form.Group>
+      <Button onClick={handleImageInsert} style={{ margin: 5 }}>
+        Insert Image
+      </Button>
+      <Button type="submit" style={{ margin: 5 }} block>
+        create
+      </Button>
+    </Form>
+  );
+};
+export default CreateBlog;

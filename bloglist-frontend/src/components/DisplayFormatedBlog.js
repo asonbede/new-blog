@@ -1,31 +1,44 @@
 import React, { useState, useEffect } from "react";
 
-import { convertToRaw, convertFromRaw, EditorState } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
+// import { convertToRaw, convertFromRaw, EditorState } from "draft-js";
+// import { Editor } from "react-draft-wysiwyg";
 
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import {
+  useField,
+  useResource,
+  useEditor,
+  handleImageInsert,
+  MyRichEditor,
+} from "../hooks/resourse";
 
-const DisplayFormatedBlog = ({ blog }) => {
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
+const DisplayFormatedBlog = ({ contentFromServer }) => {
+  // const [editorState, setEditorState] = useState(() =>
+  //   EditorState.createEmpty()
+  // );
+  const useEditorMainBlog = useEditor();
+  useEditorMainBlog.useServerContent(contentFromServer);
+  // useEffect(() => {
+  //   if (contentFromServer) {
+  //     //setUrl(blog.url);
 
-  useEffect(() => {
-    if (blog) {
-      //setUrl(blog.url);
-
-      const content = convertFromRaw(JSON.parse(blog.url));
-      if (content) {
-        setEditorState(() =>
-          EditorState.push(editorState, content, "remove-range")
-        );
-      }
-    }
-  }, [blog]);
+  //     const content = convertFromRaw(JSON.parse(contentFromServer));
+  //     if (content) {
+  //       setEditorState(() =>
+  //         EditorState.push(editorState, content, "remove-range")
+  //       );
+  //     }
+  //   }
+  // }, [contentFromServer]);
 
   return (
     <>
-      <Editor
+      <MyRichEditor
+        readOnly={true}
+        toolbarOnFocus={true}
+        useEditorMainBlog={useEditorMainBlog}
+      />
+      {/* <Editor
         toolbarOnFocus
         //initialEditorState
         // defaultEditorState={editorState}
@@ -53,7 +66,7 @@ const DisplayFormatedBlog = ({ blog }) => {
           history: { inDropdown: true },
         }}
         readOnly={true}
-      />
+      /> */}
     </>
   );
 };
