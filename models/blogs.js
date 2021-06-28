@@ -5,6 +5,9 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  topic: {
+    type: String,
+  },
   author: {
     type: String,
     required: true,

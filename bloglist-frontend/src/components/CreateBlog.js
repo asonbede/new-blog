@@ -2,17 +2,7 @@ import React, { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
 import { Form, Button } from "react-bootstrap";
-// import {
-//   convertToRaw,
-//   convertFromRaw,
-//   EditorState,
-//   AtomicBlockUtils,
-// } from "draft-js";
-// import { Editor } from "react-draft-wysiwyg";
 
-// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-// import draftToHtml from "draftjs-to-html";
-// import { stateToHTML } from "draft-js-export-html";
 import {
   useField,
   useResource,
@@ -22,16 +12,9 @@ import {
 } from "../hooks/resourse";
 
 const CreateBlog = (props) => {
-  //const [title, setTitle] = useState("");
-  //const [author, setAuthor] = useState("");
-  //const [url, setUrl] = useState("");
   const [image, setimage] = useState("");
-  //const [imageBlog, setimageBlog] = useState("");
-  // const [editorState, setEditorState] = useState(() =>
-  //   EditorState.createEmpty()
-  // );
 
-  const useFieldTitle = useField("text");
+  const useFieldTopic = useField("text");
   const useFieldAuthor = useField("text");
   const useFieldImage = useField("text");
   const useEditorMainBlog = useEditor();
@@ -39,16 +22,17 @@ const CreateBlog = (props) => {
 
   const { url, editorState, onEditorStateChange } = useEditorMainBlog;
   const { url: title } = useEditorMainBlogTitle;
-  //const { value: title } = useFieldTitle;
+  const { value: topic } = useFieldTopic;
   const { value: author } = useFieldAuthor;
   const { value: imageBlog } = useFieldImage;
   const dispatch = useDispatch();
 
   const handleCreateBlog = (event) => {
     event.preventDefault();
-    //const url = JSON.stringify(convertToRaw(editorState.getCurrentContent())); //JSON.stringify()
+
     const formData = new FormData();
     formData.append("image", image);
+    formData.append("topic", topic);
     formData.append("title", title);
     formData.append("url", url);
     formData.append("author", author);
@@ -62,67 +46,33 @@ const CreateBlog = (props) => {
     // setAuthor("");
   };
 
-  // const handleTitleChange = (event) => {
-  //   setTitle(event.target.value);
-  // };
-  // const handleAuthorChange = (event) => {
-  //   setAuthor(event.target.value);
-  // };
-
-  // const handleImageBlogChange = (event) => {
-  //   setimageBlog(event.target.value);
-  // };
-
-  // const handleEditorChange = (editorState) => {
-  //   setEditorState(editorState);
-  // };
-
   const fileSelected = (event) => {
     const file = event.target.files[0];
     setimage(file);
   };
 
-  //handle blog image
-  // const handleImageInsert = () => {
-  //   const newEditorState = insertImage(editorState, imageBlog);
-  //   onEditorStateChange(newEditorState);
-  // };
-
-  // const insertImage = (editorState, imageBlog) => {
-  //   const contentState = editorState.getCurrentContent();
-  //   const contentStateWithEntity = contentState.createEntity(
-  //     "IMAGE",
-  //     "IMMUTABLE",
-  //     { src: imageBlog }
-  //   );
-  //   const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-  //   const newEditorState = EditorState.set(editorState, {
-  //     currentContent: contentStateWithEntity,
-  //   });
-  //   return AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ");
-  // };
-
   return (
     <Form onSubmit={handleCreateBlog}>
+      <Form.Group controlId="formBlogTopicId">
+        <Form.Label>Topic</Form.Label>
+        <Form.Control {...useFieldTopic} as="textarea" rows={2} />
+      </Form.Group>
+
       <Form.Group controlId="formTitleId">
-        <Form.Label className="App-header">Title</Form.Label>
-        {/* <Form.Control {...useFieldTitle} /> */}
+        <Form.Label className="App-header">Learning Objectives</Form.Label>
+
         <MyRichEditor
           useEditorMainBlog={useEditorMainBlogTitle}
           readOnly={false}
           toolbarOnFocus={false}
+          toolbarPresent={true}
         />
       </Form.Group>
-      {/* type="text" value={title} onChange={handleTitleChange}  */}
+
       <Form.Group controlId="formAuthorId">
         <Form.Label> author</Form.Label>
 
-        <Form.Control
-          // type="text"
-          // value={author}
-          // onChange={handleAuthorChange}
-          {...useFieldAuthor}
-        />
+        <Form.Control {...useFieldAuthor} />
       </Form.Group>
 
       <Form.Group controlId="formUrlId">
@@ -132,19 +82,13 @@ const CreateBlog = (props) => {
           useEditorMainBlog={useEditorMainBlog}
           readOnly={false}
           toolbarOnFocus={false}
+          toolbarPresent={true}
         />
       </Form.Group>
 
       <Form.Group controlId="formBlogImageId">
         <Form.Label>Blog image</Form.Label>
-        <Form.Control
-          // type="text"
-          // value={imageBlog}
-          // onChange={handleImageBlogChange}
-          {...useFieldImage}
-          as="textarea"
-          rows={2}
-        />
+        <Form.Control {...useFieldImage} as="textarea" rows={2} />
       </Form.Group>
 
       <Form.Group controlId="formProfileIigeId">

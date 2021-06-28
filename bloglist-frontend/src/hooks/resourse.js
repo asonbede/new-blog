@@ -51,9 +51,9 @@ export const useEditor = () => {
   };
 
   return {
-    wrapperClassName: "wrapper-class",
-    editorClassName: "editor-class",
-    toolbarClassName: "toolbar-class",
+    // wrapperClassName: "wrapper-class",
+    // editorClassName: "editor-class",
+    // toolbarClassName: "toolbar-class",
 
     url,
     editorState,
@@ -97,7 +97,10 @@ export const MyRichEditor = ({
   useEditorMainBlog,
   readOnly,
   toolbarOnFocus,
+  toolbarPresent,
 }) => {
+  const toolbarStyleObj = { display: "block" };
+  const toolbarStyleObjIntro = { display: "none" };
   return (
     <Editor
       {...useEditorMainBlog}
@@ -110,49 +113,10 @@ export const MyRichEditor = ({
       }}
       readOnly={readOnly}
       toolbarOnFocus={toolbarOnFocus}
+      wrapperClassName="wrapper-class"
+      editorClassName="editor-class"
+      toolbarClassName={toolbarPresent ? "toolbar-class" : "remove-toolbar"}
+      // toolbarStyle={toolbarPresent ? toolbarStyleObj : toolbarStyleObjIntro}
     />
   );
 };
-//export {useField,useEditor}
-
-//   const useResource = (baseUrl) => {
-//     const [resources, setResources] = useState([])
-
-//     console.log("insideusecountry")
-
-//     useEffect(() => {
-//       console.log("effect");
-
-//         getAll(baseUrl)
-//         .then((initialResoures) => {
-//           console.log("promise fulfilled");
-//           setResources(initialResoures);
-//         })
-//         .catch((errr) => {
-//           console.log("server is down, please refresh the browser and try again");
-//           //setCountry([]);
-//         });
-//     }, []);
-
-//     const create = async (newObject) => {
-
-//       const response = await axios.post(baseUrl, newObject);
-
-//       setResources(resources.concat(response.data))
-//     };
-
-//     const service = {
-//       create
-//     }
-
-//     return [
-//       resources, service
-//     ]
-//   }
-
-// const content = useField('text')
-// const name = useField('text')
-// const number = useField('text')
-
-// const [notes, noteService] = useResource('http://localhost:3002/notes')
-// const [persons, personService] = useResource('http://localhost:3002/persons')

@@ -63,6 +63,7 @@ async function handleCreateBlog(req, res, imageid) {
   const user = await User.findById(decodedToken.id);
   console.log("working in blog222");
   const blog = new Bloglist({
+    topic: body.topic,
     title: body.title,
     author: body.author,
     url: body.url,
@@ -156,6 +157,7 @@ async function handleUpdateBlog(req, res, imageid) {
   console.log("iinnnnnput server");
   //const body = request.body;
   const blog = {
+    topic: req.body.topic,
     title: req.body.title,
     author: req.body.author,
     url: req.body.url,

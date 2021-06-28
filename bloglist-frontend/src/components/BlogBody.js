@@ -38,6 +38,7 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
   };
 
   const handleMainBlogLike = (id) => {
+    console.log("like called");
     let newObj;
     if (blog.likes.likeValue) {
       const hasAlreadyLiked = blog.likes.likers.some(
@@ -46,34 +47,39 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
       if (hasAlreadyLiked) {
         newObj = {
           ...blog,
-          likes: {
+          likes: JSON.stringify({
             likers: [
               ...blog.likes.likers.filter((person) => person !== user.username),
             ],
             likeValue: blog.likes.likeValue - 1,
-          },
+          }),
         };
         console.log("already liked");
       } else {
         newObj = {
           ...blog,
-          likes: {
+          likes: JSON.stringify({
             likeValue: blog.likes.likeValue + 1,
             likers: [...blog.likes.likers, user.username],
-          },
+          }),
         };
         console.log("not already liked---liking");
       }
     } else {
       newObj = {
         ...blog,
-        likes: {
+        likes: JSON.stringify({
           likeValue: 1,
           likers: [user.username],
-        },
+        }),
       };
+      console.log("like initiated");
     }
-
+    newObj = {
+      ...newObj,
+      comments: JSON.stringify(newObj.comments),
+      questions: JSON.stringify(newObj.questions),
+    };
     dispatch(sendCreateMainBlogLike(id, newObj));
   };
 
@@ -165,7 +171,14 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
         />
         {/* <p><img src></p> */}
         <Card style={{ width: "100%" }}>
-          <DisplayFormatedBlog contentFromServer={blog.title} />
+          <Card.Text style={{ fontSize: "3rem", textAlign: "center" }}>
+            {" "}
+            {blog.topic ? blog.topic : "Please indicate the topic"}
+          </Card.Text>
+          <DisplayFormatedBlog
+            contentFromServer={blog.title}
+            toolbarPresent={false}
+          />
           {blog.id in blogIdItems ? (
             blogIdItems[blog.id][0]()
           ) : (
@@ -236,21 +249,16 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
               {" "}
               Back{" "}
             </Link>
-            {/* <Link
-                  to={`/blogs/${paraValue}`}
-                  style={{ marginRight: 10, textDecoration: "none" }}
-                >
-                  {" "}
-                  Back{" "}
-                </Link> */}
-            {/* </Card.Text> */}
           </Card.Body>
 
           <Card.Body>
             {blog.id in blogIdItems ? (
               blogIdItems[blog.id][1]()
             ) : (
-              <DisplayFormatedBlog contentFromServer={blog.url} />
+              <DisplayFormatedBlog
+                contentFromServer={blog.url}
+                toolbarPresent={false}
+              />
             )}
           </Card.Body>
           <Card.Body>
@@ -297,6 +305,3 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
 };
 
 export default BlogBody;
-// dangerouslySetInnerHTML={{
-//   __html: convertFromJSONToHTML(blog.url),
-// }}

@@ -26,6 +26,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
   let imageType = "old";
   const dispatch = useDispatch();
 
+  const useFieldTopic = useField("text");
   const useFieldAuthor = useField("text");
   const useFieldImage = useField("text");
   const useEditorMainBlog = useEditor();
@@ -35,6 +36,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
   const { url: title } = useEditorMainBlogTitle;
 
   const { value: author, setValue: setAuthorValue } = useFieldAuthor;
+  const { value: topic, setValue: setTopicValue } = useFieldTopic;
   const { value: imageBlog } = useFieldImage;
 
   console.log({ blog }, "fromblogggggggggg");
@@ -51,6 +53,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
       console.log(blog.likes, "blog likesssss");
       //setUrl(blog.url);
       setAuthorValue(blog.author);
+      setTopicValue(blog.topic ? blog.topic : "no topic yet");
       //setTitle(blog.title);
       setoldimage(blog.imageid);
       setcomment(blog.comments);
@@ -67,6 +70,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
       console.log(blog.comments, "commmmmmentsss");
       const formData = new FormData();
       formData.append("image", image);
+      formData.append("topic", topic);
       formData.append("title", title);
       formData.append("url", url);
       formData.append("author", author);
@@ -116,6 +120,10 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
       <>
         <Togglable buttonLabel="Click Here To Begin Update" ref={noteFormRef}>
           <Form onSubmit={handleUpdateBlog}>
+            <Form.Group controlId="formBlogTopicId">
+              <Form.Label>Topic</Form.Label>
+              <Form.Control {...useFieldTopic} as="textarea" rows={2} />
+            </Form.Group>
             <Form.Group controlId="formTitleId">
               <Form.Label className="App-header">Title</Form.Label>
 
@@ -124,6 +132,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
                 useEditorMainBlog={useEditorMainBlogTitle}
                 readOnly={false}
                 toolbarOnFocus={false}
+                toolbarPresent={true}
               />
             </Form.Group>
 
@@ -139,6 +148,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
                 useEditorMainBlog={useEditorMainBlog}
                 readOnly={false}
                 toolbarOnFocus={false}
+                toolbarPresent={true}
               />
             </Form.Group>
             <Form.Group controlId="formBlogImageId">

@@ -24,7 +24,9 @@ const Blogs = () => {
             {blogs.map((blog) => (
               <tr key={blog.id}>
                 <td>
-                  <Link to={`/blogs/${blog.id}`}>{blog.title} </Link>
+                  <Link to={`/blogs/${blog.id}`}>
+                    {blog.topic ? blog.topic : "No topic, please implement"}{" "}
+                  </Link>
                 </td>
                 <td>{blog.author}</td>
               </tr>
