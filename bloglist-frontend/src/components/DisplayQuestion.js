@@ -34,6 +34,10 @@ import { sendQuestionDelete } from "../reducers/blogReducer";
 import { sendResulReviewtHandler } from "../reducers/resultReducer";
 //import useShowResult from "../hooks/resourse";
 import DisplayResult from "./DisplayResult";
+import DisplayFormatedBlog from "./DisplayFormatedBlog";
+import { convertToHTML } from "draft-convert";
+import DOMPurify from "dompurify";
+import { convertFromRaw } from "draft-js";
 //window.location.reload()
 const DisplayQuestion = ({ noteFormRef }) => {
   const [submitButtonState, setsubmitButtonState] = useState(true);
@@ -230,6 +234,14 @@ const DisplayQuestion = ({ noteFormRef }) => {
     // this.setState({financialGoal: value});
   };
 
+  const convertContentToHTML = (rawString) => {
+    const content = convertFromRaw(JSON.parse(rawString));
+    const currentContentAsHTML = convertToHTML(content);
+    return {
+      __html: DOMPurify.sanitize(currentContentAsHTML),
+    };
+  };
+
   console.log({ blog });
   if (blog.questions.length) {
     console.log(blog.questions, "questionnnnnqrray");
@@ -342,22 +354,62 @@ const DisplayQuestion = ({ noteFormRef }) => {
           >
             <Card.Body key={`${question}-${indexQue}`}>
               <Card.Title>
-                <span>{`Question${indexQue + 1}:`}</span> {question.question}
+                <span>{`Question${indexQue + 1}:`}</span>
+                <DisplayFormatedBlog
+                  contentFromServer={question.question}
+                  toolbarPresent={false}
+                />
+
+                {/* {question.question} */}
               </Card.Title>
 
               <ListGroup className="list-group-flush">
                 {Object.values(question.options).map((option, index) => (
                   <ListGroupItem key={`question${index}:${indexQue}`}>
                     {" "}
+                    {/* <Form> */}
                     <Form.Check
-                      type="radio"
-                      value={option}
-                      name={`optioname${indexQue}`}
-                      id={`question${index}:${indexQue}`}
-                      label={`${optionLetters[index]}. ${option}`}
-                      onClick={handleRadioButtonChange}
-                    />
+                    // type="radio"
+                    // value={option}
+                    // name={`optioname${indexQue}`}
+                    // id={`question${index}:${indexQue}`}
+                    // onClick={handleRadioButtonChange}
+                    >
+                      <Form.Check.Input
+                        // type="radio"
+                        isValid
+                        type="radio"
+                        value={option}
+                        name={`optioname${indexQue}`}
+                        id={`question${index}:${indexQue}`}
+                        onClick={handleRadioButtonChange}
+                      />
+                      <Form.Check.Label
+                      // dangerouslySetInnerHTML={convertContentToHTML(option)}
+                      >
+                        {`${optionLetters[index]}`}
+                        {
+                          <DisplayFormatedBlog
+                            contentFromServer={option}
+                            toolbarPresent={false}
+                          />
+                        }
+                      </Form.Check.Label>
+                    </Form.Check>
+                    {/* </Form> */}
                   </ListGroupItem>
+                  //{`${optionLetters[index]}. ${option}`}
+                  //   <Form>
+                  //   {['checkbox', 'radio'].map((type) => (
+                  //     <div key={type} className="mb-3">
+                  //       <Form.Check type={type} id={`check-api-${type}`}>
+                  //         <Form.Check.Input type={type} isValid />
+                  //         <Form.Check.Label>{`Custom api ${type}`}</Form.Check.Label>
+                  //         <Form.Control.Feedback type="valid">You did it!</Form.Control.Feedback>
+                  //       </Form.Check>
+                  //     </div>
+                  //   ))}
+                  // </Form>
                 ))}
               </ListGroup>
               {/* {user.username === question.examiner ? ( */}
