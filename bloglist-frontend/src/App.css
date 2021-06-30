@@ -66,6 +66,13 @@
   min-height: 30vh;
   margin-top: 1px;
 }
+.editor-small-class {
+  background-color: lightgray;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  min-height: 5vh;
+  margin-top: 1px;
+}
 .toolbar-class {
   border: 1px solid #ccc;
 }

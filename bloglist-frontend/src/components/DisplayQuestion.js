@@ -155,7 +155,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
 
     setalertContent({
       headers: "Question Delete Alert",
-      body: `Do you really want to delete this question ${questionObj.question} from database`,
+      body: `Do you really want to delete this question  from database`,
     });
     setshowAlert(true);
 
@@ -168,7 +168,14 @@ const DisplayQuestion = ({ noteFormRef }) => {
     const { blogId, blogObj } = deleteHandlerOutput;
     console.log({ blogId });
     console.log({ deleteHandlerOutput });
-    dispatch(sendQuestionDelete(blogId, blogObj));
+    dispatch(
+      sendQuestionDelete(blogId, {
+        ...blogObj,
+        comments: JSON.stringify(blogObj.comments),
+        questions: JSON.stringify(blogObj.questions),
+        likes: JSON.stringify(blogObj.likes),
+      })
+    );
     setshowAlert(false);
     setdeleteHandlerOutput({});
   };
@@ -358,6 +365,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
                 <DisplayFormatedBlog
                   contentFromServer={question.question}
                   toolbarPresent={false}
+                  smallHeight={false}
                 />
 
                 {/* {question.question} */}
@@ -377,25 +385,31 @@ const DisplayQuestion = ({ noteFormRef }) => {
                     >
                       <Form.Check.Input
                         // type="radio"
-                        isValid
+                        // isValid
                         type="radio"
                         value={option}
                         name={`optioname${indexQue}`}
                         id={`question${index}:${indexQue}`}
                         onClick={handleRadioButtonChange}
                       />
-                      <Form.Check.Label
-                      // dangerouslySetInnerHTML={convertContentToHTML(option)}
-                      >
-                        {`${optionLetters[index]}`}
-                        {
+                      <Form.Check.Label>
+                        {/* <span> {`${optionLetters[index]}`}</span> */}
+
+                        <span> {`${optionLetters[index]}`}</span>
+                        {/* {
                           <DisplayFormatedBlog
                             contentFromServer={option}
                             toolbarPresent={false}
+                            smallHeight={true}
                           />
-                        }
+                        } */}
                       </Form.Check.Label>
                     </Form.Check>
+                    <DisplayFormatedBlog
+                      contentFromServer={option}
+                      toolbarPresent={false}
+                      smallHeight={true}
+                    />
                     {/* </Form> */}
                   </ListGroupItem>
                   //{`${optionLetters[index]}. ${option}`}

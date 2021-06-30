@@ -146,6 +146,7 @@ const CreateQuestionsForm = ({ noteFormRef, blog }) => {
           readOnly={false}
           toolbarOnFocus={false}
           toolbarPresent={true}
+          smallHeight={false}
         />
         {/* </Form.Control> */}
       </Form.Group>
@@ -158,6 +159,7 @@ const CreateQuestionsForm = ({ noteFormRef, blog }) => {
           readOnly={false}
           toolbarOnFocus={false}
           toolbarPresent={true}
+          smallHeight={true}
         />
         {/* </Form.Control> */}
       </Form.Group>
@@ -170,6 +172,7 @@ const CreateQuestionsForm = ({ noteFormRef, blog }) => {
           readOnly={false}
           toolbarOnFocus={false}
           toolbarPresent={true}
+          smallHeight={true}
         />
         {/* </Form.Control> */}
       </Form.Group>
@@ -182,6 +185,7 @@ const CreateQuestionsForm = ({ noteFormRef, blog }) => {
           readOnly={false}
           toolbarOnFocus={false}
           toolbarPresent={true}
+          smallHeight={true}
         />
         {/* </Form.Control> */}
       </Form.Group>
@@ -194,6 +198,7 @@ const CreateQuestionsForm = ({ noteFormRef, blog }) => {
           readOnly={false}
           toolbarOnFocus={false}
           toolbarPresent={true}
+          smallHeight={true}
         />
         {/* </Form.Control> */}
       </Form.Group>
@@ -206,6 +211,7 @@ const CreateQuestionsForm = ({ noteFormRef, blog }) => {
           readOnly={false}
           toolbarOnFocus={false}
           toolbarPresent={true}
+          smallHeight={true}
         />
         {/* </Form.Control> */}
       </Form.Group>
@@ -230,6 +236,7 @@ const CreateQuestionsForm = ({ noteFormRef, blog }) => {
           readOnly={false}
           toolbarOnFocus={false}
           toolbarPresent={true}
+          smallHeight={false}
         />
         {/* </Form.Control> */}
       </Form.Group>

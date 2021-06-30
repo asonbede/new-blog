@@ -20,6 +20,7 @@ import {
   sendRadioButtonNameValue,
   sendBlogQuestionArray,
 } from "../reducers/radioButtonNameValueReducer";
+import DisplayFormatedBlog from "./DisplayFormatedBlog";
 //window.location.reload()
 import ExplanationOfQuize from "./ExplanationOfQuize";
 const CorrectAnswer = ({ radioNameValue, blog }) => {
@@ -52,7 +53,12 @@ const CorrectAnswer = ({ radioNameValue, blog }) => {
                 {question.markStatus === "correct" ? (
                   <>
                     <span>{`Question${indexQue + 1}:`}</span>{" "}
-                    {question.question}
+                    <DisplayFormatedBlog
+                      contentFromServer={question.question}
+                      toolbarPresent={false}
+                      smallHeight={false}
+                    />
+                    {/* {question.question} */}
                     <span
                       style={{
                         color: "green",
@@ -73,13 +79,33 @@ const CorrectAnswer = ({ radioNameValue, blog }) => {
                     return (
                       <ListGroupItem key={`question${index}:${indexQue}`}>
                         {" "}
-                        <Form.Check
+                        {/* <Form.Check
                           type="radio"
                           value={option}
                           name={`optioname${indexQue}`}
                           id={`question${index}:${indexQue}`}
                           label={`${optionLetters[index]}. ${option}`}
                           checked
+                        /> */}
+                        <Form.Check>
+                          <Form.Check.Input
+                            checked
+                            type="radio"
+                            value={option}
+                            name={`optioname${indexQue}`}
+                            id={`question${index}:${indexQue}`}
+                          />
+                          <Form.Check.Label>
+                            <span> {`${optionLetters[index]}`}</span>
+                            {/* {
+                         
+                        } */}
+                          </Form.Check.Label>
+                        </Form.Check>
+                        <DisplayFormatedBlog
+                          contentFromServer={option}
+                          toolbarPresent={false}
+                          smallHeight={true}
                         />
                         <IconContext.Provider
                           value={{
@@ -104,12 +130,31 @@ const CorrectAnswer = ({ radioNameValue, blog }) => {
                     return (
                       <ListGroupItem key={`question${index}:${indexQue}`}>
                         {" "}
-                        <Form.Check
+                        {/* <Form.Check
                           type="radio"
                           value={option}
                           name={`optioname${indexQue}`}
                           id={`question${index}:${indexQue}`}
                           label={`${optionLetters[index]}. ${option}`}
+                        /> */}
+                        <Form.Check>
+                          <Form.Check.Input
+                            type="radio"
+                            value={option}
+                            name={`optioname${indexQue}`}
+                            id={`question${index}:${indexQue}`}
+                          />
+                          <Form.Check.Label>
+                            <span> {`${optionLetters[index]}`}</span>
+                            {/* {
+                         
+                        } */}
+                          </Form.Check.Label>
+                        </Form.Check>
+                        <DisplayFormatedBlog
+                          contentFromServer={option}
+                          toolbarPresent={false}
+                          smallHeight={true}
                         />
                       </ListGroupItem>
                     );
@@ -122,11 +167,17 @@ const CorrectAnswer = ({ radioNameValue, blog }) => {
                     <h1>Explanation</h1>
                     <p>{question.explanation}</p>
                   </Jumbotron> */}
-                  <ExplanationOfQuize
+                  {/* <ExplanationOfQuize
                     blogIdItems={blogIdItems}
                     question={question}
                     blog={blog}
                     quizeNum={indexQue + 1}
+                  /> */}
+                  <h1>Explanation</h1>
+                  <DisplayFormatedBlog
+                    contentFromServer={question.explanation}
+                    toolbarPresent={false}
+                    smallHeight={true}
                   />
                 </>
               ) : null}

@@ -12,7 +12,7 @@ import {
   MyRichEditor,
 } from "../hooks/resourse";
 
-const DisplayFormatedBlog = ({ contentFromServer }) => {
+const DisplayFormatedBlog = ({ contentFromServer, smallHeight }) => {
   // const [editorState, setEditorState] = useState(() =>
   //   EditorState.createEmpty()
   // );
@@ -37,6 +37,7 @@ const DisplayFormatedBlog = ({ contentFromServer }) => {
         readOnly={true}
         toolbarOnFocus={true}
         useEditorMainBlog={useEditorMainBlog}
+        smallHeight={smallHeight}
       />
       {/* <Editor
         toolbarOnFocus

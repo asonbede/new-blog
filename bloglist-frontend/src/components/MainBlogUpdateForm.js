@@ -133,6 +133,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
                 readOnly={false}
                 toolbarOnFocus={false}
                 toolbarPresent={true}
+                smallHeight={false}
               />
             </Form.Group>
 
@@ -149,6 +150,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
                 readOnly={false}
                 toolbarOnFocus={false}
                 toolbarPresent={true}
+                smallHeight={false}
               />
             </Form.Group>
             <Form.Group controlId="formBlogImageId">

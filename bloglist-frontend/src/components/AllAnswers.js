@@ -23,6 +23,7 @@ import {
   sendBlogQuestionArray,
 } from "../reducers/radioButtonNameValueReducer";
 import ExplanationOfQuize from "./ExplanationOfQuize";
+import DisplayFormatedBlog from "./DisplayFormatedBlog";
 //window.location.reload()
 const AllAnswers = ({ radioNameValue, paraValue }) => {
   const dispatch = useDispatch();
@@ -64,7 +65,13 @@ const AllAnswers = ({ radioNameValue, paraValue }) => {
           <Card style={{ width: "100%" }} className="mb-3">
             <Card.Body key={`${question}-${indexQue}`}>
               <Card.Title>
-                <span>{`Question${indexQue + 1}:`}</span> {question.question}
+                <span>{`Question${indexQue + 1}:`}</span>
+                <DisplayFormatedBlog
+                  contentFromServer={question.question}
+                  toolbarPresent={false}
+                  smallHeight={false}
+                />
+                {/* {question.question} */}
                 <span
                   style={{
                     color:
@@ -92,13 +99,25 @@ const AllAnswers = ({ radioNameValue, paraValue }) => {
                     return (
                       <ListGroupItem key={`question${index}:${indexQue}`}>
                         {" "}
-                        <Form.Check
-                          type="radio"
-                          value={option}
-                          name={`optioname${indexQue}`}
-                          id={`question${index}:${indexQue}`}
-                          label={`${optionLetters[index]}. ${option}`}
-                          checked
+                        <Form.Check>
+                          <Form.Check.Input
+                            checked
+                            type="radio"
+                            value={option}
+                            name={`optioname${indexQue}`}
+                            id={`question${index}:${indexQue}`}
+                          />
+                          <Form.Check.Label>
+                            <span> {`${optionLetters[index]}`}</span>
+                            {/* {
+                         
+                        } */}
+                          </Form.Check.Label>
+                        </Form.Check>
+                        <DisplayFormatedBlog
+                          contentFromServer={option}
+                          toolbarPresent={false}
+                          smallHeight={true}
                         />
                         <IconContext.Provider
                           value={{
@@ -124,13 +143,40 @@ const AllAnswers = ({ radioNameValue, paraValue }) => {
                     return (
                       <ListGroupItem key={`question${index}:${indexQue}`}>
                         {" "}
-                        <Form.Check
+                        {/* <Form.Check
                           type="radio"
                           value={option}
                           name={`optioname${indexQue}`}
                           id={`question${index}:${indexQue}`}
                           label={`${optionLetters[index]}. ${option}`}
                           checked
+                        /> */}
+                        <Form.Check>
+                          <Form.Check.Input
+                            checked
+                            type="radio"
+                            value={option}
+                            name={`optioname${indexQue}`}
+                            id={`question${index}:${indexQue}`}
+                            // onClick={handleRadioButtonChange}
+                          />
+                          <Form.Check.Label>
+                            {/* <span> {`${optionLetters[index]}`}</span> */}
+
+                            <span> {`${optionLetters[index]}`}</span>
+                            {/* {
+                          <DisplayFormatedBlog
+                            contentFromServer={option}
+                            toolbarPresent={false}
+                            smallHeight={true}
+                          />
+                        } */}
+                          </Form.Check.Label>
+                        </Form.Check>
+                        <DisplayFormatedBlog
+                          contentFromServer={option}
+                          toolbarPresent={false}
+                          smallHeight={true}
                         />
                         <IconContext.Provider
                           value={{
@@ -158,12 +204,38 @@ const AllAnswers = ({ radioNameValue, paraValue }) => {
                       return (
                         <ListGroupItem key={`question${index}:${indexQue}`}>
                           {" "}
-                          <Form.Check
+                          {/* <Form.Check
                             type="radio"
                             value={option}
                             name={`optioname${indexQue}`}
                             id={`question${index}:${indexQue}`}
                             label={`${optionLetters[index]}. ${option}`}
+                          /> */}
+                          <Form.Check>
+                            <Form.Check.Input
+                              type="radio"
+                              value={option}
+                              name={`optioname${indexQue}`}
+                              id={`question${index}:${indexQue}`}
+                              // onClick={handleRadioButtonChange}
+                            />
+                            <Form.Check.Label>
+                              {/* <span> {`${optionLetters[index]}`}</span> */}
+
+                              <span> {`${optionLetters[index]}`}</span>
+                              {/* {
+                          <DisplayFormatedBlog
+                            contentFromServer={option}
+                            toolbarPresent={false}
+                            smallHeight={true}
+                          />
+                        } */}
+                            </Form.Check.Label>
+                          </Form.Check>
+                          <DisplayFormatedBlog
+                            contentFromServer={option}
+                            toolbarPresent={false}
+                            smallHeight={true}
                           />
                           <IconContext.Provider
                             value={{
@@ -182,12 +254,38 @@ const AllAnswers = ({ radioNameValue, paraValue }) => {
                       return (
                         <ListGroupItem key={`question${index}:${indexQue}`}>
                           {" "}
-                          <Form.Check
+                          {/* <Form.Check
                             type="radio"
                             value={option}
                             name={`optioname${indexQue}`}
                             id={`question${index}:${indexQue}`}
                             label={`${optionLetters[index]}. ${option}`}
+                          /> */}
+                          <Form.Check>
+                            <Form.Check.Input
+                              type="radio"
+                              value={option}
+                              name={`optioname${indexQue}`}
+                              id={`question${index}:${indexQue}`}
+                              // onClick={handleRadioButtonChange}
+                            />
+                            <Form.Check.Label>
+                              {/* <span> {`${optionLetters[index]}`}</span> */}
+
+                              <span> {`${optionLetters[index]}`}</span>
+                              {/* {
+                          <DisplayFormatedBlog
+                            contentFromServer={option}
+                            toolbarPresent={false}
+                            smallHeight={true}
+                          />
+                        } */}
+                            </Form.Check.Label>
+                          </Form.Check>
+                          <DisplayFormatedBlog
+                            contentFromServer={option}
+                            toolbarPresent={false}
+                            smallHeight={true}
                           />
                         </ListGroupItem>
                       );
@@ -202,12 +300,38 @@ const AllAnswers = ({ radioNameValue, paraValue }) => {
                     return (
                       <ListGroupItem key={`question${index}:${indexQue}`}>
                         {" "}
-                        <Form.Check
+                        {/* <Form.Check
                           type="radio"
                           value={option}
                           name={`optioname${indexQue}`}
                           id={`question${index}:${indexQue}`}
                           label={`${optionLetters[index]}. ${option}`}
+                        /> */}
+                        <Form.Check>
+                          <Form.Check.Input
+                            type="radio"
+                            value={option}
+                            name={`optioname${indexQue}`}
+                            id={`question${index}:${indexQue}`}
+                            // onClick={handleRadioButtonChange}
+                          />
+                          <Form.Check.Label>
+                            {/* <span> {`${optionLetters[index]}`}</span> */}
+
+                            <span> {`${optionLetters[index]}`}</span>
+                            {/* {
+                          <DisplayFormatedBlog
+                            contentFromServer={option}
+                            toolbarPresent={false}
+                            smallHeight={true}
+                          />
+                        } */}
+                          </Form.Check.Label>
+                        </Form.Check>
+                        <DisplayFormatedBlog
+                          contentFromServer={option}
+                          toolbarPresent={false}
+                          smallHeight={true}
                         />
                         <span>Skipped</span>
                         <BsCheck />
@@ -223,12 +347,38 @@ const AllAnswers = ({ radioNameValue, paraValue }) => {
                     return (
                       <ListGroupItem key={`question${index}:${indexQue}`}>
                         {" "}
-                        <Form.Check
+                        {/* <Form.Check
                           type="radio"
                           value={option}
                           name={`optioname${indexQue}`}
                           id={`question${index}:${indexQue}`}
                           label={`${optionLetters[index]}. ${option}`}
+                        /> */}
+                        <Form.Check>
+                          <Form.Check.Input
+                            type="radio"
+                            value={option}
+                            name={`optioname${indexQue}`}
+                            id={`question${index}:${indexQue}`}
+                            // onClick={handleRadioButtonChange}
+                          />
+                          <Form.Check.Label>
+                            {/* <span> {`${optionLetters[index]}`}</span> */}
+
+                            <span> {`${optionLetters[index]}`}</span>
+                            {/* {
+                          <DisplayFormatedBlog
+                            contentFromServer={option}
+                            toolbarPresent={false}
+                            smallHeight={true}
+                          />
+                        } */}
+                          </Form.Check.Label>
+                        </Form.Check>
+                        <DisplayFormatedBlog
+                          contentFromServer={option}
+                          toolbarPresent={false}
+                          smallHeight={true}
                         />
                       </ListGroupItem>
                     );
@@ -239,11 +389,17 @@ const AllAnswers = ({ radioNameValue, paraValue }) => {
                 <h1>Explanation</h1>
                 <p>{question.explanation}</p>
               </Jumbotron> */}
-              <ExplanationOfQuize
+              {/* <ExplanationOfQuize
                 blogIdItems={blogIdItems}
                 question={question}
                 paraValue={paraValue}
                 quizeNum={indexQue + 1}
+              /> */}
+              <h1>Explanation</h1>
+              <DisplayFormatedBlog
+                contentFromServer={question.explanation}
+                toolbarPresent={false}
+                smallHeight={true}
               />
             </Card.Body>
           </Card>

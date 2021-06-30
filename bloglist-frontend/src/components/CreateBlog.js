@@ -5,7 +5,6 @@ import { Form, Button } from "react-bootstrap";
 
 import {
   useField,
-  useResource,
   useEditor,
   handleImageInsert,
   MyRichEditor,
@@ -66,6 +65,7 @@ const CreateBlog = (props) => {
           readOnly={false}
           toolbarOnFocus={false}
           toolbarPresent={true}
+          smallHeight={false}
         />
       </Form.Group>
 
@@ -83,6 +83,7 @@ const CreateBlog = (props) => {
           readOnly={false}
           toolbarOnFocus={false}
           toolbarPresent={true}
+          smallHeight={false}
         />
       </Form.Group>
 

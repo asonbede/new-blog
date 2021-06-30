@@ -23,6 +23,7 @@ import {
   sendBlogQuestionArray,
 } from "../reducers/radioButtonNameValueReducer";
 import ExplanationOfQuize from "./ExplanationOfQuize";
+import DisplayFormatedBlog from "./DisplayFormatedBlog";
 //window.location.reload()
 const InCorrectAnswer = ({ radioNameValue, blog }) => {
   const dispatch = useDispatch();
@@ -69,7 +70,12 @@ const InCorrectAnswer = ({ radioNameValue, blog }) => {
                 {question.markStatus === "incorrect" ? (
                   <>
                     <span>{`Question${indexQue + 1}:`}</span>{" "}
-                    {question.question}
+                    <DisplayFormatedBlog
+                      contentFromServer={question.question}
+                      toolbarPresent={false}
+                      smallHeight={false}
+                    />
+                    {/* {question.question} */}
                     <span
                       style={{
                         color: "red",
@@ -90,13 +96,33 @@ const InCorrectAnswer = ({ radioNameValue, blog }) => {
                     return (
                       <ListGroupItem key={`question${index}:${indexQue}`}>
                         {" "}
-                        <Form.Check
+                        {/* <Form.Check
                           type="radio"
                           value={option}
                           name={`optioname${indexQue}`}
                           id={`question${index}:${indexQue}`}
                           label={`${optionLetters[index]}. ${option}`}
                           checked
+                        /> */}
+                        <Form.Check>
+                          <Form.Check.Input
+                            checked
+                            type="radio"
+                            value={option}
+                            name={`optioname${indexQue}`}
+                            id={`question${index}:${indexQue}`}
+                          />
+                          <Form.Check.Label>
+                            <span> {`${optionLetters[index]}`}</span>
+                            {/* {
+                         
+                        } */}
+                          </Form.Check.Label>
+                        </Form.Check>
+                        <DisplayFormatedBlog
+                          contentFromServer={option}
+                          toolbarPresent={false}
+                          smallHeight={true}
                         />
                         <IconContext.Provider
                           value={{
@@ -121,12 +147,31 @@ const InCorrectAnswer = ({ radioNameValue, blog }) => {
                     return (
                       <ListGroupItem key={`question${index}:${indexQue}`}>
                         {" "}
-                        <Form.Check
+                        {/* <Form.Check
                           type="radio"
                           value={option}
                           name={`optioname${indexQue}`}
                           id={`question${index}:${indexQue}`}
                           label={`${optionLetters[index]}. ${option}`}
+                        /> */}
+                        <Form.Check>
+                          <Form.Check.Input
+                            type="radio"
+                            value={option}
+                            name={`optioname${indexQue}`}
+                            id={`question${index}:${indexQue}`}
+                          />
+                          <Form.Check.Label>
+                            <span> {`${optionLetters[index]}`}</span>
+                            {/* {
+                         
+                        } */}
+                          </Form.Check.Label>
+                        </Form.Check>
+                        <DisplayFormatedBlog
+                          contentFromServer={option}
+                          toolbarPresent={false}
+                          smallHeight={true}
                         />
                         <IconContext.Provider
                           value={{
@@ -151,12 +196,31 @@ const InCorrectAnswer = ({ radioNameValue, blog }) => {
                     return (
                       <ListGroupItem key={`question${index}:${indexQue}`}>
                         {" "}
-                        <Form.Check
+                        {/* <Form.Check
                           type="radio"
                           value={option}
                           name={`optioname${indexQue}`}
                           id={`question${index}:${indexQue}`}
                           label={`${optionLetters[index]}. ${option}`}
+                        /> */}
+                        <Form.Check>
+                          <Form.Check.Input
+                            type="radio"
+                            value={option}
+                            name={`optioname${indexQue}`}
+                            id={`question${index}:${indexQue}`}
+                          />
+                          <Form.Check.Label>
+                            <span> {`${optionLetters[index]}`}</span>
+                            {/* {
+                         
+                        } */}
+                          </Form.Check.Label>
+                        </Form.Check>
+                        <DisplayFormatedBlog
+                          contentFromServer={option}
+                          toolbarPresent={false}
+                          smallHeight={true}
                         />
                       </ListGroupItem>
                     );
@@ -169,11 +233,17 @@ const InCorrectAnswer = ({ radioNameValue, blog }) => {
                     <h1>Explanation</h1>
                     <p>{question.explanation}</p>
                   </Jumbotron> */}
-                  <ExplanationOfQuize
+                  {/* <ExplanationOfQuize
                     blogIdItems={blogIdItems}
                     question={question}
                     blog={blog}
                     quizeNum={indexQue + 1}
+                  /> */}
+                  <h1>Explanation</h1>
+                  <DisplayFormatedBlog
+                    contentFromServer={question.explanation}
+                    toolbarPresent={false}
+                    smallHeight={true}
                   />
                 </>
               ) : null}

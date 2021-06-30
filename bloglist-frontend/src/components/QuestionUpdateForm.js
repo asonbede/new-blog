@@ -8,22 +8,19 @@ import { sendQuestionUpdate } from "../reducers/commentUpdate";
 
 import { useRouteMatch, Link } from "react-router-dom";
 import Togglable from "./Togglable";
+import {
+  useField,
+  useEditor,
+  handleImageInsert,
+  MyRichEditor,
+} from "../hooks/resourse";
+
 const QuestionUpdateForm = ({
   blog,
   noteFormRef,
   questionObj,
   questionIdValue,
 }) => {
-  const [question, setquestion] = useState("");
-  const [optionA, setoptionA] = useState("");
-  const [optionB, setoptionB] = useState("");
-  const [optionC, setoptionC] = useState("");
-  const [optionD, setoptionD] = useState("");
-  const [optionE, setoptionE] = useState("");
-  const [correctOption, setcorrectOption] = useState("");
-  const [explanation, setexplanation] = useState("");
-  //const [postedTime, setpostedTime] = useState("");
-
   const dispatch = useDispatch();
 
   console.log({ blog });
@@ -31,35 +28,37 @@ const QuestionUpdateForm = ({
   const questionUpdateState = useSelector(
     (state) => state.updateState.questionUpdateState
   );
+  const useEditorQuestion = useEditor();
+  const useEditorOptionA = useEditor();
+  const useEditorOptionB = useEditor();
+  const useEditorOptionC = useEditor();
+  const useEditorOptionD = useEditor();
+  const useEditorOptionE = useEditor();
+  const useEditorCorrectOption = useField("text");
+  const useEditorExplanation = useEditor();
 
+  //const { url, editorState, onEditorStateChange } = useEditorMainBlog;
+  const { url: question } = useEditorQuestion;
+  const { url: optionA } = useEditorOptionA;
+  const { url: optionB } = useEditorOptionB;
+  const { url: optionC } = useEditorOptionC;
+  const { url: optionD } = useEditorOptionD;
+  const { url: optionE } = useEditorOptionE;
+
+  const { value: correctOption, setValue: setCorrectOptionValue } =
+    useEditorCorrectOption;
+  const { url: explanation } = useEditorExplanation;
+
+  useEditorQuestion.useServerContent(questionObj.question);
+  useEditorOptionA.useServerContent(questionObj.options.optionA);
+  useEditorOptionB.useServerContent(questionObj.options.optionB);
+  useEditorOptionC.useServerContent(questionObj.options.optionC);
+  useEditorOptionD.useServerContent(questionObj.options.optionD);
+  useEditorOptionE.useServerContent(questionObj.options.optionE);
+
+  useEditorExplanation.useServerContent(questionObj.explanation);
   useEffect(() => {
-    if (questionObj) {
-      setquestion(questionObj.question);
-      setoptionA(questionObj.options.optionA);
-      setoptionB(questionObj.options.optionB);
-      setoptionC(questionObj.options.optionC);
-      setoptionD(questionObj.options.optionD);
-      setoptionE(questionObj.options.optionE);
-
-      setcorrectOption(questionObj.correctOption);
-      setexplanation(questionObj.explanation);
-      //setpostedTime(questionObj.postedTime);
-
-      //         question,
-      //         options: {
-      //           optionA,
-      //           optionB,
-      //           optionC,
-      //           optionD,
-      //           optionE,
-      //         },
-
-      //         correctOption,
-      //         explanation,
-
-      //         postedTime: new Date().getTime(),
-      //         commentId: uuidv4(),
-    }
+    setCorrectOptionValue(questionObj.correctOption);
   }, [questionObj]);
   const handleSubmit = (event) => {
     console.log("sending question Update");
@@ -102,38 +101,6 @@ const QuestionUpdateForm = ({
     dispatch(sendQuestionUpdate(null));
   };
 
-  const handleQuestionChange = (event) => {
-    setquestion(event.target.value);
-  };
-
-  const handleOptionAChange = (event) => {
-    setoptionA(event.target.value);
-  };
-
-  const handleOptionBChange = (event) => {
-    setoptionB(event.target.value);
-  };
-
-  const handleOptionCChange = (event) => {
-    setoptionC(event.target.value);
-  };
-
-  const handleOptionDChange = (event) => {
-    setoptionD(event.target.value);
-  };
-
-  const handleOptionEChange = (event) => {
-    setoptionE(event.target.value);
-  };
-
-  const handleCorrectOptionChange = (event) => {
-    setcorrectOption(event.target.value);
-  };
-
-  const handleExplanationChange = (event) => {
-    setexplanation(event.target.value);
-  };
-
   if (questionUpdateState && questionUpdateState === questionIdValue) {
     return (
       <div id="updateForm">
@@ -144,88 +111,90 @@ const QuestionUpdateForm = ({
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formUrlId">
               <Form.Label> Questions</Form.Label>
-
-              <Form.Control
-                type="text"
-                as="textarea"
-                rows={5}
-                value={question}
-                onChange={handleQuestionChange}
+              <MyRichEditor
+                useEditorMainBlog={useEditorQuestion}
+                readOnly={false}
+                toolbarOnFocus={false}
+                toolbarPresent={true}
+                smallHeight={false}
               />
             </Form.Group>
 
             <Form.Group controlId="formOptionAId">
-              <Form.Label>Option A</Form.Label>
-              <Form.Control
-                type="text"
-                value={optionA}
-                as="textarea"
-                rows={2}
-                onChange={handleOptionAChange}
+              <Form.Label className="App-header">Option A</Form.Label>
+
+              <MyRichEditor
+                useEditorMainBlog={useEditorOptionA}
+                readOnly={false}
+                toolbarOnFocus={false}
+                toolbarPresent={true}
+                smallHeight={true}
               />
             </Form.Group>
 
             <Form.Group controlId="formOptionBId">
-              <Form.Label>Option B</Form.Label>
-              <Form.Control
-                type="text"
-                value={optionB}
-                as="textarea"
-                rows={2}
-                onChange={handleOptionBChange}
+              <Form.Label className="App-header">Option B</Form.Label>
+
+              <MyRichEditor
+                useEditorMainBlog={useEditorOptionB}
+                readOnly={false}
+                toolbarOnFocus={false}
+                toolbarPresent={true}
+                smallHeight={true}
               />
             </Form.Group>
 
             <Form.Group controlId="formOptionCId">
-              <Form.Label>Option C</Form.Label>
-              <Form.Control
-                type="text"
-                value={optionC}
-                as="textarea"
-                rows={2}
-                onChange={handleOptionCChange}
+              <Form.Label className="App-header">Option C</Form.Label>
+
+              <MyRichEditor
+                useEditorMainBlog={useEditorOptionC}
+                readOnly={false}
+                toolbarOnFocus={false}
+                toolbarPresent={true}
+                smallHeight={true}
               />
             </Form.Group>
 
             <Form.Group controlId="formOptionDId">
-              <Form.Label>Option D</Form.Label>
-              <Form.Control
-                type="text"
-                value={optionD}
-                as="textarea"
-                rows={2}
-                onChange={handleOptionDChange}
+              <Form.Label className="App-header">Option D</Form.Label>
+
+              <MyRichEditor
+                useEditorMainBlog={useEditorOptionD}
+                readOnly={false}
+                toolbarOnFocus={false}
+                toolbarPresent={true}
+                smallHeight={true}
               />
             </Form.Group>
 
             <Form.Group controlId="formOptionEId">
-              <Form.Label>Option E</Form.Label>
-              <Form.Control
-                type="text"
-                value={optionE}
-                as="textarea"
-                rows={2}
-                onChange={handleOptionEChange}
+              <Form.Label className="App-header">Option E</Form.Label>
+
+              <MyRichEditor
+                useEditorMainBlog={useEditorOptionE}
+                readOnly={false}
+                toolbarOnFocus={false}
+                toolbarPresent={true}
+                smallHeight={true}
               />
             </Form.Group>
 
             <Form.Group controlId="formCorrectOptionId">
               <Form.Label>Correct Option </Form.Label>
-              <Form.Control
-                type="text"
-                value={correctOption}
-                onChange={handleCorrectOptionChange}
-              />
+
+              <Form.Control {...useEditorCorrectOption} />
             </Form.Group>
 
             <Form.Group controlId="formExplanationEId">
-              <Form.Label>Explanation</Form.Label>
-              <Form.Control
-                type="text"
-                value={explanation}
-                as="textarea"
-                rows={7}
-                onChange={handleExplanationChange}
+              <Form.Label className="App-header">Explanation</Form.Label>
+
+              <MyRichEditor
+                useEditorMainBlog={useEditorExplanation}
+                readOnly={false}
+                toolbarOnFocus={false}
+                toolbarPresent={true}
+                smallHeight={false}
               />
             </Form.Group>
 
@@ -240,190 +209,3 @@ const QuestionUpdateForm = ({
   return null;
 };
 export default QuestionUpdateForm;
-//profileimageid
-// import React, { useState, useRef } from "react";
-// import { useDispatch } from "react-redux";
-// import { sendCreateQuestion } from "../reducers/blogReducer";
-// import { Table, Form, Button, Alert, Navbar, Nav } from "react-bootstrap";
-// import { v4 as uuidv4 } from "uuid";
-// const CreateQuestionsForm = ({ noteFormRef, blog }) => {
-//   const [question, setquestion] = useState("");
-//   const [optionA, setoptionA] = useState("");
-//   const [optionB, setoptionB] = useState("");
-//   const [optionC, setoptionC] = useState("");
-//   const [optionD, setoptionD] = useState("");
-//   const [optionE, setoptionE] = useState("");
-//   const [correctOption, setcorrectOption] = useState("");
-//   const [explanation, setexplanation] = useState("");
-
-//   const dispatch = useDispatch();
-
-//   const handleCreateQuestion = (event) => {
-//     //noteFormRef.current.togglevisibility();
-//     //console.log({ noteFormRef });
-//     event.preventDefault();
-
-//     // const newBlogObject = {
-//     //   title: title,
-//     //   url: url,
-//     //   author: author,
-//     // };
-
-//     const questionArray = [
-//       ...blog.questions,
-//       {
-//         question,
-//         options: {
-//           optionA,
-//           optionB,
-//           optionC,
-//           optionD,
-//           optionE,
-//         },
-
-//         correctOption,
-//         explanation,
-
-//         postedTime: new Date().getTime(),
-//         commentId: uuidv4(),
-//       },
-//     ];
-//     dispatch(
-//       sendCreateQuestion(blog.id, { ...blog, questions: questionArray })
-//     );
-//     noteFormRef.current.togglevisibility();
-
-//     // setTitle("");
-//     // setAuthor("");
-//     // setUrl("");
-//     //noteFormRef.current.togglevisibility();
-//   };
-
-//   const handleQuestionChange = (event) => {
-//     setquestion(event.target.value);
-//   };
-
-//   const handleOptionAChange = (event) => {
-//     setoptionA(event.target.value);
-//   };
-
-//   const handleOptionBChange = (event) => {
-//     setoptionB(event.target.value);
-//   };
-
-//   const handleOptionCChange = (event) => {
-//     setoptionC(event.target.value);
-//   };
-
-//   const handleOptionDChange = (event) => {
-//     setoptionD(event.target.value);
-//   };
-
-//   const handleOptionEChange = (event) => {
-//     setoptionE(event.target.value);
-//   };
-
-//   const handleCorrectOptionChange = (event) => {
-//     setcorrectOption(event.target.value);
-//   };
-
-//   const handleExplanationChange = (event) => {
-//     setexplanation(event.target.value);
-//   };
-
-//   return (
-//     <Form onSubmit={handleCreateQuestion}>
-//       <Form.Group controlId="formUrlId">
-//         <Form.Label> Questions</Form.Label>
-
-//         <Form.Control
-//           type="text"
-//           as="textarea"
-//           rows={5}
-//           value={question}
-//           onChange={handleQuestionChange}
-//         />
-//       </Form.Group>
-
-//       <Form.Group controlId="formOptionAId">
-//         <Form.Label>Option A</Form.Label>
-//         <Form.Control
-//           type="text"
-//           value={optionA}
-//           as="textarea"
-//           rows={2}
-//           onChange={handleOptionAChange}
-//         />
-//       </Form.Group>
-
-//       <Form.Group controlId="formOptionBId">
-//         <Form.Label>Option B</Form.Label>
-//         <Form.Control
-//           type="text"
-//           value={optionB}
-//           as="textarea"
-//           rows={2}
-//           onChange={handleOptionBChange}
-//         />
-//       </Form.Group>
-
-//       <Form.Group controlId="formOptionCId">
-//         <Form.Label>Option C</Form.Label>
-//         <Form.Control
-//           type="text"
-//           value={optionC}
-//           as="textarea"
-//           rows={2}
-//           onChange={handleOptionCChange}
-//         />
-//       </Form.Group>
-
-//       <Form.Group controlId="formOptionDId">
-//         <Form.Label>Option D</Form.Label>
-//         <Form.Control
-//           type="text"
-//           value={optionD}
-//           as="textarea"
-//           rows={2}
-//           onChange={handleOptionDChange}
-//         />
-//       </Form.Group>
-
-//       <Form.Group controlId="formOptionEId">
-//         <Form.Label>Option E</Form.Label>
-//         <Form.Control
-//           type="text"
-//           value={optionE}
-//           as="textarea"
-//           rows={2}
-//           onChange={handleOptionEChange}
-//         />
-//       </Form.Group>
-
-//       <Form.Group controlId="formCorrectOptionId">
-//         <Form.Label>Correct Option </Form.Label>
-//         <Form.Control
-//           type="text"
-//           value={correctOption}
-//           onChange={handleCorrectOptionChange}
-//         />
-//       </Form.Group>
-
-//       <Form.Group controlId="formExplanationEId">
-//         <Form.Label>Explanation</Form.Label>
-//         <Form.Control
-//           type="text"
-//           value={explanation}
-//           as="textarea"
-//           rows={7}
-//           onChange={handleExplanationChange}
-//         />
-//       </Form.Group>
-
-//       <Button type="submit" style={{ margin: 5 }} block>
-//         create question
-//       </Button>
-//     </Form>
-//   );
-// };
-// export default CreateQuestionsForm;

@@ -98,12 +98,15 @@ export const MyRichEditor = ({
   readOnly,
   toolbarOnFocus,
   toolbarPresent,
+  smallHeight,
 }) => {
-  const toolbarStyleObj = { display: "block" };
-  const toolbarStyleObjIntro = { display: "none" };
+  // const toolbarStyleObj = { display: "block" };
+  // const toolbarStyleObjIntro = { display: "none" };
   return (
     <Editor
-      {...useEditorMainBlog}
+      onEditorStateChange={useEditorMainBlog.onEditorStateChange}
+      editorState={useEditorMainBlog.editorState}
+      // {...useEditorMainBlog}
       toolbar={{
         inline: { inDropdown: true },
         list: { inDropdown: true },
@@ -114,7 +117,7 @@ export const MyRichEditor = ({
       readOnly={readOnly}
       toolbarOnFocus={toolbarOnFocus}
       wrapperClassName="wrapper-class"
-      editorClassName="editor-class"
+      editorClassName={smallHeight ? "editor-small-class" : "editor-class"}
       toolbarClassName={toolbarPresent ? "toolbar-class" : "remove-toolbar"}
       // toolbarStyle={toolbarPresent ? toolbarStyleObj : toolbarStyleObjIntro}
     />
