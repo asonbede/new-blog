@@ -7,8 +7,20 @@ import { updateMessage } from "../reducers/commentUpdateReducer";
 import { sendCommentUpdate } from "../reducers/commentUpdate";
 import { useRouteMatch, Link } from "react-router-dom";
 import Togglable from "./Togglable";
-const UpdateForm = ({ blog, noteFormRef, commentObj, commentIdValue }) => {
-  const [comment, setComment] = useState("");
+import {
+  useField,
+  useEditor,
+  handleImageInsert,
+  MyRichEditor,
+} from "../hooks/resourse";
+
+const CommentUpdateForm = ({
+  blog,
+  noteFormRef,
+  commentObj,
+  commentIdValue,
+}) => {
+  //const [comment, setComment] = useState("");
 
   const dispatch = useDispatch();
 
@@ -17,19 +29,31 @@ const UpdateForm = ({ blog, noteFormRef, commentObj, commentIdValue }) => {
   const commentUpdateState = useSelector(
     (state) => state.updateState.commentUpdateState
   );
+  const useEditorMainBlogComment = useEditor();
+  const {
+    url: comment,
+    editorState,
+    onEditorStateChange,
+  } = useEditorMainBlogComment;
+  useEditorMainBlogComment.useServerContent(commentObj.comment);
+  //useEditorMainBlogTitle.useServerContent(blog.title);
 
-  useEffect(() => {
-    if (commentObj) {
-      setComment(commentObj.comment);
-    }
-  }, [commentObj]);
+  // useEffect(() => {
+  //   if (commentObj) {
+  //     setComment(commentObj.comment);
+  //   }
+  // }, [commentObj]);
   const handleSubmit = (event) => {
     console.log("sending comment");
     console.log(event.target.value);
 
     event.preventDefault();
     //const initialTime = new Date();
-    const newItemObject = { ...commentObj, comment: comment };
+    const newItemObject = {
+      ...commentObj,
+      comment: comment,
+      updatedTime: new Date().getTime(),
+    };
     console.log({ newItemObject });
     const newCommentArray = [...blog.comments].map((item) => {
       if (item.commentId === commentObj.commentId) {
@@ -40,16 +64,21 @@ const UpdateForm = ({ blog, noteFormRef, commentObj, commentIdValue }) => {
     });
     console.log({ newCommentArray });
 
-    dispatch(
-      handleUpdateComment(blog.id, { ...blog, comments: newCommentArray })
-    );
+    const blogObj = {
+      ...blog,
+      questions: JSON.stringify(blog.questions),
+      likes: JSON.stringify(blog.likes),
+      comments: JSON.stringify(newCommentArray),
+    };
+
+    dispatch(handleUpdateComment(blog.id, blogObj));
     noteFormRef.current.togglevisibility();
 
     dispatch(sendCommentUpdate(null));
   };
-  const handleTextAreaChange = (event) => {
-    setComment(event.target.value);
-  };
+  // const handleTextAreaChange = (event) => {bb
+  //   setComment(event.target.value);
+  // };
 
   if (commentUpdateState && commentUpdateState === commentIdValue) {
     return (
@@ -57,7 +86,7 @@ const UpdateForm = ({ blog, noteFormRef, commentObj, commentIdValue }) => {
         <Togglable buttonLabel="click here to begin update" ref={noteFormRef}>
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formCommentId">
-              <Form.Label>Update Comment</Form.Label>
+              {/* <Form.Label>Update Comment</Form.Label>
               <Form.Control
                 type="text"
                 as="textarea"
@@ -66,6 +95,15 @@ const UpdateForm = ({ blog, noteFormRef, commentObj, commentIdValue }) => {
                 value={comment}
                 onChange={handleTextAreaChange}
                 style={{ width: "50%" }}
+              /> */}
+              <Form.Label className="App-header"> Update Comment</Form.Label>
+
+              <MyRichEditor
+                useEditorMainBlog={useEditorMainBlogComment}
+                readOnly={false}
+                toolbarOnFocus={false}
+                toolbarPresent={true}
+                smallHeight={false}
               />
             </Form.Group>
             <Button type="submit" style={{ margin: 5 }}>
@@ -78,5 +116,5 @@ const UpdateForm = ({ blog, noteFormRef, commentObj, commentIdValue }) => {
   }
   return null;
 };
-export default UpdateForm;
+export default CommentUpdateForm;
 //profileimageid

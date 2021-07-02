@@ -224,7 +224,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
 
     console.log({ numValue1 }, "numberrrrvaluee");
     //const value = event.target.value
-    // this.setState({financialGoal: value});
+    // .setState({financialGoal: value});
     //setblogQuestionObjArray(blog.questions);
   };
   const handleNumberInputChange2 = (event) => {
@@ -238,7 +238,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
     //console.log({ numValue1 }, "numberrrrvaluee3333333");
 
     //const value = event.target.value
-    // this.setState({financialGoal: value});
+    // .setState({financialGoal: value});
   };
 
   const convertContentToHTML = (rawString) => {
@@ -293,10 +293,10 @@ const DisplayQuestion = ({ noteFormRef }) => {
               <Nav.Item>
                 <Nav.Link href="#" style={{ cursor: "none" }}>
                   {" "}
-                  <Form inline style={{ width: "20%" }}>
+                  {/* <Form inline style={{ width: "20%" }}>
                     <Form.Group controlId="exampleForm.ControlInput1">
-                      <Form.Label htmlFor="quantity1">
-                        {" "}
+                      <Form.Label>
+                         htmlFor="quantity1" {" "}
                         {`Quantity:1 - ${blog.questions.length}`}: Between{" "}
                       </Form.Label>
                       <Form.Control
@@ -307,11 +307,12 @@ const DisplayQuestion = ({ noteFormRef }) => {
                         max={blog.questions.length - 1}
                         onChange={handleNumberInputChange}
                         pattern="[1-9]*"
-                        inputmode="numeric"
+                        inputMode="numeric"
                         // value="1"
                         size="sm"
                       />{" "}
-                      <Form.Label htmlFor="quantity2">to</Form.Label>
+                      <Form.Label>to</Form.Label>
+                     htmlFor="quantity2" 
                       <Form.Control
                         type="number"
                         id="quantity2"
@@ -320,7 +321,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
                         max={blog.questions.length}
                         onChange={handleNumberInputChange2}
                         pattern="[1-9]*"
-                        inputmode="numeric"
+                        inputMode="numeric"
                         // value={blog.questions.length}
                         size="sm"
                       />
@@ -329,7 +330,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
                         Go
                       </Button>
                     </Form.Group>
-                  </Form>
+                  </Form> */}
                 </Nav.Link>
               </Nav.Item>
 
@@ -358,6 +359,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
             className={`${
               indexQue === 0 ? "first-card-margin" : "other-card-margin"
             }`}
+            key={question.commentId}
           >
             <Card.Body key={`${question}-${indexQue}`}>
               <Card.Title>

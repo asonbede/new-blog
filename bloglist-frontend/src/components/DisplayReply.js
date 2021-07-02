@@ -23,7 +23,9 @@ import {
 import { Link } from "react-router-dom";
 
 import UpdateReplyForm from "./UpdateReplyForm";
-
+import DisplayFormatedBlog from "./DisplayFormatedBlog";
+import { useDeleteResourse } from "../hooks/deleteResourses";
+import AlertComponent from "./AlertComponent";
 const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
   const dispatch = useDispatch();
   const replyViewWrite = useSelector(
@@ -33,94 +35,180 @@ const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
   const replyViewWriteCommentId = useSelector(
     (state) => state.updateState.replyViewWriteCommentId
   );
+  const messageObj = {
+    headers: "Reply Delete Alert",
+    body: `Do you really want to delete this reply from the  database?
+    Note that this action will delete any likes, dislikes, replies  associated with this comment, this action 
+    is irreversible: a deleted comment cannot be recovered`,
+  };
 
-  const handleDeleteCommentReply = (replyId) => {
+  const {
+    handleDeleteComment,
+    handleDeleteCommentReply,
+    continueHandler,
+    cancelHandler,
+    showAlert,
+    alertContent,
+    // deleteHandlerOutput,
+    // setalertContent
+  } = useDeleteResourse(messageObj);
+
+  // const handleDeleteCommentReply = (replyId) => {
+  //   const blogId = blog.id;
+  //   const replyObj = commentObj.reply.find((item) => item.id === replyId);
+  //   const replyText = replyObj.comment;
+  //   const newCommentArray = blog.comments.map((item) => {
+  //     if (item.commentId === commentObj.commentId) {
+  //       return {
+  //         ...item,
+  //         reply: [...item.reply.filter((reply) => reply.commentId !== replyId)],
+  //       };
+  //     } else {
+  //       return item;
+  //     }
+  //   });
+  //   const blogObj = {
+  //     ...blog,
+  //     comments: newCommentArray,
+  //   };
+
+  //   //const blogObject = blogs.find((blog) => blog.id === id);
+  //   const confirmResult = window.confirm(
+  //     `Do you really want to delete this comment: ${replyText} from database/server?`
+  //   );
+  //   if (!confirmResult) {
+  //     return;
+  //   }
+
+  //   dispatch(sendDeleteCommentReply(blogId, blogObj));
+  // };
+
+  // const handleLikeCommentReply = (replyId) => {
+  //   const blogId = blog.id;
+
+  //   const newCommentArray = blog.comments.map((item) => {
+  //     if (item.commentId === commentObj.commentId) {
+  //       return {
+  //         ...item,
+  //         reply: [
+  //           ...item.reply.map((reply) =>
+  //             reply.commentId === replyId
+  //               ? { ...reply, likes: reply.likes + 1 }
+  //               : reply
+  //           ),
+  //         ],
+  //       };
+  //     } else {
+  //       return item;
+  //     }
+  //   });
+  //   console.log({ newCommentArray });
+  //   const blogObj = {
+  //     ...blog,
+  //     comments: newCommentArray,
+  //   };
+
+  //   dispatch(sendLikeCommentReply(blogId, blogObj));
+  // };
+
+  // const handleDisLikeCommentReply = (replyId) => {
+  //   // const newCommentObj = {
+  //   //   ...comment,
+  //   //   dislikes: comment.dislikes + 1,
+  //   // };
+  //   const blogId = blog.id;
+  //   const newCommentArray = blog.comments.map((item) => {
+  //     if (item.commentId === commentObj.commentId) {
+  //       return {
+  //         ...item,
+  //         reply: [
+  //           ...item.reply.map((reply) =>
+  //             reply.commentId === replyId
+  //               ? { ...reply, dislikes: reply.dislikes + 1 }
+  //               : reply
+  //           ),
+  //         ],
+  //       };
+  //     } else {
+  //       return item;
+  //     }
+  //   });
+  //   console.log({ newCommentArray });
+  //   const blogObj = {
+  //     ...blog,
+  //     comments: newCommentArray,
+  //   };
+
+  //   dispatch(sendDisLikeCommentReply(blogId, blogObj));
+  // };
+
+  const handleLikeOrDislikeComment = (blog, comment, replyId, likesDislike) => {
     const blogId = blog.id;
-    const replyObj = commentObj.reply.find((item) => item.id === replyId);
-    const replyText = replyObj.comment;
-    const newCommentArray = blog.comments.map((item) => {
-      if (item.commentId === commentObj.commentId) {
-        return {
-          ...item,
-          reply: [...item.reply.filter((reply) => reply.commentId !== replyId)],
+    const commentId = comment.commentId;
+    const replyObj = comment.reply.find((item) => item.commentId === replyId);
+    console.log("like called");
+    let newObj;
+    if (replyObj[likesDislike].likeValue) {
+      const hasAlreadyLiked = replyObj[likesDislike].likers.some(
+        (person) => person === user.username
+      );
+      if (hasAlreadyLiked) {
+        newObj = {
+          ...replyObj,
+          [likesDislike]: {
+            likers: [
+              ...replyObj[likesDislike].likers.filter(
+                (person) => person !== user.username
+              ),
+            ],
+            likeValue: replyObj[likesDislike].likeValue - 1,
+          },
         };
+        console.log("already liked");
       } else {
-        return item;
+        newObj = {
+          ...replyObj,
+          [likesDislike]: {
+            likeValue: replyObj[likesDislike].likeValue + 1,
+            likers: [...replyObj[likesDislike].likers, user.username],
+          },
+        };
+        console.log("not already liked---liking");
       }
-    });
-    const blogObj = {
-      ...blog,
-      comments: newCommentArray,
-    };
-
-    //const blogObject = blogs.find((blog) => blog.id === id);
-    const confirmResult = window.confirm(
-      `Do you really want to delete this comment: ${replyText} from database/server?`
-    );
-    if (!confirmResult) {
-      return;
+    } else {
+      newObj = {
+        ...replyObj,
+        [likesDislike]: {
+          likeValue: 1,
+          likers: [user.username],
+        },
+      };
+      console.log("like initiated");
     }
 
-    dispatch(sendDeleteCommentReply(blogId, blogObj));
-  };
-
-  const handleLikeCommentReply = (replyId) => {
-    const blogId = blog.id;
-
-    const newCommentArray = blog.comments.map((item) => {
-      if (item.commentId === commentObj.commentId) {
+    const newArray = blog.comments.map((item) => {
+      if (item.commentId === commentId) {
         return {
           ...item,
-          reply: [
-            ...item.reply.map((reply) =>
-              reply.commentId === replyId
-                ? { ...reply, likes: reply.likes + 1 }
-                : reply
-            ),
-          ],
+          reply: item.reply.map((replyItem) =>
+            replyItem.commentId === replyId ? newObj : replyItem
+          ),
         };
       } else {
         return item;
       }
     });
-    console.log({ newCommentArray });
     const blogObj = {
       ...blog,
-      comments: newCommentArray,
+      comments: JSON.stringify(newArray),
+      questions: JSON.stringify(blog.questions),
+      likes: JSON.stringify(blog.likes),
     };
-
-    dispatch(sendLikeCommentReply(blogId, blogObj));
-  };
-
-  const handleDisLikeCommentReply = (replyId) => {
-    // const newCommentObj = {
-    //   ...comment,
-    //   dislikes: comment.dislikes + 1,
-    // };
-    const blogId = blog.id;
-    const newCommentArray = blog.comments.map((item) => {
-      if (item.commentId === commentObj.commentId) {
-        return {
-          ...item,
-          reply: [
-            ...item.reply.map((reply) =>
-              reply.commentId === replyId
-                ? { ...reply, dislikes: reply.dislikes + 1 }
-                : reply
-            ),
-          ],
-        };
-      } else {
-        return item;
-      }
-    });
-    console.log({ newCommentArray });
-    const blogObj = {
-      ...blog,
-      comments: newCommentArray,
-    };
-
-    dispatch(sendDisLikeCommentReply(blogId, blogObj));
+    if (likesDislike === "likes") {
+      dispatch(sendLikeCommentReply(blogId, blogObj));
+    } else {
+      dispatch(sendDisLikeCommentReply(blogId, blogObj));
+    }
   };
 
   //import CommentReply from "./CommentReply";
@@ -132,6 +220,12 @@ const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
   ) {
     return (
       <>
+        <AlertComponent
+          showAlert={showAlert}
+          continueHandler={() => continueHandler(sendDeleteCommentReply)}
+          cancelHandler={cancelHandler}
+          alertContent={alertContent}
+        />
         {commentObj.reply.map((comment, i) => (
           <Media key={`${i}-comment`} style={{ marginBottom: 20 }}>
             {" "}
@@ -141,7 +235,7 @@ const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
               height={64}
               className="mr-3"
               src={
-                comment.profileimageid
+                comment.profileimageidg
                   ? `http://localhost:8082${comment.profileimageid}`
                   : require("../images/profile.jpg")
               }
@@ -149,32 +243,61 @@ const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
             />
             <Media.Body>
               <h5>{comment.commenter}</h5>
-              <p style={{ width: "40%" }}>{comment.comment}</p>
+              <div style={{ width: "40%" }}>
+                <DisplayFormatedBlog
+                  contentFromServer={comment.comment}
+                  toolbarPresent={false}
+                  smallHeight={true}
+                />
+              </div>
 
               <span style={{ marginRight: 10 }}>
+                Created:{" "}
                 {comment.postedTime
                   ? getTimeDiff(comment.postedTime)
                   : "notime"}
               </span>
 
+              <span style={{ marginRight: 10 }}>
+                updated:{" "}
+                {comment.updatedTime
+                  ? getTimeDiff(comment.updatedTime)
+                  : "notime"}
+              </span>
+
               <Link
                 style={{ marginRight: 10 }}
-                onClick={() => handleLikeCommentReply(comment.commentId)}
+                onClick={() =>
+                  handleLikeOrDislikeComment(
+                    blog,
+                    commentObj,
+                    comment.commentId,
+                    "likes"
+                  )
+                }
                 size="sm"
               >
                 <Badge pill variant="success">
-                  {comment.likes}
+                  {comment.likes.likeValue}
                 </Badge>{" "}
                 Like
               </Link>
 
               <Link
                 style={{ marginRight: 10 }}
-                onClick={() => handleDisLikeCommentReply(comment.commentId)}
+                onClick={() =>
+                  handleLikeOrDislikeComment(
+                    blog,
+                    commentObj,
+                    comment.commentId,
+                    "dislikes"
+                  )
+                }
                 size="sm"
               >
                 <Badge pill variant="success">
-                  {comment.dislikes}
+                  {/* {comment.dislikes.likeValue} */}
+                  {comment.dislikes.likeValue}
                 </Badge>{" "}
                 Dislike
               </Link>
@@ -182,7 +305,13 @@ const DisplayReply = ({ user, commentObj, getTimeDiff, noteFormRef, blog }) => {
               {user.username === comment.commenter ? (
                 <Link
                   style={{ marginRight: 10 }}
-                  onClick={() => handleDeleteCommentReply(comment.commentId)}
+                  onClick={() =>
+                    handleDeleteCommentReply(
+                      blog,
+                      commentObj,
+                      comment.commentId
+                    )
+                  }
                   size="sm"
                 >
                   Delete

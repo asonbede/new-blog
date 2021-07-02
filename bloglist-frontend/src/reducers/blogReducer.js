@@ -74,7 +74,9 @@ const blogReducer = (state = [], action) => {
       );
 
     case "DELETE_COMMENT":
-      return state.filter((blog) => blog.id !== action.data.id);
+      return state.map((blog) =>
+        blog.id === action.data.id ? action.data : blog
+      );
 
     case "CREATE_LIKE":
       return state.filter((blog) =>
@@ -404,7 +406,7 @@ export const sendCommentDisLike = (id, content) => {
   };
 };
 
-export const sendCommentDelete = (id, content, comment) => {
+export const sendCommentDelete = (id, content) => {
   const successMessage = "Comment-Delete operation was successful";
   const failureMessage = "Comment-Delete operation was not successful";
 
@@ -413,10 +415,10 @@ export const sendCommentDelete = (id, content, comment) => {
     try {
       const response = await blogService.update(id, content);
 
-      console.log({ response });
+      console.log({ response }, "from--blog-reducer");
       dispatch({
         type: "DELETE_COMMENT",
-        data: comment,
+        data: response,
       });
 
       dispatch(

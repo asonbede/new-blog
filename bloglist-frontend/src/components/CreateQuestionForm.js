@@ -219,7 +219,11 @@ const CreateQuestionsForm = ({ noteFormRef, blog }) => {
       <Form.Group controlId="formCorrectOptionId">
         <Form.Label className="App-header">Correct Option </Form.Label>
 
-        <Form.Control {...useEditorCorrectOption} />
+        <Form.Control
+          text={useEditorCorrectOption.text}
+          value={useEditorCorrectOption.value}
+          onChange={useEditorCorrectOption.onChange}
+        />
         {/* <Form.Control
           type="text"
           value={correctOption}
