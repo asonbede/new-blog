@@ -67,6 +67,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
   );
   let match = useRouteMatch("/questions/:id");
   const paraValue = match.params.id;
+  //Question-creation was successful
   blogs = useSelector((state) => state.blogs);
   // useEffect(() => {
   //   if (blog && blog.questions.length) {
@@ -263,9 +264,9 @@ const DisplayQuestion = ({ noteFormRef }) => {
         <Card
           style={{
             width: "80%",
-            position: "fixed",
-            zIndex: 1,
-            top: "8%",
+            position: "static",
+            // zIndex: 1,
+            // top: "8%",
           }}
           // className="mt-3"
         >
@@ -293,10 +294,10 @@ const DisplayQuestion = ({ noteFormRef }) => {
               <Nav.Item>
                 <Nav.Link href="#" style={{ cursor: "none" }}>
                   {" "}
-                  {/* <Form inline style={{ width: "20%" }}>
+                  <Form inline style={{ width: "20%" }}>
                     <Form.Group controlId="exampleForm.ControlInput1">
                       <Form.Label>
-                         htmlFor="quantity1" {" "}
+                        {/* htmlFor="quantity1"{" "} */}
                         {`Quantity:1 - ${blog.questions.length}`}: Between{" "}
                       </Form.Label>
                       <Form.Control
@@ -312,7 +313,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
                         size="sm"
                       />{" "}
                       <Form.Label>to</Form.Label>
-                     htmlFor="quantity2" 
+                      {/* htmlFor="quantity2" */}
                       <Form.Control
                         type="number"
                         id="quantity2"
@@ -330,7 +331,7 @@ const DisplayQuestion = ({ noteFormRef }) => {
                         Go
                       </Button>
                     </Form.Group>
-                  </Form> */}
+                  </Form>
                 </Nav.Link>
               </Nav.Item>
 

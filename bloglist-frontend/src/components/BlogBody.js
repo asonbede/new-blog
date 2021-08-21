@@ -22,6 +22,7 @@ import StrLineGraphAndTableOfValue from "./data-presentation/StrLineGraphAndTabl
 import GraphTableExplanation from "./data-presentation/GraphTableExplanation";
 import imageSize from "image-size";
 //import MainBlogUpdateForm from "./MainBlogUpdateForm";
+//import { renderMessage } from "../reducers/messageReducer";
 const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
   const [blogTitleSuffix, setblogTitleSuffix] = useState(true);
   const [showAlert, setshowAlert] = useState(false);
@@ -29,7 +30,10 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
   const [deleteHandlerOutput, setdeleteHandlerOutput] = useState({});
 
   const classVarr = blogTitleSuffix ? "add-on-present" : "add-on-addsent";
+
   const dispatch = useDispatch();
+
+  // dispatch(renderMessage(null));
   const blogIdItems = {
     "60c8ccabc7580d2db825db5b": [
       () => <StrLineGraphAndTableOfValue />,
@@ -156,7 +160,7 @@ const BlogBody = ({ blog, blogs, user, noteFormRef, paraValue }) => {
     // {
     //   console.log(convertFromJSONToHTML(blog.url), "fromm blog-bodyyy");
     // }
-    const imagePath = blog.imageid
+    const imagePath = blog.imageidd
       ? `http://localhost:8082${blog.imageid}`
       : require(`../images/default-photo.jpeg`);
     console.log(blog.imageid, "imageeeeeididddddd");

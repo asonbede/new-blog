@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { sendCreateQuestion } from "../reducers/blogReducer";
 import { Table, Form, Button, Alert, Navbar, Nav } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
+import { useRouteMatch, useHistory, Link } from "react-router-dom";
 
 import {
   useField,
@@ -10,6 +11,7 @@ import {
   handleImageInsert,
   MyRichEditor,
 } from "../hooks/resourse";
+import { renderMessage } from "../reducers/messageReducer";
 
 const CreateQuestionsForm = ({ noteFormRef, blog }) => {
   // const [question, setquestion] = useState("");
@@ -23,7 +25,22 @@ const CreateQuestionsForm = ({ noteFormRef, blog }) => {
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.logInUser);
+  const stateMessage = useSelector((state) => state.message);
+  let match = useRouteMatch("/questions/:id");
+  const history = useHistory();
+  const paraValue = match.params.id;
+  // if (message === "Question-creation was successful") {
+  //   let match = useRouteMatch("/questions/:id");
+  //   history.push(`/blogs/${paraValue}`);
+  // }
+  if (stateMessage) {
+    const { type, message } = stateMessage;
+    if (message === "Question-creation was successful") {
+      history.push(`/blogs/${paraValue}`);
 
+      // dispatch(renderMessage(null));
+    }
+  }
   //const useFieldTopic = useField("text");
   //const useFieldAuthor = useField("text");
   //const useFieldImage = useField("text");
