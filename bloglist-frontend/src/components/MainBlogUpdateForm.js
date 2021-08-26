@@ -54,7 +54,7 @@ const MainBlogUpdateForm = ({ noteFormRef, blog, blogIdValue }) => {
       //setUrl(blog.url);
       setAuthorValue(blog.author);
       setTopicValue(blog.topic ? blog.topic : "no topic yet");
-      //setTitle(blog.title);
+      //setTitle(blog.title);//
       setoldimage(blog.imageid);
       setcomment(blog.comments);
       setlikes(blog.likes);
